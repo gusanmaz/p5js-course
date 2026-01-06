@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-    <!-- Theme initialization (prevent flash) -->
     <script>
         (function() {
             var savedTheme = localStorage.getItem('theme');
@@ -12,111 +11,81 @@
             }
         })();
     </script>
-    <title>Kaynaklar - p5.js Kursu</title>
-    
-    <!-- Stylesheets -->
+    <title>Kaynaklar - İnteraktif p5.js Eğitimi</title>
     <link rel="stylesheet" href="css/main.css">
-    
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <style>
-        .resource-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
+        .resources-page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
         }
-        
-        .resource-card {
-            background: var(--bg-light);
-            border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            transition: transform 0.2s, box-shadow 0.2s;
+        .resources-page h1 {
+            text-align: center;
+            margin-bottom: 0.5rem;
         }
-        
-        .resource-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border-color: var(--accent-primary);
-        }
-        
-        .resource-card h3 {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-            color: var(--text-light);
-        }
-        
-        .resource-card h3 .emoji {
-            font-size: 1.5rem;
-        }
-        
-        .resource-card p {
+        .resources-page > p {
+            text-align: center;
             color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-        
-        .resource-card a {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--accent-primary);
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .resource-card a:hover {
-            text-decoration: underline;
-        }
-        
-        .resource-section {
             margin-bottom: 3rem;
         }
-        
-        .resource-section h2 {
-            border-bottom: 2px solid var(--accent-primary);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
+        .resource-section {
+            margin-bottom: 2.5rem;
         }
-        
-        .book-list {
+        .resource-section h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-primary);
+        }
+        .resource-list {
             list-style: none;
             padding: 0;
-        }
-        
-        .book-list li {
-            padding: 1rem;
-            background: var(--bg-light);
-            margin-bottom: 0.5rem;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .book-list li span {
-            font-size: 2rem;
-        }
-        
-        .book-info h4 {
             margin: 0;
-            color: var(--text-light);
         }
-        
-        .book-info p {
-            margin: 0.25rem 0 0;
-            color: var(--text-muted);
+        .resource-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .resource-list li:last-child {
+            border-bottom: none;
+        }
+        .resource-list a {
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+        .resource-list a:hover {
+            text-decoration: underline;
+        }
+        .resource-list .desc {
+            color: var(--text-secondary);
             font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+        .tips-box {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        [data-theme="light"] .tips-box {
+            background: #f0f9ff;
+        }
+        .tips-box h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
+        .tips-box ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        .tips-box li {
+            margin-bottom: 0.5rem;
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="main-nav">
         <div class="container">
             <div class="nav-content">
@@ -135,290 +104,168 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="container" style="padding: 2rem 0; max-width: 1000px;">
-        <h1 style="text-align: center; margin-bottom: 0.5rem;">📚 Öğrenme Kaynakları</h1>
-        <p style="text-align: center; color: var(--text-muted); margin-bottom: 3rem;">
-            p5.js ve yaratıcı kodlama yolculuğunuzda size yardımcı olacak en iyi kaynaklar
-        </p>
+    <main class="resources-page">
+        <h1>📚 Öğrenme Kaynakları</h1>
+        <p>p5.js ve yaratıcı kodlama için en iyi kaynaklar</p>
 
-        <!-- Official Resources -->
         <section class="resource-section">
             <h2>🌐 Resmi Kaynaklar</h2>
-            
-            <div class="resource-grid">
-                <div class="resource-card">
-                    <h3><span class="emoji">🎨</span> p5.js Resmi Sitesi</h3>
-                    <p>p5.js'in ana sitesi. Dokümantasyon, örnekler ve indirilecekler burada.</p>
-                    <a href="https://p5js.org" target="_blank">p5js.org →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">📝</span> p5.js Web Editörü</h3>
-                    <p>Tarayıcıda hemen kodlamaya başla! Kurulum gerektirmez, kaydet ve paylaş.</p>
-                    <a href="https://editor.p5js.org" target="_blank">editor.p5js.org →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">📖</span> p5.js Referans</h3>
-                    <p>Tüm fonksiyonlar, özellikler ve örnekler burada. En önemli kaynak!</p>
-                    <a href="https://p5js.org/reference/" target="_blank">Referansa Git →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">💡</span> p5.js Örnekler</h3>
-                    <p>Resmi örnek galerisi. Her konuda interaktif örnekler mevcut.</p>
-                    <a href="https://p5js.org/examples/" target="_blank">Örneklere Git →</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- YouTube Channels -->
-        <section class="resource-section">
-            <h2>🎬 YouTube Kanalları</h2>
-            
-            <div class="resource-grid">
-                <div class="resource-card">
-                    <h3><span class="emoji">🚂</span> The Coding Train</h3>
-                    <p>
-                        <strong>Daniel Shiffman</strong> tarafından yönetilen muhteşem kanal. 
-                        Eğlenceli, enerjik ve çok açıklayıcı dersler. Kesinlikle izlemeli!
-                    </p>
-                    <a href="https://www.youtube.com/@TheCodingTrain" target="_blank">Kanala Git →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">✨</span> Patt Vira</h3>
-                    <p>
-                        Başarılı görsel efektler ve sanat projeleri. Yaratıcı kodlama için 
-                        harika ilham kaynağı ve detaylı tutorial'lar.
-                    </p>
-                    <a href="https://www.youtube.com/@pattvira" target="_blank">Kanala Git →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">🎨</span> Kazuki Umeda</h3>
-                    <p>
-                        Japonya'dan güzel görsel projeler. Minimal ve etkileyici 
-                        generatif sanat çalışmaları.
-                    </p>
-                    <a href="https://www.youtube.com/@KazukiUmeda" target="_blank">Kanala Git →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">🔮</span> Tim Rodenbröker</h3>
-                    <p>
-                        Creative coding dersleri. Typography ve görsel tasarım 
-                        odaklı projeler.
-                    </p>
-                    <a href="https://www.youtube.com/@timrodenbroeker" target="_blank">Kanala Git →</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Communities -->
-        <section class="resource-section">
-            <h2>👥 Topluluklar</h2>
-            
-            <div class="resource-grid">
-                <div class="resource-card">
-                    <h3><span class="emoji">🌈</span> OpenProcessing</h3>
-                    <p>
-                        Binlerce p5.js projesi! Kodları incele, fork'la, kendi versiyonunu yap. 
-                        Paylaşım ve ilham için harika platform.
-                    </p>
-                    <a href="https://openprocessing.org" target="_blank">openprocessing.org →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">🐙</span> GitHub - p5.js</h3>
-                    <p>
-                        p5.js'in kaynak kodu ve issue tracker'ı. Katkıda bulunmak 
-                        veya hata bildirmek için buraya.
-                    </p>
-                    <a href="https://github.com/processing/p5.js" target="_blank">GitHub'a Git →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">💬</span> p5.js Discord</h3>
-                    <p>
-                        Resmi Discord sunucusu. Sorular sor, projelerini paylaş, 
-                        diğer kodlayıcılarla tanış!
-                    </p>
-                    <a href="https://discord.gg/SHQ8dH25r9" target="_blank">Discord'a Katıl →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">📱</span> Reddit r/p5js</h3>
-                    <p>
-                        p5.js subreddit'i. Projeler, sorular ve tartışmalar 
-                        için aktif bir topluluk.
-                    </p>
-                    <a href="https://www.reddit.com/r/p5js/" target="_blank">Reddit'e Git →</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Video Series -->
-        <section class="resource-section">
-            <h2>📺 Önerilen Video Serileri</h2>
-            
-            <div class="resource-grid">
-                <div class="resource-card">
-                    <h3><span class="emoji">🎓</span> Code! Programming with p5.js</h3>
-                    <p>
-                        Daniel Shiffman'ın başlangıç serisi. Sıfırdan p5.js öğrenmek 
-                        için en iyi kaynak.
-                    </p>
-                    <a href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6Zy51Q-x9tMWIv9cueOFTFA" target="_blank">Playlist'i İzle →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">🌊</span> The Nature of Code</h3>
-                    <p>
-                        Fizik simülasyonları, parçacık sistemleri, yapay zeka. 
-                        İleri seviye ve çok etkileyici!
-                    </p>
-                    <a href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM" target="_blank">Playlist'i İzle →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">🎮</span> Coding Challenges</h3>
-                    <p>
-                        Her videoda farklı bir proje: oyunlar, simülasyonlar, 
-                        algoritmalar. 200+ challenge!
-                    </p>
-                    <a href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6ZiZxtDDRCi6uhfTH4FilpH" target="_blank">Playlist'i İzle →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">🧬</span> Algorithmic Botany</h3>
-                    <p>
-                        L-systems, fraktallar, doğadan ilham alan algoritmalar. 
-                        Organik görünümlü generatif sanat.
-                    </p>
-                    <a href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6bXUJvjnMWGU5SmjhI-OXef" target="_blank">Playlist'i İzle →</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Books -->
-        <section class="resource-section">
-            <h2>📕 Kitaplar</h2>
-            
-            <ul class="book-list">
+            <ul class="resource-list">
                 <li>
-                    <span>📘</span>
-                    <div class="book-info">
-                        <h4>Getting Started with p5.js</h4>
-                        <p>Lauren McCarthy, Casey Reas, Ben Fry - Resmi başlangıç kitabı, O'Reilly yayını</p>
-                    </div>
+                    <a href="https://p5js.org" target="_blank">p5.js Resmi Sitesi</a>
+                    <div class="desc">Ana site - dokümantasyon, örnekler ve indirilecekler</div>
                 </li>
                 <li>
-                    <span>📗</span>
-                    <div class="book-info">
-                        <h4>The Nature of Code</h4>
-                        <p>Daniel Shiffman - Fizik simülasyonları ve doğal sistemler. <a href="https://natureofcode.com" target="_blank">Ücretsiz online!</a></p>
-                    </div>
+                    <a href="https://editor.p5js.org" target="_blank">p5.js Web Editörü</a>
+                    <div class="desc">Tarayıcıda hemen kodla, kaydet ve paylaş</div>
                 </li>
                 <li>
-                    <span>📙</span>
-                    <div class="book-info">
-                        <h4>Generative Design</h4>
-                        <p>Benedikt Groß ve ekibi - Görsel tasarım ve generatif sanat teknikleri</p>
-                    </div>
+                    <a href="https://p5js.org/reference/" target="_blank">p5.js Referans</a>
+                    <div class="desc">Tüm fonksiyonlar ve özellikler - en önemli kaynak</div>
                 </li>
                 <li>
-                    <span>📕</span>
-                    <div class="book-info">
-                        <h4>Learning Processing</h4>
-                        <p>Daniel Shiffman - Processing için ama kavramlar p5.js'e uygulanabilir</p>
-                    </div>
+                    <a href="https://p5js.org/examples/" target="_blank">p5.js Örnekler</a>
+                    <div class="desc">Her konuda interaktif örnek galerisi</div>
                 </li>
             </ul>
         </section>
 
-        <!-- Libraries -->
         <section class="resource-section">
-            <h2>🔧 Faydalı Kütüphaneler</h2>
-            
-            <div class="resource-grid">
-                <div class="resource-card">
-                    <h3><span class="emoji">🎵</span> p5.sound</h3>
-                    <p>Ses analizi, müzik çalma, ses efektleri. Müzik görselleştirme için!</p>
-                    <a href="https://p5js.org/reference/#/libraries/p5.sound" target="_blank">Dökümantasyon →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">🎥</span> ml5.js</h3>
-                    <p>Makine öğrenmesi p5.js ile! Yüz tanıma, poz algılama, nesne tespiti.</p>
-                    <a href="https://ml5js.org" target="_blank">ml5js.org →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">⚡</span> matter.js</h3>
-                    <p>2D fizik motoru. Gerçekçi fizik simülasyonları için.</p>
-                    <a href="https://brm.io/matter-js/" target="_blank">matter-js →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">🌐</span> p5.js Kütüphaneleri</h3>
-                    <p>Topluluk tarafından geliştirilen tüm kütüphaneler.</p>
-                    <a href="https://p5js.org/libraries/" target="_blank">Tüm Kütüphaneler →</a>
-                </div>
-            </div>
+            <h2>🎬 YouTube Kanalları</h2>
+            <ul class="resource-list">
+                <li>
+                    <a href="https://www.youtube.com/@TheCodingTrain" target="_blank">The Coding Train</a>
+                    <div class="desc">Daniel Shiffman - eğlenceli ve açıklayıcı p5.js dersleri</div>
+                </li>
+                <li>
+                    <a href="https://www.youtube.com/@pattvira" target="_blank">Patt Vira</a>
+                    <div class="desc">Görsel efektler ve yaratıcı kodlama projeleri</div>
+                </li>
+                <li>
+                    <a href="https://www.youtube.com/@KazukiUmeda" target="_blank">Kazuki Umeda</a>
+                    <div class="desc">Minimal ve etkileyici generatif sanat</div>
+                </li>
+                <li>
+                    <a href="https://www.youtube.com/@timrodenbroeker" target="_blank">Tim Rodenbröker</a>
+                    <div class="desc">Typography ve görsel tasarım odaklı</div>
+                </li>
+            </ul>
         </section>
 
-        <!-- Inspiration -->
         <section class="resource-section">
-            <h2>✨ İlham Kaynakları</h2>
-            
-            <div class="resource-grid">
-                <div class="resource-card">
-                    <h3><span class="emoji">🖼️</span> Creative Applications</h3>
-                    <p>Sanat, tasarım ve teknoloji kesişiminde projeler.</p>
-                    <a href="https://www.creativeapplications.net" target="_blank">Site →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">🎯</span> Dribbble - Creative Coding</h3>
-                    <p>Tasarımcıların paylaştığı yaratıcı kodlama animasyonları.</p>
-                    <a href="https://dribbble.com/search/creative-coding" target="_blank">Dribbble →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">🐦</span> #creativecoding</h3>
-                    <p>Twitter/X'te yaratıcı kodlama paylaşımları.</p>
-                    <a href="https://twitter.com/search?q=%23creativecoding" target="_blank">Hashtag →</a>
-                </div>
-                
-                <div class="resource-card">
-                    <h3><span class="emoji">📷</span> #p5js Instagram</h3>
-                    <p>Instagram'da p5.js projeleri ve sanat çalışmaları.</p>
-                    <a href="https://www.instagram.com/explore/tags/p5js/" target="_blank">Instagram →</a>
-                </div>
-            </div>
+            <h2>📺 Video Serileri</h2>
+            <ul class="resource-list">
+                <li>
+                    <a href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6Zy51Q-x9tMWIv9cueOFTFA" target="_blank">Code! Programming with p5.js</a>
+                    <div class="desc">Sıfırdan p5.js öğrenmek için en iyi başlangıç serisi</div>
+                </li>
+                <li>
+                    <a href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM" target="_blank">The Nature of Code</a>
+                    <div class="desc">Fizik simülasyonları, parçacık sistemleri, yapay zeka</div>
+                </li>
+                <li>
+                    <a href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6ZiZxtDDRCi6uhfTH4FilpH" target="_blank">Coding Challenges</a>
+                    <div class="desc">200+ farklı proje: oyunlar, simülasyonlar, algoritmalar</div>
+                </li>
+            </ul>
         </section>
 
-        <!-- Tips Box -->
-        <section style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(255, 107, 107, 0.1)); border-radius: 16px; padding: 2rem; margin-top: 3rem;">
-            <h2 style="margin-top: 0;">💡 Öğrenme İpuçları</h2>
-            <ul style="line-height: 1.8;">
+        <section class="resource-section">
+            <h2>👥 Topluluklar</h2>
+            <ul class="resource-list">
+                <li>
+                    <a href="https://openprocessing.org" target="_blank">OpenProcessing</a>
+                    <div class="desc">Binlerce p5.js projesi - incele, fork'la, paylaş</div>
+                </li>
+                <li>
+                    <a href="https://github.com/processing/p5.js" target="_blank">GitHub - p5.js</a>
+                    <div class="desc">Kaynak kodu ve issue tracker</div>
+                </li>
+                <li>
+                    <a href="https://discord.gg/SHQ8dH25r9" target="_blank">p5.js Discord</a>
+                    <div class="desc">Resmi Discord - sorular sor, projelerini paylaş</div>
+                </li>
+                <li>
+                    <a href="https://www.reddit.com/r/p5js/" target="_blank">Reddit r/p5js</a>
+                    <div class="desc">Aktif topluluk - projeler, sorular, tartışmalar</div>
+                </li>
+            </ul>
+        </section>
+
+        <section class="resource-section">
+            <h2>📕 Kitaplar</h2>
+            <ul class="resource-list">
+                <li>
+                    <a href="https://www.oreilly.com/library/view/getting-started-with/9781457186769/" target="_blank">Getting Started with p5.js</a>
+                    <div class="desc">Lauren McCarthy, Casey Reas, Ben Fry - Resmi başlangıç kitabı</div>
+                </li>
+                <li>
+                    <a href="https://natureofcode.com" target="_blank">The Nature of Code</a>
+                    <div class="desc">Daniel Shiffman - Fizik simülasyonları (ücretsiz online!)</div>
+                </li>
+                <li>
+                    <a href="http://www.introcreativecomp.com/gendesign/" target="_blank">Generative Design</a>
+                    <div class="desc">Benedikt Groß - Görsel tasarım ve generatif sanat teknikleri</div>
+                </li>
+            </ul>
+        </section>
+
+        <section class="resource-section">
+            <h2>🔧 Kütüphaneler</h2>
+            <ul class="resource-list">
+                <li>
+                    <a href="https://p5js.org/reference/#/libraries/p5.sound" target="_blank">p5.sound</a>
+                    <div class="desc">Ses analizi, müzik çalma, ses efektleri</div>
+                </li>
+                <li>
+                    <a href="https://ml5js.org" target="_blank">ml5.js</a>
+                    <div class="desc">Makine öğrenmesi - yüz tanıma, poz algılama</div>
+                </li>
+                <li>
+                    <a href="https://brm.io/matter-js/" target="_blank">matter.js</a>
+                    <div class="desc">2D fizik motoru</div>
+                </li>
+                <li>
+                    <a href="https://p5js.org/libraries/" target="_blank">Tüm Kütüphaneler</a>
+                    <div class="desc">Topluluk tarafından geliştirilen tüm kütüphaneler</div>
+                </li>
+            </ul>
+        </section>
+
+        <section class="resource-section">
+            <h2>✨ İlham</h2>
+            <ul class="resource-list">
+                <li>
+                    <a href="https://www.creativeapplications.net" target="_blank">Creative Applications</a>
+                    <div class="desc">Sanat, tasarım ve teknoloji kesişiminde projeler</div>
+                </li>
+                <li>
+                    <a href="https://twitter.com/search?q=%23creativecoding" target="_blank">#creativecoding</a>
+                    <div class="desc">Twitter/X'te yaratıcı kodlama paylaşımları</div>
+                </li>
+                <li>
+                    <a href="https://www.instagram.com/explore/tags/p5js/" target="_blank">#p5js Instagram</a>
+                    <div class="desc">p5.js projeleri ve sanat çalışmaları</div>
+                </li>
+            </ul>
+        </section>
+
+        <div class="tips-box">
+            <h2>💡 Öğrenme İpuçları</h2>
+            <ul>
                 <li><strong>Her gün biraz kodla</strong> - 15 dakika bile olsa düzenlilik önemli</li>
                 <li><strong>Başkalarının kodlarını incele</strong> - OpenProcessing'de fork'la ve değiştir</li>
                 <li><strong>Hata yapmaktan korkma</strong> - Her hata bir öğrenme fırsatı</li>
-                <li><strong>Küçük başla, büyük düşün</strong> - Basit projelerle başla</li>
-                <li><strong>Paylaş ve geri bildirim al</strong> - Toplulukla etkileşim kur</li>
-                <li><strong>Eğlen!</strong> - Yaratıcı kodlama keyifli olmalı 🎨</li>
+                <li><strong>Küçük başla</strong> - Basit projelerle başla, karmaşığa geç</li>
+                <li><strong>Paylaş</strong> - Toplulukla etkileşim kur</li>
             </ul>
-        </section>
+        </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-bottom">
-                <p>İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            <div class="footer-bottom" style="text-align: center; padding: 1.5rem 0;">
+                <p style="margin: 0;">İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
             </div>
         </div>
     </footer>
