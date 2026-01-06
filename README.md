@@ -2,4 +2,4 @@
 
 Book Development in progress..
 
-Hosted at gusanmaz.github.io/p5js-course
+Hosted at https://gusanmaz.github.io/p5js-course
