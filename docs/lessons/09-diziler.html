@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <title>Ders 9: Diziler - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html" class="active">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#dizi-nedir">Dizi Nedir?</a></li>
+                    <li><a href="#olusturma">Dizi Oluşturma</a></li>
+                    <li><a href="#erisim">Elemanlara Erişim</a></li>
+                    <li><a href="#metodlar">Dizi Metodları</a></li>
+                    <li><a href="#dongu">Döngü ile Diziler</a></li>
+                    <li><a href="#ornekler">Uygulama Örnekleri</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 9: Diziler (Arrays)</h1>
+                <div class="lesson-meta">
+                    <span>📚 Orta-İleri Seviye</span>
+                    <span>⏱️ 60 dakika</span>
+                    <span>🎯 Veri Yapıları</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: What is Array -->
+                <section id="dizi-nedir">
+                    <h2>Dizi Nedir ve Neden Önemli?</h2>
+                    
+                    <p>
+                        Dizi (Array), <strong>birden fazla değeri tek bir değişkende saklayan</strong> 
+                        veri yapısıdır. Alışveriş listesi gibi düşünebilirsiniz - tek bir kağıtta 
+                        birçok ürün yazılı!
+                    </p>
+                    
+                    <p>
+                        Normalde her değer için ayrı değişken tanımlarsın: <code>let sayi1 = 10;</code>, 
+                        <code>let sayi2 = 20;</code>... Ama 100 sayı için 100 değişken mi tanımlayacaksın? 
+                        İşte diziler tam bu sorunu çözer: <code>let sayilar = [10, 20, 30, ...];</code>
+                    </p>
+
+                    <div class="info-box note">
+                        <div class="info-box-title">🎮 Oyun Programcısı İçin Neden Kritik?</div>
+                        <p>
+                            Oyunlarda <strong>çok sayıda nesne</strong> var: düşmanlar, mermiler, güç-uplar, 
+                            parçacıklar, engeller... Her biri için ayrı değişken tanımlamak imkansız! 
+                            Diziler sayesinde 100 mermiyi tek bir <code>mermiler</code> değişkeninde tutabilirsin.
+                        </p>
+                    </div>
+
+                    <h3>🎯 Problem: Çok Fazla Değişken!</h3>
+                    <p>5 tane düşen yıldız animasyonu yapmak istiyorsun:</p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>❌ Dizi Olmadan</th>
+                                <th>✅ Dizi ile</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><pre style="margin:0;"><code>// 5 yıldız için 10 değişken!
+let y1X = 50, y1Y = 0;
+let y2X = 100, y2Y = 0;
+let y3X = 150, y3Y = 0;
+let y4X = 200, y4Y = 0;
+let y5X = 250, y5Y = 0;
+
+// draw() içinde:
+y1Y += 2; circle(y1X, y1Y, 10);
+y2Y += 2; circle(y2X, y2Y, 10);
+y3Y += 2; circle(y3X, y3Y, 10);
+y4Y += 2; circle(y4X, y4Y, 10);
+y5Y += 2; circle(y5X, y5Y, 10);
+
+// 100 yıldız için 200 değişken! 🤯</code></pre>
+                                <p style="color:#ff6b6b; font-size:12px; margin-top:5px;">😫 Her yıldız için 2 değişken + 2 satır kod</p></td>
+                                <td><pre style="margin:0;"><code>// Tüm x'ler bir dizide, y'ler bir dizide
+let yildizX = [50, 100, 150, 200, 250];
+let yildizY = [0, 0, 0, 0, 0];
+
+// draw() içinde - 5 veya 100 farketmez!
+for (let i = 0; i < yildizX.length; i++) {
+  yildizY[i] += 2;
+  circle(yildizX[i], yildizY[i], 10);
+}
+
+// 100 yıldız için sadece 2 dizi!</code></pre>
+                                <p style="color:#4ecdc4; font-size:12px; margin-top:5px;">🎉 Kaç yıldız olursa olsun aynı kod!</p></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Dizilerin 5 Büyük Faydası</h3>
+                    <ul>
+                        <li><strong>📦 Organize:</strong> İlişkili verileri bir arada tut</li>
+                        <li><strong>🔢 Ölçeklenebilir:</strong> 5 veya 5000 eleman - kod aynı</li>
+                        <li><strong>🔄 Döngü Uyumu:</strong> <code>for</code> ile tüm elemanları gez</li>
+                        <li><strong>➕ Dinamik:</strong> Çalışma anında eleman ekle/sil</li>
+                        <li><strong>🎮 Oyun Mekaniği:</strong> Düşman listesi, envanter, skor tablosu</li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 Oyun Örnekleri</div>
+                        <ul>
+                            <li><strong>Space Invaders:</strong> <code>dusmanlar[]</code>, <code>mermiler[]</code></li>
+                            <li><strong>Flappy Bird:</strong> <code>borular[]</code></li>
+                            <li><strong>Snake:</strong> <code>yilanParcalari[]</code></li>
+                            <li><strong>Tetris:</strong> <code>bloklar[][]</code> (2D dizi)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Section: Creating -->
+                <section id="olusturma" class="mt-4">
+                    <h2>Dizi Oluşturma</h2>
+
+                    <pre><code>// Boş dizi
+let renkler = [];
+
+// Değerlerle dizi
+let sayilar = [10, 20, 30, 40, 50];
+let meyveler = ["elma", "armut", "muz"];
+let karisik = [42, "merhaba", true, 3.14];</code></pre>
+
+                    <div id="editor1"></div>
+                </section>
+
+                <!-- Section: Accessing -->
+                <section id="erisim" class="mt-4">
+                    <h2>Elemanlara Erişim</h2>
+
+                    <p>
+                        Dizilerde her eleman bir <strong>index (sıra numarası)</strong> ile işaretlenir. 
+                        Önemli nokta: <strong>index'ler 0'dan başlar</strong>, 1'den değil! 
+                        Bu programlamada evrensel bir kuraldır.
+                    </p>
+                    
+                    <p>
+                        Bir elemanı okumak için <code>dizi[index]</code> yazarsın. 
+                        Örneğin <code>meyveler[0]</code> ilk elemanı, <code>meyveler[2]</code> üçüncü elemanı verir. 
+                        Son elemana ulaşmak için <code>dizi[dizi.length - 1]</code> kullanılır çünkü 
+                        index 0'dan başladığı için son elemanın index'i uzunluktan 1 eksiktir.
+                    </p>
+
+                    <pre><code>let meyveler = ["elma", "armut", "muz"];
+//               [0]      [1]     [2]
+
+console.log(meyveler[0]);  // "elma"
+console.log(meyveler[1]);  // "armut"
+console.log(meyveler[2]);  // "muz"
+
+// Değiştirme
+meyveler[1] = "çilek";  // armut → çilek
+
+// Uzunluk
+console.log(meyveler.length);  // 3</code></pre>
+
+                    <div class="info-box warning">
+                        <div class="info-box-title">⚠️ Dikkat!</div>
+                        <p>
+                            Diziler <strong>0'dan başlar</strong>! İlk eleman <code>[0]</code>, 
+                            son eleman <code>[uzunluk - 1]</code> index'indedir.
+                        </p>
+                    </div>
+
+                    <div id="editor2"></div>
+                </section>
+
+                <!-- Section: Methods -->
+                <section id="metodlar" class="mt-4">
+                    <h2>Dizi Metodları</h2>
+                    
+                    <p>
+                        JavaScript dizileri güçlü <strong>metodlar</strong> (hazır fonksiyonlar) sunar. 
+                        En sık kullanılanlar: <code>push()</code> (sona ekle), <code>pop()</code> (sondan çıkar), 
+                        <code>length</code> (uzunluk). Bu metodlar sayesinde dizilere dinamik olarak 
+                        eleman ekleyip çıkarabilirsin - oyunlarda düşman öldüğünde listeden silmek gibi!
+                    </p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Metod</th>
+                                <th>Açıklama</th>
+                                <th>Örnek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>push(eleman)</code></td>
+                                <td>Sona eleman ekler</td>
+                                <td><code>dizi.push("yeni")</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>pop()</code></td>
+                                <td>Sondan eleman çıkarır ve döner</td>
+                                <td><code>let son = dizi.pop()</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>shift()</code></td>
+                                <td>Baştan eleman çıkarır ve döner</td>
+                                <td><code>let ilk = dizi.shift()</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>unshift(eleman)</code></td>
+                                <td>Başa eleman ekler</td>
+                                <td><code>dizi.unshift("ilk")</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>splice(i, n)</code></td>
+                                <td>i. indexten n eleman siler</td>
+                                <td><code>dizi.splice(2, 1)</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>includes(eleman)</code></td>
+                                <td>Eleman var mı kontrol eder</td>
+                                <td><code>dizi.includes("elma")</code> → <span class="result">true/false</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>indexOf(eleman)</code></td>
+                                <td>Elemanın indexini döner</td>
+                                <td><code>dizi.indexOf("elma")</code> → <span class="result">2</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>length</code></td>
+                                <td>Dizi uzunluğu (eleman sayısı)</td>
+                                <td><code>dizi.length</code> → <span class="result">5</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="editor3"></div>
+                </section>
+
+                <!-- Section: Loops -->
+                <section id="dongu" class="mt-4">
+                    <h2>Döngü ile Diziler</h2>
+                    
+                    <p>
+                        Dizilerin gerçek gücü <strong>döngülerle</strong> ortaya çıkar! 
+                        <code>for</code> döngüsü ile tüm elemanları tek tek gezebilirsin. 
+                        <code>i</code> değişkeni 0'dan başlayıp <code>dizi.length</code>'e kadar gider, 
+                        böylece <code>dizi[i]</code> ile her elemana sırayla erişirsin.
+                    </p>
+                    
+                    <p>
+                        <code>for...of</code> döngüsü daha kısa bir alternatif: index ile uğraşmadan 
+                        doğrudan elemanlara erişirsin. Ama elemanı değiştirmek veya index'i bilmek 
+                        istersen klasik <code>for</code> döngüsü gerekir.
+                    </p>
+
+                    <pre><code>let renkler = ["kırmızı", "yeşil", "mavi"];
+
+// for döngüsü
+for (let i = 0; i < renkler.length; i++) {
+  console.log(renkler[i]);
+}
+
+// for...of döngüsü (daha kolay)
+for (let renk of renkler) {
+  console.log(renk);
+}</code></pre>
+
+                    <div id="editor4"></div>
+                </section>
+
+                <!-- Section: Examples -->
+                <section id="ornekler" class="mt-4">
+                    <h2>Uygulama Örnekleri</h2>
+
+                    <h3>Örnek 1: Renk Paleti</h3>
+                    <p>Dizide renkleri sakla ve kullan:</p>
+                    <div id="editor5"></div>
+
+                    <h3>Örnek 2: Çoklu Top Animasyonu</h3>
+                    <p>Birden fazla nesneyi dizide sakla:</p>
+                    <div id="editor6"></div>
+
+                    <h3>Örnek 3: Fare İzi</h3>
+                    <p>Fare konumlarını dizide sakla:</p>
+                    <div id="editor7"></div>
+
+                    <h3>Örnek 4: Parçacık Patlaması</h3>
+                    <p>Dinamik olarak eleman ekle ve sil:</p>
+                    <div id="editor8"></div>
+                </section>
+
+                <!-- Summary -->
+                <section class="mt-4">
+                    <h2>Özet</h2>
+
+                    <div class="card" style="background: rgba(0, 217, 255, 0.05);">
+                        <h4>Bu Derste Öğrendikleriniz</h4>
+                        <ul>
+                            <li><strong>Dizi:</strong> Birden fazla değeri tek değişkende saklar</li>
+                            <li><strong>Index:</strong> 0'dan başlayan eleman numaraları</li>
+                            <li><strong>push/pop:</strong> Sona ekleme ve silme</li>
+                            <li><strong>length:</strong> Dizi uzunluğu</li>
+                            <li><strong>Döngü:</strong> for veya for...of ile tüm elemanlara eriş</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <section class="mt-4" style="display: flex; justify-content: space-between; padding: 2rem 0; border-top: 1px solid var(--border-color);">
+                    <a href="08-fonksiyonlar.html" class="btn btn-secondary">
+                        ← Önceki: Fonksiyonlar
+                    </a>
+                    <a href="10-nesneler.html" class="btn btn-primary">
+                        Sonraki Ders: Nesneler ve Sınıflar →
+                    </a>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="../js/editor.js"></script>
+    <script src="../js/theme.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Örnek 1: Dizi Oluşturma
+            new P5CodeEditor('editor1', {
+                initialCode: `function setup() {
+  createCanvas(400, 300);
+  background(30);
+  
+  // FARKLI TÜRDE DİZİLER
+  // Sayılardan oluşan dizi
+  let sayilar = [10, 25, 30, 45, 50];
+  
+  // Metinlerden (string) oluşan dizi
+  let isimler = ["Ayşe", "Mehmet", "Zeynep"];
+  
+  // Renk kodlarından oluşan dizi (hex format)
+  let renkler = ["#FF6B6B", "#4ECDC4", "#FFE66D"];
+  
+  // DİZİLERİ EKRANA YAZ
+  textSize(14);
+  fill(255);
+  noStroke();
+  
+  // Dizi doğrudan yazılırsa virgülle ayrılmış görünür
+  text("Sayılar: " + sayilar, 20, 30);
+  text("İsimler: " + isimler, 20, 60);
+  text("Renkler dizisi:", 20, 100);
+  
+  // RENKLERİ GÖRSELLEŞTİR
+  // Döngü ile her rengi kutu olarak çiz
+  for (let i = 0; i < renkler.length; i++) {
+    // fill() fonksiyonu hex renk kodunu kabul eder
+    fill(renkler[i]);
+    // Her kutu 60 piksel aralıkla
+    rect(20 + i * 60, 110, 50, 50, 5);
+    
+    // Altına index numarasını yaz
+    fill(255);
+    text("[" + i + "]", 35 + i * 60, 180);
+  }
+  
+  // .length ÖZELLİĞİ
+  // Her dizinin kaç elemanı olduğunu verir
+  fill(100, 255, 100);
+  text("sayilar.length = " + sayilar.length, 20, 220);
+  text("isimler.length = " + isimler.length, 20, 245);
+  text("renkler.length = " + renkler.length, 20, 270);
+}`,
+                autoRun: true,
+                showConsole: true
+            });
+
+            // Örnek 2: Index Erişimi
+            new P5CodeEditor('editor2', {
+                initialCode: `function setup() {
+  createCanvas(400, 300);
+  noLoop();  // draw() sadece 1 kez çalışsın
+}
+
+function draw() {
+  background(30);
+  
+  // Emoji dizisi - her emoji bir eleman
+  let meyveler = ["🍎", "🍐", "🍌", "🍇", "🍊"];
+  //   index:       [0]    [1]    [2]    [3]    [4]
+  
+  textSize(40);
+  textAlign(CENTER, CENTER);
+  
+  // DÖNGÜ İLE HER MEYVEYE ERİŞ
+  for (let i = 0; i < meyveler.length; i++) {
+    // Her meyve için x konumu hesapla
+    // i=0 -> x=50, i=1 -> x=120, i=2 -> x=190...
+    let x = 50 + i * 70;
+    
+    // Arka plan kutusu
+    stroke(100);
+    strokeWeight(2);
+    fill(50);
+    rect(x - 25, 80, 50, 60, 5);
+    
+    // meyveler[i] -> i. indexteki eleman
+    // i=0 iken "🍎", i=2 iken "🍌" vs.
+    noStroke();
+    text(meyveler[i], x, 110);
+    
+    // Altına index numarası
+    fill(0, 200, 255);
+    textSize(16);
+    text("[" + i + "]", x, 160);
+    textSize(40);
+    fill(255);
+  }
+  
+  // TEK TEK ERİŞİM ÖRNEKLERİ
+  textSize(14);
+  textAlign(LEFT);
+  fill(255);
+  text("meyveler[0] = " + meyveler[0], 20, 200);  // İlk eleman
+  text("meyveler[2] = " + meyveler[2], 20, 225);  // 3. eleman
+  text("meyveler[4] = " + meyveler[4], 20, 250);  // 5. eleman
+  
+  // SON ELEMANA ERİŞİM
+  // length=5 ama son index=4 (çünkü 0'dan başlıyor)
+  fill(255, 200, 100);
+  textSize(12);
+  text("Son eleman: meyveler[meyveler.length-1] = " + meyveler[meyveler.length - 1], 20, 275);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 3: Metodlar
+            new P5CodeEditor('editor3', {
+                initialCode: `// Global değişkenler
+let liste = [];    // Test dizisi
+let y = 30;        // Yazı pozisyonu
+
+function setup() {
+  createCanvas(400, 400);
+  textSize(14);
+  noLoop();  // Bir kez çalışsın yeter
+}
+
+function draw() {
+  background(30);
+  y = 30;  // Her seferinde en üstten başla
+  fill(255);
+  
+  // BAŞLANGIÇ DİZİSİ
+  liste = ["A", "B", "C"];
+  goster("Başlangıç");
+  
+  // PUSH: Sona eleman ekler
+  liste.push("D");  // ["A","B","C","D"]
+  goster("push('D') sonrası");
+  
+  // push() birden fazla eleman ekleyebilir
+  liste.push("E", "F");  // ["A","B","C","D","E","F"]
+  goster("push('E', 'F') sonrası");
+  
+  // POP: Sondan eleman çıkarır ve DÖNDERİR
+  let cikarilan = liste.pop();  // "F" çıkar, cikarilan="F"
+  goster("pop() sonrası (çıkarılan: " + cikarilan + ")");
+  
+  // UNSHIFT: Başa eleman ekler
+  liste.unshift("X");  // ["X","A","B","C","D","E"]
+  goster("unshift('X') sonrası");
+  
+  // SHIFT: Baştan eleman çıkarır ve dönderir
+  let ilk = liste.shift();  // "X" çıkar
+  goster("shift() sonrası (çıkarılan: " + ilk + ")");
+  
+  // SPLICE: Ortadan eleman siler
+  // splice(başlangiçIndex, kaçEleman)
+  liste.splice(1, 2);  // index 1'den başla, 2 eleman sil
+  goster("splice(1, 2) sonrası");
+}
+
+// Diziyi ekrana yazdıran yardımcı fonksiyon
+function goster(aciklama) {
+  fill(100, 200, 255);
+  text(aciklama + ":", 20, y);
+  fill(255);
+  // join(", ") dizinin elemanlarını virgülle birleştirir
+  text("[" + liste.join(", ") + "]  (uzunluk: " + liste.length + ")", 200, y);
+  y += 25;  // Bir sonraki satıra geç
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 4: Döngü
+            new P5CodeEditor('editor4', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Boyut değerlerinden oluşan dizi
+  let boyutlar = [20, 35, 50, 40, 25, 60, 45];
+  
+  // ===== KLASİK FOR DÖNGÜSÜ =====
+  // i: 0'dan başlayıp length'e kadar gider
+  // Her adımda boyutlar[i] ile o elemana erişiriz
+  for (let i = 0; i < boyutlar.length; i++) {
+    // Her daire için x pozisyonu hesapla
+    let x = 30 + i * 55;
+    // Diziden boyut değerini al
+    let boyut = boyutlar[i];
+    
+    // i'ye göre renk değişimi (gradyan efekti)
+    // i arttıkça kırmızı artar: 50, 80, 110, 140...
+    fill(50 + i * 30, 100, 200);
+    noStroke();
+    circle(x, 100, boyut);
+    
+    // Altına boyut değerini yaz
+    fill(255);
+    textAlign(CENTER);
+    textSize(12);
+    text(boyut, x, 140);
+  }
+  
+  // ===== FOR...OF DÖNGÜSÜ =====
+  // Daha kısa sözdizimi - index'e ihtiyaç yoksa ideal
+  // "renk" değişkeni sırayla her elemanı alır
+  let renkler = [
+    color(255, 100, 100),  // Kırmızımsı
+    color(100, 255, 100),  // Yeşilimsi
+    color(100, 100, 255),  // Mavimsi
+    color(255, 255, 100),  // Sarımsı
+    color(255, 100, 255)   // Morumus
+  ];
+  
+  let xPos = 40;  // X pozisyonunu manuel takip
+  for (let renk of renkler) {
+    fill(renk);  // "renk" sırayla her color() olur
+    rect(xPos, 200, 60, 60, 10);
+    xPos += 70;  // Bir sonraki kutu için kaydır
+  }
+  
+  // ===== FARE İLE DİZİ SEÇİMİ =====
+  // floor() ondalığı atar: 145/70=2.07 -> 2
+  let secili = floor(mouseX / 70);
+  
+  // Geçerli index mi kontrol et
+  if (secili >= 0 && secili < renkler.length) {
+    // Seçili kutunun etrafına beyaz çerçeve
+    stroke(255);
+    strokeWeight(3);
+    noFill();
+    rect(40 + secili * 70, 200, 60, 60, 10);
+    
+    fill(255);
+    noStroke();
+    textSize(16);
+    text("Seçili: renk #" + secili, width/2, 300);
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 5: Renk Paleti
+            new P5CodeEditor('editor5', {
+                initialCode: `// Renkleri saklayan dizi
+let palet = [];
+// Hangi renk seçili (index)
+let seciliIndex = 0;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // RENK PALETİ OLUŞTUR
+  // color() fonksiyonu RGB değerlerinden renk nesnesi oluşturur
+  palet = [
+    color(231, 76, 60),   // Kırmızı
+    color(46, 204, 113),  // Yeşil
+    color(52, 152, 219),  // Mavi
+    color(155, 89, 182),  // Mor
+    color(241, 196, 15),  // Sarı
+    color(26, 188, 156),  // Turkuaz
+    color(230, 126, 34),  // Turuncu
+    color(236, 240, 241)  // Beyaz
+  ];
+}
+
+function draw() {
+  background(30);
+  
+  // PALET KUTUŚINI ÇİZ
+  let kutuBoyut = 40;
+  for (let i = 0; i < palet.length; i++) {
+    // Her kutunun x pozisyonu
+    // i=0 -> x=20, i=1 -> x=70, i=2 -> x=120...
+    let x = 20 + i * (kutuBoyut + 10);
+    
+    // SEÇİLİ KUTU EFEKTİ
+    // Seçili kutunun etrafına beyaz çerçeve
+    if (i == seciliIndex) {
+      stroke(255);       // Beyaz çizgi
+      strokeWeight(3);   // Kalın çizgi
+    } else {
+      noStroke();        // Diğerleri çerçevesiz
+    }
+    
+    // palet[i] -> i. renk nesnesi
+    fill(palet[i]);
+    rect(x, 20, kutuBoyut, kutuBoyut, 5);
+  }
+  
+  // ÇİZİM ALANI
+  fill(50);
+  noStroke();
+  rect(20, 80, 360, 280, 10);
+  
+  // FARE BASILIYSA VE ÇİZİM ALANINDAYSA
+  // mouseIsPressed: fare butonu basılı mı?
+  if (mouseIsPressed && mouseY > 80) {
+    // Seçili renkle daire çiz
+    fill(palet[seciliIndex]);
+    noStroke();
+    circle(mouseX, mouseY, 30);
+  }
+  
+  // BİLGİ
+  fill(255);
+  textSize(12);
+  text("Renk seçmek için üstteki kutuya tıkla, çizmek için aşağıda sürükle", 20, 380);
+}
+
+function mousePressed() {
+  // PALET SEÇİMİ
+  // Sadece üst kısımda (y < 70) tıklanırsa
+  if (mouseY < 70) {
+    // Her kutunun alanını kontrol et
+    for (let i = 0; i < palet.length; i++) {
+      let x = 20 + i * 50;
+      // Fare bu kutunun içinde mi?
+      if (mouseX > x && mouseX < x + 40) {
+        seciliIndex = i;  // Bu rengi seç
+        break;            // Döngüden çık
+      }
+    }
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 6: Çoklu Top
+            new P5CodeEditor('editor6', {
+                initialCode: `// Tüm topları saklayan dizi
+// Her top bir "nesne" olacak (x, y, hız, renk vs.)
+let toplar = [];
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // BAŞLANGIÇTA 15 TOP OLUŞTUR
+  for (let i = 0; i < 15; i++) {
+    // Her top bir nesne (object) ve diziye ekleniyor
+    // push() ile sona eklenir
+    toplar.push({
+      x: random(width),        // Rastgele x konumu
+      y: random(height),       // Rastgele y konumu
+      vx: random(-3, 3),       // X yönü hızı (velocity x)
+      vy: random(-3, 3),       // Y yönü hızı
+      boyut: random(20, 50),   // Rastgele boyut
+      renk: color(random(255), random(255), random(255))  // Rastgele renk
+    });
+  }
+}
+
+function draw() {
+  background(30, 30, 50);
+  
+  // TÜM TOPLARI GÜNCELLE VE ÇİZ
+  for (let i = 0; i < toplar.length; i++) {
+    // toplar[i] -> i. top nesnesi
+    let top = toplar[i];
+    
+    // HAREKET: Pozisyonu hıza göre güncelle
+    top.x += top.vx;  // x = x + vx
+    top.y += top.vy;  // y = y + vy
+    
+    // KENARLARDAN SEKME
+    // Sol veya sağ kenara çarptıysa x hızını tersle
+    if (top.x < 0 || top.x > width) {
+      top.vx *= -1;  // vx = vx * -1 (yön değişir)
+    }
+    // Üst veya alt kenara çarptıysa y hızını tersle
+    if (top.y < 0 || top.y > height) {
+      top.vy *= -1;
+    }
+    
+    // TOPU ÇİZ
+    noStroke();
+    fill(top.renk);
+    circle(top.x, top.y, top.boyut);
+    
+    // PARLAKLIK EFEKTİ (ışık yansıması)
+    // Yarı saydam beyaz küçük daire
+    fill(255, 255, 255, 100);  // Beyaz, %40 opak
+    circle(top.x - top.boyut * 0.15, top.y - top.boyut * 0.15, top.boyut * 0.3);
+  }
+  
+  // BİLGİ
+  fill(255);
+  textSize(14);
+  text("Top sayısı: " + toplar.length, 10, 25);
+  text("Tıkla: yeni top ekle", 10, 45);
+}
+
+function mousePressed() {
+  // YENİ TOP EKLE
+  // Tıklanan konumda yeni top oluştur
+  toplar.push({
+    x: mouseX,                 // Fare x konumu
+    y: mouseY,                 // Fare y konumu
+    vx: random(-4, 4),         // Rastgele hız
+    vy: random(-4, 4),
+    boyut: random(25, 60),
+    renk: color(random(255), random(255), random(255))
+  });
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 7: Fare İzi
+            new P5CodeEditor('editor7', {
+                initialCode: `// Fare konumlarını saklayacak dizi
+let izler = [];
+// Maksimum kaç nokta saklanacak
+let maxUzunluk = 50;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(20);
+  
+  // HER KAREDE YENİ KONUM EKLE
+  // push() ile dizinin sonuna yeni nesne ekle
+  izler.push({
+    x: mouseX,
+    y: mouseY
+  });
+  
+  // DİZİ ÇOK UZARSA BAŞTAN SİL
+  // shift() en eski (ilk) elemanı siler
+  // Böylece dizi hep maxUzunluk kadar kalır
+  if (izler.length > maxUzunluk) {
+    izler.shift();
+  }
+  
+  // TÜM NOKTÁLARI ÇİZ
+  noFill();
+  
+  for (let i = 0; i < izler.length; i++) {
+    let nokta = izler[i];
+    
+    // ORAN HESABI: Eski noktalar küçük, yeniler büyük
+    // i=0 -> oran=0 (en eski), i=49 -> oran~1 (en yeni)
+    let oran = i / izler.length;
+    
+    // Orana göre opaklık ve boyut
+    let alfa = oran * 255;     // 0->255 (soluktan parşağa)
+    let boyut = oran * 30;     // 0->30 (küçükten büyüğe)
+    
+    // GÖKKUŞAĞI RENGİ (sin dalgası ile)
+    // sin() -1 ile 1 arası değer verir
+    // *127+128 ile 0-255 aralığına çevir
+    let renk = color(
+      sin(oran * PI) * 127 + 128,      // Kırmızı
+      sin(oran * PI + 2) * 127 + 128,  // Yeşil (faz kayması)
+      sin(oran * PI + 4) * 127 + 128,  // Mavi (faz kayması)
+      alfa
+    );
+    
+    fill(renk);
+    noStroke();
+    circle(nokta.x, nokta.y, boyut);
+    
+    // NOKTALAR ARASI ÇİZGİ
+    // İlk nokta hariç (i>0), önceki noktaya bağla
+    if (i > 0) {
+      let onceki = izler[i - 1];
+      stroke(renk);
+      strokeWeight(boyut / 5);
+      line(onceki.x, onceki.y, nokta.x, nokta.y);
+    }
+  }
+  
+  // BİLGİ
+  fill(255);
+  noStroke();
+  textSize(12);
+  text("İz uzunluğu: " + izler.length + "/" + maxUzunluk, 10, 25);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 8: Parçacık Patlaması
+            new P5CodeEditor('editor8', {
+                initialCode: `// Tüm parçacıkları saklayan dizi
+let parcaciklar = [];
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  // Yarı saydam arkaplan = iz bırakma efekti
+  // 50 = alfa değeri (%20 opaklık)
+  background(10, 10, 30, 50);
+  
+  // TERSİNE DÖNGÜ İLE PARÇACIK GÜNCELLEME
+  // Neden tersten? Çünkü splice() ile silince
+  // indexler kayar, tersten gidince sorun olmaz
+  for (let i = parcaciklar.length - 1; i >= 0; i--) {
+    let p = parcaciklar[i];
+    
+    // FİZİK GÜNCELLEMESİ
+    p.x += p.vx;          // X pozisyonunu hıza göre güncelle
+    p.y += p.vy;          // Y pozisyonunu güncelle
+    p.vy += 0.1;          // Yerçekimi: her karede aşağı hız artışı
+    p.alfa -= 3;          // Opaklık azal: yavaşça solma
+    p.boyut *= 0.98;      // Boyut küçülme: %2 azalma
+    
+    // ÇİZİM
+    noStroke();
+    fill(p.r, p.g, p.b, p.alfa);  // Alfa ile saydamlık
+    circle(p.x, p.y, p.boyut);
+    
+    // ÖLÜ PARÇACIKLARI SİL
+    // Görünmez veya çok küçüklerse diziden çıkar
+    // splice(i, 1) = i. indexten 1 eleman sil
+    if (p.alfa <= 0 || p.boyut < 0.5) {
+      parcaciklar.splice(i, 1);
+    }
+  }
+  
+  // BİLGİ
+  fill(255);
+  noStroke();
+  textSize(14);
+  text("Parçacık: " + parcaciklar.length, 10, 25);
+  text("Tıkla: patlama!", 10, 45);
+}
+
+function mousePressed() {
+  // PATLAMA RENK TEMASI
+  // Rastgele ama uyumlu renkler
+  let renk = {
+    r: random(200, 255),   // Kırmızı-turuncu tonlar
+    g: random(100, 200),   // Yeşil orta
+    b: random(50, 150)     // Mavi düşük
+  };
+  
+  // 30 PARÇACIK OLUŞTUR
+  for (let i = 0; i < 30; i++) {
+    // Rastgele açı (0 ile 2π arası = 360 derece)
+    let aci = random(TWO_PI);
+    // Rastgele hız büyüklüğü
+    let hiz = random(2, 8);
+    
+    // Yeni parçacık nesnesi oluştur ve diziye ekle
+    parcaciklar.push({
+      x: mouseX,               // Fare pozisyonundan başla
+      y: mouseY,
+      vx: cos(aci) * hiz,      // X hızı = cos(açı) * hız
+      vy: sin(aci) * hiz - 2,  // Y hızı = sin(açı) * hız (-2: yukarı it)
+      boyut: random(5, 15),    // Rastgele başlangıç boyutu
+      alfa: 255,               // Tam opak başla
+      r: renk.r + random(-30, 30),  // Renk varyasyonu
+      g: renk.g + random(-30, 30),
+      b: renk.b + random(-30, 30)
+    });
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+        });
+    </script>
+</body>
+</html>

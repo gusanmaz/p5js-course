@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <title>Ders 6: Döngüler - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html" class="active">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#dongu-nedir">Döngü Nedir?</a></li>
+                    <li><a href="#for-dongusu">for Döngüsü</a></li>
+                    <li><a href="#while-dongusu">while Döngüsü</a></li>
+                    <li><a href="#ic-ice-donguler">İç İçe Döngüler</a></li>
+                    <li><a href="#izgara">Izgara Desenleri</a></li>
+                    <li><a href="#ornekler">Uygulama Örnekleri</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 6: Döngüler (Loops)</h1>
+                <div class="lesson-meta">
+                    <span>📚 Orta Seviye</span>
+                    <span>⏱️ 60 dakika</span>
+                    <span>🎯 Tekrarlı İşlemler</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: What is a Loop -->
+                <section id="dongu-nedir">
+                    <h2>Döngü Nedir ve Neden Önemli?</h2>
+                    
+                    <p>
+                        Diyelim ki ekrana yan yana 50 tane daire çizmek istiyorsunuz. 
+                        <code>circle()</code> fonksiyonunu 50 kez mi yazacaksınız? 
+                        Tabii ki hayır! İşte döngüler tam da bu sorunu çözer.
+                    </p>
+
+                    <div class="info-box note">
+                        <div class="info-box-title">🎮 Oyun Programcısı İçin Neden Kritik?</div>
+                        <p>
+                            Oyunlarda <strong>her şey tekrar</strong> üzerine kurulu: her karede tüm düşmanları güncelle, 
+                            tüm mermileri hareket ettir, tüm parçacıkları çiz... <code>draw()</code> fonksiyonu zaten 
+                            bir döngü! İç içe döngülerle ızgaralar (grid), haritalar, seviyeler oluşturursun.
+                        </p>
+                    </div>
+                    
+                    <p>
+                        <strong>Döngüler</strong>, aynı kod bloğunu belirli bir koşul sağlandığı 
+                        sürece (veya belirli sayıda) tekrar tekrar çalıştıran yapılardır. 
+                        Programlamada en temel ve en güçlü araçlardan biridir.
+                    </p>
+
+                    <h3>🎯 Problem: 10 Çizgi Çizmek</h3>
+                    <p>
+                        Aşağıda 10 tane dikey çizgi çizmek için iki farklı yaklaşım var. 
+                        Hangisini tercih ederdiniz?
+                    </p>
+                    
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>❌ Döngü Olmadan (10 çizgi)</th>
+                                <th>✅ Döngü ile (10 çizgi)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><pre style="margin:0;"><code>line(40, 50, 40, 350);
+line(80, 50, 80, 350);
+line(120, 50, 120, 350);
+line(160, 50, 160, 350);
+line(200, 50, 200, 350);
+line(240, 50, 240, 350);
+line(280, 50, 280, 350);
+line(320, 50, 320, 350);
+line(360, 50, 360, 350);
+line(400, 50, 400, 350);</code></pre>
+                                <p style="color:#ff6b6b; font-size:12px; margin-top:5px;">😫 10 satır... 100 çizgi için 100 satır!</p></td>
+                                <td><pre style="margin:0;"><code>for (let i = 0; i < 10; i++) {
+  let x = 40 + i * 40;
+  line(x, 50, x, 350);
+}</code></pre>
+                                <p style="color:#4ecdc4; font-size:12px; margin-top:5px;">🎉 Sadece 4 satır! 100 çizgi için de 4 satır!</p></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Döngülerin 5 Büyük Faydası</h3>
+                    <ul>
+                        <li><strong>🔄 Tekrar:</strong> 100 şekil çizmek için 100 satır değil, 3-4 satır</li>
+                        <li><strong>🎨 Desenler:</strong> Izgaralar, çizgiler, dalgalar, parçacık efektleri</li>
+                        <li><strong>📊 Veri İşleme:</strong> Dizideki tüm elemanları gezme</li>
+                        <li><strong>🎬 Animasyon:</strong> Birden fazla nesneyi aynı anda güncelleme</li>
+                        <li><strong>🎮 Oyunlar:</strong> Düşman sürüleri, mermi yağmuru, tile-based haritalar</li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 Oyun Örnekleri</div>
+                        <ul>
+                            <li><strong>Space Invaders:</strong> Düşman ızgarası (iç içe for)</li>
+                            <li><strong>Tetris:</strong> 10x20 oyun alanı (2D grid)</li>
+                            <li><strong>Candy Crush:</strong> Şeker ızgarası kontrol + eşleştirme</li>
+                            <li><strong>Minecraft:</strong> Her chunk'taki blokları render etme</li>
+                        </ul>
+                    </div>
+                    
+                    <h3>Döngü Mantığını Anlama</h3>
+                    <p>
+                        Aşağıdaki kod örneğindeki gibi çizgilere bakarsak bir <strong>desen</strong> görürüz:
+                    </p>
+                    <ul>
+                        <li>İlk çizgi: x = 40</li>
+                        <li>İkinci çizgi: x = 80 (40 + 40)</li>
+                        <li>Üçüncü çizgi: x = 120 (40 + 40 + 40)</li>
+                        <li>... ve böyle devam eder</li>
+                    </ul>
+                    <p>
+                        Matematiksel olarak: <code>x = 40 + (sıra numarası × 40)</code>
+                    </p>
+                    <p>
+                        Döngü değişkeni <code>i</code> her seferinde 0, 1, 2, 3... değerlerini alır. 
+                        Bunu formüle koyarsak: <code>x = 40 + i * 40</code>
+                    </p>
+                </section>
+
+                <!-- Section: for Loop -->
+                <section id="for-dongusu" class="mt-4">
+                    <h2>for Döngüsü</h2>
+
+                    <p>
+                        <code>for</code> döngüsü, belirli sayıda tekrar yapmak için en çok kullanılan 
+                        döngü türüdür. Üç bölümden oluşur:
+                    </p>
+
+                    <pre><code>for (başlangıç; koşul; artış) {
+  // Tekrarlanacak kod
+}
+
+// Örnek:
+for (let i = 0; i < 10; i++) {
+  console.log(i);  // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+}</code></pre>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Bölüm</th>
+                                <th>Kod</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>1. Başlangıç</strong></td>
+                                <td><code>let i = 0</code></td>
+                                <td>Sayaç değişkeni oluşturulur ve başlangıç değeri atanır</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. Koşul</strong></td>
+                                <td><code>i < 10</code></td>
+                                <td>Bu koşul doğru olduğu sürece döngü devam eder</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. Artış</strong></td>
+                                <td><code>i++</code></td>
+                                <td>Her tekrardan sonra sayaç güncellenir</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="editor1"></div>
+
+                    <div class="challenge-box">
+                        <h4>🧪 Deneyin</h4>
+                        <ul>
+                            <li><code>adet</code> değerini 20 yapın</li>
+                            <li><code>bosluk</code> değerini 15 yapın</li>
+                            <li>Çizgileri yatay yapmak için <code>line(50, x, 350, x)</code> deneyin</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Section: while Loop -->
+                <section id="while-dongusu" class="mt-4">
+                    <h2>while Döngüsü</h2>
+
+                    <p>
+                        <code>while</code> döngüsü, bir koşul <strong>doğru olduğu sürece</strong> 
+                        çalışır. Kaç kez döneceği önceden bilinmediğinde kullanışlıdır.
+                    </p>
+
+                    <pre><code>let i = 0;
+while (i < 10) {
+  // Tekrarlanacak kod
+  i++;  // ÖNEMLİ: Sayacı artırmayı unutma!
+}</code></pre>
+
+                    <div class="info-box warning">
+                        <div class="info-box-title">⚠️ Sonsuz Döngü Tehlikesi!</div>
+                        <p>
+                            <code>while</code> döngüsünde sayacı artırmayı unutursanız, koşul hiçbir zaman 
+                            false olmaz ve program sonsuza kadar döner (tarayıcı donar!). Dikkatli olun!
+                        </p>
+                    </div>
+
+                    <h3>for vs while Karşılaştırması</h3>
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>for Döngüsü</th>
+                                <th>while Döngüsü</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><pre><code>for (let i = 0; i < 5; i++) {
+  circle(50 + i * 40, 200, 30);
+}</code></pre>
+                                <span class="result">✅ Sayaç tek satırda, daha temiz</span></td>
+                                <td><pre><code>let i = 0;
+while (i < 5) {
+  circle(50 + i * 40, 200, 30);
+  i++;
+}</code></pre>
+                                <span class="comment">Aynı sonuç, daha fazla satır</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="editor2"></div>
+                </section>
+
+                <!-- Section: Nested Loops -->
+                <section id="ic-ice-donguler" class="mt-4">
+                    <h2>İç İçe Döngüler (Nested Loops)</h2>
+
+                    <p>
+                        Bir döngünün içine başka bir döngü koyarak 2 boyutlu desenler oluşturabilirsiniz. 
+                        Bu, <strong>ızgara (grid)</strong> yapıları için temel tekniktir.
+                    </p>
+
+                    <pre><code>// Dıştaki döngü: Satırlar (y)
+for (let y = 0; y < satırSayisi; y++) {
+  
+  // İçteki döngü: Sütunlar (x)
+  for (let x = 0; x < sutunSayisi; x++) {
+    // Her hücre için bir şey yap
+    circle(x * bosluk, y * bosluk, boyut);
+  }
+}</code></pre>
+
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 İç İçe Döngü Nasıl Çalışır?</div>
+                        <p>
+                            Dıştaki döngü her 1 adım attığında, içteki döngü <strong>tamamen baştan sona</strong> 
+                            çalışır. 3x3 bir ızgara için:
+                        </p>
+                        <p>
+                            <code>y=0: x=0,1,2</code> → <code>y=1: x=0,1,2</code> → <code>y=2: x=0,1,2</code>
+                        </p>
+                        <p>Toplam: 3 × 3 = 9 tekrar</p>
+                    </div>
+
+                    <div id="editor3"></div>
+                </section>
+
+                <section class="mt-4">
+                    <h2>Mod (%) Operatörü - Detaylı Açıklama</h2>
+                    
+                    <p>
+                        <code>%</code> (mod/modulo) operatörü, bir sayının diğerine bölümünden 
+                        <strong>kalanı</strong> verir. İlk bakışta basit görünse de, döngülerde 
+                        inanılmaz güçlü desenlere kapı açar.
+                    </p>
+                    
+                    <table class="info-table">
+                        <thead>
+                            <tr>
+                                <th>İfade</th>
+                                <th>Sonuç</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>7 % 3</code></td>
+                                <td>1</td>
+                                <td>7 ÷ 3 = 2 kalan <strong>1</strong></td>
+                            </tr>
+                            <tr>
+                                <td><code>10 % 5</code></td>
+                                <td>0</td>
+                                <td>10 ÷ 5 = 2 kalan <strong>0</strong> (tam bölünür)</td>
+                            </tr>
+                            <tr>
+                                <td><code>13 % 4</code></td>
+                                <td>1</td>
+                                <td>13 ÷ 4 = 3 kalan <strong>1</strong></td>
+                            </tr>
+                            <tr>
+                                <td><code>8 % 2</code></td>
+                                <td>0</td>
+                                <td>Çift sayı! (2'ye tam bölünür)</td>
+                            </tr>
+                            <tr>
+                                <td><code>9 % 2</code></td>
+                                <td>1</td>
+                                <td>Tek sayı! (2'ye bölünce 1 kalır)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3>Mod'un Sihirli Gücü: Döngüsel Sayma</h3>
+                    <p>
+                        Mod operatörünün en güzel özelliği <strong>döngüsel değerler</strong> üretmesidir. 
+                        Örneğin <code>i % 5</code> her zaman 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, ... şeklinde döner:
+                    </p>
+                    <pre><code>// i = 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10...
+// i % 5 = 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0...</code></pre>
+                    
+                    <h3>Kullanım Alanları</h3>
+                    
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h4>🔢 Tek/Çift Kontrolü</h4>
+                            <code>sayi % 2 == 0</code>
+                            <p>Sayı çift ise kalan 0, tek ise kalan 1 olur. Satranç tahtası deseni için kullanılır.</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>🔄 Döngüsel Animasyon</h4>
+                            <code>frameCount % 60</code>
+                            <p>Her saniye 0-59 arası değişir. Sürekli dönen animasyonlar için idealdir.</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>📍 Ekran Sınırına Dönme</h4>
+                            <code>x % width</code>
+                            <p>x değeri width'i geçince 0'dan başlar. Pac-Man tarzı "karşıdan çıkma" efekti.</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>🎨 Renk Döngüsü</h4>
+                            <code>i % 3</code>
+                            <p>0, 1, 2, 0, 1, 2... Her 3 elemanda bir aynı renk. Şerit desenleri için.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="editor-mod"></div>
+                </section>
+
+                <section class="mt-4">
+                    <h2>map() Fonksiyonu</h2>
+                    
+                    <p>
+                        <code>map()</code> fonksiyonu, bir değeri bir aralıktan başka bir aralığa 
+                        dönüştürür. Döngülerde çok kullanışlıdır çünkü <code>i</code> değişkenini 
+                        istediğiniz herhangi bir aralığa çevirebilirsiniz.
+                    </p>
+                    
+                    <pre><code>map(değer, eskiMin, eskiMax, yeniMin, yeniMax)
+
+// Örnek: 0-10 aralığını 0-255 aralığına dönüştür
+let renk = map(5, 0, 10, 0, 255);  // Sonuç: 127.5
+
+// i değeri 0-9 arasında, bunu 100-300 arasına çevir
+for (let i = 0; i < 10; i++) {
+  let x = map(i, 0, 9, 100, 300);
+  circle(x, 200, 20);
+}</code></pre>
+                    
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 map() Neden Kullanışlı?</div>
+                        <p>
+                            Diyelim ki fareyi hareket ettirdiğinizde bir dairenin boyutu değişsin. 
+                            Fare X konumu 0-400 arası, ama daire boyutu 20-100 arası olsun:
+                        </p>
+                        <pre><code>let boyut = map(mouseX, 0, 400, 20, 100);</code></pre>
+                        <p>
+                            Bu, mouseX=0 iken boyut=20, mouseX=400 iken boyut=100 olur. 
+                            Aradaki değerler otomatik hesaplanır!
+                        </p>
+                    </div>
+                    
+                    <div id="editor-map"></div>
+                </section>
+
+                <section id="izgara" class="mt-4">
+                    <h2>Izgara Desenleri</h2>
+
+                    <h3>Satranç Tahtası</h3>
+                    <p>
+                        Klasik satranç tahtası deseni için <code>(i + j) % 2</code> formülünü kullanırız.
+                        Bu, satır ve sütun toplamının çift mi tek mi olduğunu kontrol eder.
+                    </p>
+
+                    <div id="editor4"></div>
+
+                    <h3>Renkli Gradient Izgara</h3>
+                    <p>Konum bilgisini renklere dönüştürerek güzel gradientler oluşturabilirsiniz:</p>
+                    <div id="editor5"></div>
+                </section>
+
+                <!-- Section: break and continue -->
+                <section class="mt-4">
+                    <h2>break ve continue</h2>
+                    
+                    <p>
+                        Bazen döngüyü erken sonlandırmak veya bazı adımları atlamak isteriz. 
+                        <code>break</code> ve <code>continue</code> komutları bu işe yarar.
+                    </p>
+                    
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Komut</th>
+                                <th>Örnek Kod</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>break</code><br><strong>Döngüyü Durdur</strong></td>
+                                <td><pre><code>for (let i = 0; i < 100; i++) {
+  if (i == 5) break;
+  console.log(i);
+}
+// Çıktı: 0, 1, 2, 3, 4</code></pre></td>
+                                <td>Döngü tamamen sonlanır, sonraki kodlara geçilir</td>
+                            </tr>
+                            <tr>
+                                <td><code>continue</code><br><strong>Adımı Atla</strong></td>
+                                <td><pre><code>for (let i = 0; i < 5; i++) {
+  if (i == 2) continue;
+  console.log(i);
+}
+// Çıktı: 0, 1, 3, 4</code></pre></td>
+                                <td>Sadece o adım atlanır, döngü devam eder</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div id="editor-break"></div>
+                </section>
+
+                <!-- Section: Practice Examples -->
+                <section id="ornekler" class="mt-4">
+                    <h2>Uygulama Örnekleri</h2>
+                    
+                    <h3>Örnek 1: Çizgi Desenleri</h3>
+                    <p>Yatay ve dikey çizgilerle grid:</p>
+                    <div id="editor6"></div>
+
+                    <h3>Örnek 2: Büyüyen Daireler</h3>
+                    <p>Döngü değişkeniyle boyut değiştirme:</p>
+                    <div id="editor7"></div>
+
+                    <h3>Örnek 3: Renkli Şeritler</h3>
+                    <p>Mod operatörü ile renk döngüsü:</p>
+                    <div id="editor8"></div>
+                </section>
+
+                <!-- Key Concepts Summary -->
+                <section class="mt-4">
+                    <h2>Temel Kavramlar Özeti</h2>
+
+                    <div class="card" style="background: rgba(0, 217, 255, 0.05);">
+                        <h4>Bu Derste Öğrendikleriniz</h4>
+                        <ul>
+                            <li><strong>for döngüsü:</strong> <code>for (let i = 0; i < n; i++)</code></li>
+                            <li><strong>while döngüsü:</strong> Koşul doğru olduğu sürece döner</li>
+                            <li><strong>İç içe döngüler:</strong> 2D ızgara yapıları için</li>
+                            <li><strong>i değişkeni:</strong> Sayaç olarak kullanılır</li>
+                            <li><strong>Mod operatörü (%):</strong> Desen oluşturmak için</li>
+                            <li><strong>break:</strong> Döngüyü erken sonlandırır</li>
+                            <li><strong>continue:</strong> O adımı atlar, sonrakine geçer</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box note mt-3">
+                        <div class="info-box-title">📚 Döngü Kullanım Rehberi</div>
+                        <ul>
+                            <li><strong>for:</strong> Kaç kez döneceği belli olduğunda</li>
+                            <li><strong>while:</strong> Bir koşul sağlanana kadar devam ederken</li>
+                            <li><strong>İç içe for:</strong> Izgara, matris, 2D yapılar için</li>
+                            <li><strong>for...of:</strong> Dizi elemanlarını gezerken</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <section class="mt-4" style="display: flex; justify-content: space-between; padding: 2rem 0; border-top: 1px solid var(--border-color);">
+                    <a href="05-etkilesim.html" class="btn btn-secondary">
+                        ← Önceki: Etkileşim
+                    </a>
+                    <a href="07-animasyon.html" class="btn btn-primary">
+                        Sonraki Ders: Animasyon →
+                    </a>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="../js/editor.js"></script>
+    <script src="../js/theme.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Örnek 1: Temel for Döngüsü
+            new P5CodeEditor('editor1', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+  background(240);
+  stroke(0);
+  strokeWeight(2);
+
+  // Dikey çizgiler çiz
+  let adet = 9;
+  let bosluk = 40;
+
+  for (let i = 0; i < adet; i++) {
+    // i = 0, 1, 2, 3, ... 8
+    // x = 40, 80, 120, 160, ... 360
+    let x = 40 + (i * bosluk);
+    
+    // Her çizgiye farklı renk
+    stroke(i * 25, 100, 200);
+    
+    line(x, 50, x, 350);
+    
+    // Numarayı yaz
+    fill(0);
+    noStroke();
+    textAlign(CENTER);
+    text(i, x, 380);
+    stroke(i * 25, 100, 200);
+  }
+}
+
+function draw() {
+  noLoop();
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 2: while vs for
+            new P5CodeEditor('editor2', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+  background(30);
+  noStroke();
+}
+
+function draw() {
+  background(30);
+  
+  // FOR döngüsü ile daireler (üst sıra)
+  fill(255, 100, 100);
+  for (let i = 0; i < 8; i++) {
+    circle(50 + i * 45, 100, 35);
+  }
+  
+  // WHILE döngüsü ile daireler (alt sıra)
+  fill(100, 255, 100);
+  let j = 0;
+  while (j < 8) {
+    circle(50 + j * 45, 200, 35);
+    j++;  // Bunu silmeyi deneyin!
+  }
+  
+  // Değişen boyutlarla (for)
+  fill(100, 100, 255);
+  for (let k = 0; k < 8; k++) {
+    let boyut = 15 + k * 5;  // Giderek büyüyen
+    circle(50 + k * 45, 300, boyut);
+  }
+  
+  // Etiketler
+  fill(255);
+  textSize(14);
+  text("for döngüsü", 20, 50);
+  text("while döngüsü", 20, 150);
+  text("Değişen boyut", 20, 250);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 3: İç İçe Döngüler
+            new P5CodeEditor('editor3', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+  background(20);
+  noStroke();
+
+  let bosluk = 40;
+  let boyut = 30;
+
+  // Dış döngü: y (satırlar)
+  for (let y = bosluk; y < height; y += bosluk) {
+    
+    // İç döngü: x (sütunlar)
+    for (let x = bosluk; x < width; x += bosluk) {
+      
+      // Konum bazlı renk
+      fill(x * 0.6, y * 0.6, 150);
+      
+      circle(x, y, boyut);
+    }
+  }
+}
+
+function draw() {
+  noLoop();
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 4: Satranç Tahtası
+            new P5CodeEditor('editor4', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+  noStroke();
+
+  let kareSayisi = 8;
+  let kareBoyutu = width / kareSayisi;
+
+  // Satırlar
+  for (let j = 0; j < kareSayisi; j++) {
+    // Sütunlar
+    for (let i = 0; i < kareSayisi; i++) {
+      
+      let x = i * kareBoyutu;
+      let y = j * kareBoyutu;
+
+      // Renk: (i + j) çift ise beyaz, tek ise siyah
+      if ((i + j) % 2 == 0) {
+        fill(240, 220, 180);  // Açık kare
+      } else {
+        fill(120, 80, 40);    // Koyu kare
+      }
+
+      rect(x, y, kareBoyutu, kareBoyutu);
+    }
+  }
+  
+  // Satranç taşı simgesi (örnek)
+  fill(0);
+  textSize(30);
+  textAlign(CENTER, CENTER);
+  text("♜", kareBoyutu * 0.5, kareBoyutu * 0.5);
+  text("♞", kareBoyutu * 1.5, kareBoyutu * 0.5);
+  
+  fill(255);
+  text("♔", kareBoyutu * 4.5, kareBoyutu * 7.5);
+  text("♕", kareBoyutu * 3.5, kareBoyutu * 7.5);
+}
+
+function draw() {
+  noLoop();
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 5: Gradient Izgara
+            new P5CodeEditor('editor5', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+  noStroke();
+}
+
+function draw() {
+  background(0);
+  
+  let boyut = 25;
+  let sutun = width / boyut;
+  let satir = height / boyut;
+  
+  for (let y = 0; y < satir; y++) {
+    for (let x = 0; x < sutun; x++) {
+      // Konuma göre renk (gradient efekti)
+      let r = map(x, 0, sutun, 50, 255);
+      let g = map(y, 0, satir, 50, 255);
+      let b = 150;
+      
+      fill(r, g, b);
+      rect(x * boyut, y * boyut, boyut - 1, boyut - 1);
+    }
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Mod Operatörü Örneği
+            new P5CodeEditor('editor-mod', {
+                initialCode: `// MOD (%) OPERATÖRÜ GÖSTERİMİ
+function setup() {
+  createCanvas(400, 400);
+  textAlign(CENTER, CENTER);
+}
+
+function draw() {
+  background(30);
+  
+  // 20 tane kutu çiz
+  for (let i = 0; i < 20; i++) {
+    let x = 40 + (i % 5) * 80;  // Her 5'te bir yeni satır (x konumunu düzelttik)
+    let y = 50 + floor(i / 5) * 80;
+    
+    // i % 2 ile sıralı renk (0 veya 1)
+    if (i % 2 == 0) {
+      fill(100, 200, 255);  // Çift indeksler: mavi
+    } else {
+      fill(255, 150, 100);  // Tek indeksler: turuncu
+    }
+    
+    rect(x - 35, y - 35, 70, 70, 8);  // Kutuyu biraz büyüttük
+    
+    // İndeks ve mod değerini yaz
+    fill(0);
+    textAlign(CENTER, CENTER); // Hizalamayı garantiye al
+    textSize(12);
+    text("i=" + i, x, y - 8);
+    text("i%2=" + (i % 2), x, y + 10);
+  }
+  
+  // Açıklama
+  fill(255);
+  textSize(14);
+  textAlign(CENTER); // Açıklamaları da ortala
+  text("i % 2 == 1 → Tek sayılar (turuncu)", width/2, 360);
+  text("i % 2 == 0 → Çift sayılar (mavi)", width/2, 380);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // map() Fonksiyonu Örneği
+            new P5CodeEditor('editor-map', {
+                initialCode: `// map() FONKSİYONU GÖSTERİMİ
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Fare X konumuna göre daire boyutu
+  // mouseX: 0-400 aralığı → boyut: 20-150 aralığına
+  let boyut = map(mouseX, 0, width, 20, 150);
+  
+  // Fare Y konumuna göre renk
+  // mouseY: 0-400 aralığı → renk: 0-255 aralığına  
+  let renk = map(mouseY, 0, height, 0, 255);
+  
+  // Daire çiz
+  fill(renk, 100, 255 - renk);
+  noStroke();
+  circle(width/2, height/2, boyut);
+  
+  // Bilgi göster
+  fill(255);
+  textSize(14);
+  text("mouseX: " + mouseX + " → boyut: " + floor(boyut), 20, 30);
+  text("mouseY: " + mouseY + " → renk: " + floor(renk), 20, 50);
+  
+  // Döngüde map kullanımı
+  for (let i = 0; i < 10; i++) {
+    // i: 0-9 aralığı → x: 50-350 aralığına
+    let x = map(i, 0, 9, 50, 350);
+    // i: 0-9 aralığı → boyut: 10-30 aralığına
+    let b = map(i, 0, 9, 10, 30);
+    
+    fill(255, 100);
+    circle(x, 350, b);
+  }
+  
+  textSize(12);
+  text("Döngüde map(): i değeri → x ve boyut", 20, 380);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // break ve continue Örneği
+            new P5CodeEditor('editor-break', {
+                initialCode: `// BREAK ve CONTINUE GÖSTERİMİ
+function setup() {
+  createCanvas(400, 400);
+  noLoop();
+}
+
+function draw() {
+  background(30);
+  textSize(12);
+  
+  // --- BREAK Örneği ---
+  fill(255);
+  text("BREAK: İlk 5'e kadar çiz, sonra dur", 20, 25);
+  
+  for (let i = 0; i < 20; i++) {
+    if (i >= 5) {
+      break;  // Döngüyü tamamen durdur
+    }
+    fill(100, 255, 100);
+    rect(20 + i * 35, 40, 30, 30, 5);
+    fill(0);
+    text(i, 30 + i * 35, 60);
+  }
+  
+  // --- CONTINUE Örneği ---
+  fill(255);
+  text("CONTINUE: 3'ün katlarını atla", 20, 120);
+  
+  for (let i = 0; i < 10; i++) {
+    if (i % 3 == 0) {
+      continue;  // Bu adımı atla, sonrakine geç
+    }
+    fill(255, 150, 100);
+    rect(20 + i * 35, 135, 30, 30, 5);
+    fill(0);
+    text(i, 30 + i * 35, 155);
+  }
+  
+  // --- Normal döngü ---
+  fill(255);
+  text("NORMAL: Hepsini çiz", 20, 215);
+  
+  for (let i = 0; i < 10; i++) {
+    fill(100, 150, 255);
+    rect(20 + i * 35, 230, 30, 30, 5);
+    fill(0);
+    text(i, 30 + i * 35, 250);
+  }
+  
+  // Açıklamalar
+  fill(150);
+  textSize(11);
+  text("break → Döngüden tamamen çık", 20, 320);
+  text("continue → Bu adımı atla, devam et", 20, 340);
+  text("3'ün katları: 0, 3, 6, 9 atlandı", 20, 360);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 6: Çizgi Desenleri
+            new P5CodeEditor('editor6', {
+                initialCode: `// ÇİZGİ DESENLERİ
+function setup() {
+  createCanvas(400, 400);
+  stroke(100, 200, 255);
+  strokeWeight(1);
+}
+
+function draw() {
+  background(20);
+  
+  let adet = 20;
+  let bosluk = width / adet;
+  
+  // Dikey çizgiler
+  for (let i = 0; i <= adet; i++) {
+    let x = i * bosluk;
+    stroke(100, 200, 255, 150);
+    line(x, 0, x, height);
+  }
+  
+  // Yatay çizgiler
+  for (let i = 0; i <= adet; i++) {
+    let y = i * bosluk;
+    stroke(255, 150, 100, 150);
+    line(0, y, width, y);
+  }
+  
+  // Fare yakınındaki kesişimler
+  noStroke();
+  for (let i = 0; i <= adet; i++) {
+    for (let j = 0; j <= adet; j++) {
+      let x = i * bosluk;
+      let y = j * bosluk;
+      
+      // Fareye uzaklık
+      let d = dist(x, y, mouseX, mouseY);
+      
+      if (d < 80) {
+        let boyut = map(d, 0, 80, 15, 3);
+        fill(255, 255, 100);
+        circle(x, y, boyut);
+      }
+    }
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 7: Büyüyen Daireler
+            new P5CodeEditor('editor7', {
+                initialCode: `// DÖNGÜ DEĞİŞKENİYLE BOYUT DEĞİŞTİRME
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  noFill();
+  strokeWeight(2);
+  
+  let merkezX = width / 2;
+  let merkezY = height / 2;
+  
+  // i değeri hem boyutu hem rengi belirliyor
+  for (let i = 1; i <= 10; i++) {
+    // i arttıkça yarıçap artar
+    let yaricap = i * 18;
+    
+    // i değerine göre renk
+    let renk = map(i, 1, 10, 50, 255);
+    stroke(renk, 100, 255 - renk);
+    noFill(); // Dairenin içi boş olsun (daha önceki fill komutlarını iptal et)
+    
+    circle(merkezX, merkezY, yaricap * 2);
+    
+    // Yarıçapı yaz
+    fill(200);
+    noStroke();
+    textSize(10);
+    text(yaricap, merkezX + yaricap + 5, merkezY);
+    stroke(renk, 100, 255 - renk);
+  }
+  
+  // Bilgi
+  fill(255);
+  noStroke();
+  textSize(14);
+  text("i: 1-10 → yarıçap: 18-180", 20, 30);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 8: Renkli Şeritler
+            new P5CodeEditor('editor8', {
+                initialCode: `// MOD İLE RENKLİ ŞERİTLER
+function setup() {
+  createCanvas(400, 400);
+  noStroke();
+}
+
+function draw() {
+  background(30);
+  
+  let seritGenislik = 20;
+  let seritSayisi = width / seritGenislik;
+  
+  for (let i = 0; i < seritSayisi; i++) {
+    // i % 3 ile 3 renk döngüsü: 0, 1, 2, 0, 1, 2...
+    let renkIndex = i % 3;
+    
+    if (renkIndex == 0) {
+      fill(255, 100, 100);  // Kırmızı
+    } else if (renkIndex == 1) {
+      fill(100, 255, 100);  // Yeşil
+    } else {
+      fill(100, 100, 255);  // Mavi
+    }
+    
+    // Animasyonlu yükseklik
+    let animasyon = (i + frameCount * 0.1);
+    let yukseklik = 150 + 100 * abs((animasyon % 20) - 10) / 10;
+    
+    rect(i * seritGenislik, height - yukseklik, seritGenislik - 2, yukseklik);
+  }
+  
+  // Bilgi
+  fill(255);
+  textSize(14);
+  text("i % 3 → 0: Kırmızı, 1: Yeşil, 2: Mavi", 20, 30);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+        });
+    </script>
+</body>
+</html>

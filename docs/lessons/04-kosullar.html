@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <title>Ders 4: Koşullar - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html" class="active">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#if-yapisi">if Yapısı</a></li>
+                    <li><a href="#karsilastirma">Karşılaştırma Operatörleri</a></li>
+                    <li><a href="#else-elif">else ve else if</a></li>
+                    <li><a href="#mantiksal">Mantıksal Operatörler</a></li>
+                    <li><a href="#dogruluk-tablolari">Doğruluk Tabloları</a></li>
+                    <li><a href="#kompleks">Kompleks İfadeler</a></li>
+                    <li><a href="#ornekler">Uygulama Örnekleri</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 4: Koşullar (if/else)</h1>
+                <div class="lesson-meta">
+                    <span>📚 Temel Kavram</span>
+                    <span>⏱️ 45 dakika</span>
+                    <span>🎯 Karar Yapıları</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: if -->
+                <section id="if-yapisi">
+                    <h2>if Yapısı ve Neden Önemli?</h2>
+                    
+                    <p>
+                        <code>if</code> (eğer) ifadesi, programın belirli koşullara göre farklı davranışlar 
+                        sergilemesini sağlar. Koşul doğruysa kod bloğu çalışır, değilse atlanır.
+                    </p>
+
+                    <div class="info-box note">
+                        <div class="info-box-title">🎮 Oyun Programcısı İçin Neden Kritik?</div>
+                        <p>
+                            Oyunlarda <strong>sürekli karar verilir</strong>: Düşmana çarptın mı? Zıplama tuşuna 
+                            bastın mı? Canın bitti mi? Sınırı geçtin mi? Hepsi <code>if</code> ile kontrol edilir. 
+                            <code>if</code> olmadan oyun yapılamaz!
+                        </p>
+                    </div>
+
+                    <h3>🎯 Problem: Koşulsuz Kod</h3>
+                    <p>Koşul olmadan program hep aynı şeyi yapar:</p>
+                    
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>❌ Koşul Olmadan</th>
+                                <th>✅ if ile</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><pre style="margin:0;"><code>// Top her zaman aynı renk
+fill(255, 0, 0);  // Kırmızı
+circle(x, y, 50);
+
+// Düşman her zaman hareket eder
+x += hiz;  // Sınır kontrolü yok!</code></pre>
+                                <p style="color:#ff6b6b; font-size:12px; margin-top:5px;">😫 Top sınırdan çıkar, hiç tepki veremez</p></td>
+                                <td><pre style="margin:0;"><code>// Fare üzerindeyse yeşil, değilse kırmızı
+if (dist(mouseX, mouseY, x, y) < 25) {
+  fill(0, 255, 0);  // Yeşil - hover!
+} else {
+  fill(255, 0, 0);  // Kırmızı
+}
+circle(x, y, 50);
+
+// Sınır kontrolü
+if (x > width) x = 0;  // Sarmala!</code></pre>
+                                <p style="color:#4ecdc4; font-size:12px; margin-top:5px;">🎉 Etkileşimli ve kontrollü!</p></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>if'in 5 Büyük Kullanım Alanı</h3>
+                    <ul>
+                        <li><strong>🧱 Sınır Kontrolü:</strong> Ekrandan çıkma, zıplama</li>
+                        <li><strong>💥 Çarpışma:</strong> Düşmana çarptın mı? Güç aldın mı?</li>
+                        <li><strong>🎮 Girdi:</strong> Hangi tuşa basıldı?</li>
+                        <li><strong>🏆 Oyun Durumu:</strong> Kazandın mı? Kaybettin mi?</li>
+                        <li><strong>🎨 Görsel Değişim:</strong> Hover, seçim, hasar animasyonu</li>
+                    </ul>
+
+                    <pre><code>if (koşul) {
+  // Koşul doğruysa (true) bu kod çalışır
+}</code></pre>
+
+                    <div id="editor1"></div>
+                </section>
+
+                <!-- Section: Comparison -->
+                <section id="karsilastirma" class="mt-4">
+                    <h2>Karşılaştırma Operatörleri</h2>
+
+                    <p>
+                        Koşullar oluşturmak için karşılaştırma operatörlerini kullanırız:
+                    </p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Operatör</th>
+                                <th>Anlamı</th>
+                                <th>Örnek</th>
+                                <th>Sonuç</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span style="font-family: Georgia, serif; font-size: 20px; font-weight: bold;">==</span></td>
+                                <td>Eşit mi?</td>
+                                <td><span style="font-family: Georgia, serif; font-size: 16px;">5 == 5</span></td>
+                                <td class="result">true</td>
+                            </tr>
+                            <tr>
+                                <td><span style="font-family: Georgia, serif; font-size: 20px; font-weight: bold;">===</span></td>
+                                <td>Tam eşit mi? (tip dahil)</td>
+                                <td><span style="font-family: Georgia, serif; font-size: 16px;">5 === "5"</span></td>
+                                <td class="result">false</td>
+                            </tr>
+                            <tr>
+                                <td><span style="font-family: Georgia, serif; font-size: 20px; font-weight: bold;">!=</span></td>
+                                <td>Eşit değil mi?</td>
+                                <td><span style="font-family: Georgia, serif; font-size: 16px;">5 != 3</span></td>
+                                <td class="result">true</td>
+                            </tr>
+                            <tr>
+                                <td><span style="font-family: Georgia, serif; font-size: 20px; font-weight: bold;">!==</span></td>
+                                <td>Tam eşit değil mi?</td>
+                                <td><span style="font-family: Georgia, serif; font-size: 16px;">5 !== "5"</span></td>
+                                <td class="result">true</td>
+                            </tr>
+                            <tr>
+                                <td><span style="font-family: Georgia, serif; font-size: 20px; font-weight: bold;">&gt;</span></td>
+                                <td>Büyük mü?</td>
+                                <td><span style="font-family: Georgia, serif; font-size: 16px;">10 &gt; 5</span></td>
+                                <td class="result">true</td>
+                            </tr>
+                            <tr>
+                                <td><span style="font-family: Georgia, serif; font-size: 20px; font-weight: bold;">&lt;</span></td>
+                                <td>Küçük mü?</td>
+                                <td><span style="font-family: Georgia, serif; font-size: 16px;">3 &lt; 7</span></td>
+                                <td class="result">true</td>
+                            </tr>
+                            <tr>
+                                <td><span style="font-family: Georgia, serif; font-size: 20px; font-weight: bold;">&gt;=</span></td>
+                                <td>Büyük veya eşit mi?</td>
+                                <td><span style="font-family: Georgia, serif; font-size: 16px;">5 &gt;= 5</span></td>
+                                <td class="result">true</td>
+                            </tr>
+                            <tr>
+                                <td><span style="font-family: Georgia, serif; font-size: 20px; font-weight: bold;">&lt;=</span></td>
+                                <td>Küçük veya eşit mi?</td>
+                                <td><span style="font-family: Georgia, serif; font-size: 16px;">4 &lt;= 3</span></td>
+                                <td class="result">false</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="info-box warning">
+                        <div class="info-box-title">⚠️ = ile == Farkı</div>
+                        <table class="code-table" style="margin: 0.5rem 0;">
+                            <tbody>
+                                <tr>
+                                    <td><span style="font-family: Georgia, serif; font-size: 18px; font-weight: bold;">=</span></td>
+                                    <td>Değer atama</td>
+                                    <td><span style="font-family: Georgia, serif; font-size: 16px;">x = 5</span></td>
+                                    <td class="comment">x'e 5 değerini ata</td>
+                                </tr>
+                                <tr>
+                                    <td><span style="font-family: Georgia, serif; font-size: 18px; font-weight: bold;">==</span></td>
+                                    <td>Karşılaştırma</td>
+                                    <td><span style="font-family: Georgia, serif; font-size: 16px;">x == 5</span></td>
+                                    <td class="comment">x 5'e eşit mi?</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 0.75rem; margin-bottom: 0;">Bu ikisini karıştırmak çok yaygın bir hatadır!</p>
+                    </div>
+
+                    <div id="editor2"></div>
+                </section>
+
+                <!-- Section: else and else if -->
+                <section id="else-elif" class="mt-4">
+                    <h2>else ve else if</h2>
+
+                    <h3>else (Değilse)</h3>
+                    <p>Koşul yanlışsa çalışacak alternatif kod bloğu:</p>
+                    <pre><code>if (kosul) {
+  // Koşul doğruysa
+} else {
+  // Koşul yanlışsa
+}</code></pre>
+
+                    <h3>else if (Değilse Eğer)</h3>
+                    <p>Birden fazla koşulu sırayla kontrol etmek için:</p>
+                    <pre><code>if (kosul1) {
+  // Koşul1 doğruysa
+} else if (kosul2) {
+  // Koşul1 yanlış, koşul2 doğruysa
+} else if (kosul3) {
+  // Koşul1 ve 2 yanlış, koşul3 doğruysa
+} else {
+  // Hiçbiri doğru değilse
+}</code></pre>
+
+                    <div id="editor3"></div>
+                </section>
+
+                <!-- Section: Logical Operators -->
+                <section id="mantiksal" class="mt-4">
+                    <h2>Mantıksal Operatörler</h2>
+
+                    <p>
+                        Gerçek hayatta kararlar nadiren tek bir koşula bağlıdır. "Hava güzelse VE param varsa 
+                        dışarı çıkarım" gibi. Programlamada da birden fazla koşulu birleştirmek için 
+                        <strong>mantıksal operatörler</strong> kullanırız.
+                    </p>
+
+                    <h3>🔗 Operatörler</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Operatör</th>
+                                <th>Adı</th>
+                                <th>Açıklama</th>
+                                <th>Örnek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>&&</code></td>
+                                <td>VE (AND)</td>
+                                <td>Her iki koşul da doğru olmalı</td>
+                                <td><code>x > 0 && x < 100</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>||</code></td>
+                                <td>VEYA (OR)</td>
+                                <td>En az bir koşul doğru olmalı</td>
+                                <td><code>key == 'a' || key == 'A'</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>!</code></td>
+                                <td>DEĞİL (NOT)</td>
+                                <td>Koşulu tersine çevirir</td>
+                                <td><code>!oyunBitti</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>📊 Doğruluk Tabloları (Truth Tables)</h3>
+                    <p>
+                        Mantıksal operatörlerin nasıl çalıştığını anlamak için <strong>doğruluk tabloları</strong> 
+                        kullanılır. Bu tablolar tüm olası giriş kombinasyonları için çıktıyı gösterir.
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                        <!-- AND Table -->
+                        <div>
+                            <h4>VE (&&) - AND</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                                İkisi de <code>true</code> olmalı
+                            </p>
+                            <table class="styled-table">
+                                <thead>
+                                    <tr>
+                                        <th>A</th>
+                                        <th>B</th>
+                                        <th>A && B</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>false</td>
+                                        <td>false</td>
+                                        <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>false</td>
+                                        <td>true</td>
+                                        <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>true</td>
+                                        <td>false</td>
+                                        <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>true</td>
+                                        <td>true</td>
+                                        <td style="color: #51cf66;"><strong>true ✓</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- OR Table -->
+                        <div>
+                            <h4>VEYA (||) - OR</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                                En az biri <code>true</code> olmalı
+                            </p>
+                            <table class="styled-table">
+                                <thead>
+                                    <tr>
+                                        <th>A</th>
+                                        <th>B</th>
+                                        <th>A || B</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>false</td>
+                                        <td>false</td>
+                                        <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>false</td>
+                                        <td>true</td>
+                                        <td style="color: #51cf66;"><strong>true ✓</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>true</td>
+                                        <td>false</td>
+                                        <td style="color: #51cf66;"><strong>true ✓</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>true</td>
+                                        <td>true</td>
+                                        <td style="color: #51cf66;"><strong>true ✓</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- NOT Table -->
+                        <div>
+                            <h4>DEĞİL (!) - NOT</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                                Değeri tersine çevirir
+                            </p>
+                            <table class="styled-table">
+                                <thead>
+                                    <tr>
+                                        <th>A</th>
+                                        <th>!A</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>false</td>
+                                        <td style="color: #51cf66;"><strong>true</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>true</td>
+                                        <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="info-box tip">
+                        <h4>💡 Hatırlatıcı İpuçları</h4>
+                        <ul>
+                            <li><strong>&&</strong> (VE): "Pessimist" gibi düşün - bir tanesi bile <code>false</code> ise sonuç <code>false</code></li>
+                            <li><strong>||</strong> (VEYA): "Optimist" gibi düşün - bir tanesi bile <code>true</code> ise sonuç <code>true</code></li>
+                            <li><strong>!</strong> (DEĞİL): Kapıdaki "itiniz/çekiniz" gibi - ne ise tersini yap</li>
+                        </ul>
+                    </div>
+
+                    <h3>🧩 Kompleks İfadeler</h3>
+                    <p>
+                        Birden fazla operatörü birleştirerek karmaşık koşullar oluşturabilirsiniz. 
+                        Parantez kullanarak öncelik belirleyin.
+                    </p>
+
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>💡</span>
+                            <h4>Kompleks İfade Örnekleri</h4>
+                        </div>
+                        <pre><code>// Örnek 1: Oyun karakteri hareket edebilir mi?
+// Oyun bitmemişse VE (canı varsa VEYA kalkanı varsa)
+let hareketEdebilir = !oyunBitti && (can > 0 || kalkanVar);
+
+// Örnek 2: Fare dikdörtgenin içinde mi?
+// x hem soldan büyük HEM sağdan küçük VE
+// y hem üstten büyük HEM alttan küçük
+if (mouseX > sol && mouseX < sag && mouseY > ust && mouseY < alt) {
+  // Fare dikdörtgenin içinde!
+}
+
+// Örnek 3: Kullanıcı giriş yapabilir mi?
+// (Email doğru VE şifre doğru) VEYA admin ise
+let girisYapabilir = (emailDogru && sifreDogru) || adminMi;
+
+// Örnek 4: Hafta içi çalışma saatleri
+// Hafta içi (Pzt-Cum) VE saat 9-17 arası
+let calismaSaati = gunHaftaIci && (saat >= 9 && saat < 17);
+
+// Örnek 5: Yaş kontrolü (18-65 arası ve emekli değil)
+let calisabilir = (yas >= 18 && yas <= 65) && !emekli;</code></pre>
+                    </div>
+
+                    <h4>📊 Kompleks İfade Doğruluk Tablosu</h4>
+                    <p>
+                        <code>!oyunBitti && (can > 0 || kalkanVar)</code> ifadesinin tüm olası durumları:
+                    </p>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>oyunBitti</th>
+                                <th>can > 0</th>
+                                <th>kalkanVar</th>
+                                <th>!oyunBitti</th>
+                                <th>(can>0 || kalkan)</th>
+                                <th>Sonuç</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>false</td>
+                                <td>false</td>
+                                <td>false</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #ff6b6b;">false</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong> ❌</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>false</td>
+                                <td>true</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #51cf66;"><strong>true</strong> ✓</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>true</td>
+                                <td>false</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #51cf66;"><strong>true</strong> ✓</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>true</td>
+                                <td>true</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #51cf66;"><strong>true</strong> ✓</td>
+                            </tr>
+                            <tr>
+                                <td>true</td>
+                                <td>false</td>
+                                <td>false</td>
+                                <td style="color: #ff6b6b;">false</td>
+                                <td style="color: #ff6b6b;">false</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong> ❌</td>
+                            </tr>
+                            <tr>
+                                <td>true</td>
+                                <td>false</td>
+                                <td>true</td>
+                                <td style="color: #ff6b6b;">false</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong> ❌</td>
+                            </tr>
+                            <tr>
+                                <td>true</td>
+                                <td>true</td>
+                                <td>false</td>
+                                <td style="color: #ff6b6b;">false</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong> ❌</td>
+                            </tr>
+                            <tr>
+                                <td>true</td>
+                                <td>true</td>
+                                <td>true</td>
+                                <td style="color: #ff6b6b;">false</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong> ❌</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">
+                        💡 <strong>Yorum:</strong> Oyun bitmişse (oyunBitti = true), canın veya kalkanın olması fark etmez - hareket edemezsin!
+                    </p>
+
+                    <div class="info-box warning">
+                        <h4>⚠️ Operatör Önceliği</h4>
+                        <p>JavaScript'te mantıksal operatör önceliği:</p>
+                        <ol>
+                            <li><code>!</code> (NOT) - En yüksek öncelik</li>
+                            <li><code>&&</code> (AND)</li>
+                            <li><code>||</code> (OR) - En düşük öncelik</li>
+                        </ol>
+                        <p>Karışıklığı önlemek için <strong>parantez kullanın</strong>: <code>(A || B) && C</code></p>
+                    </div>
+
+                    <h3>🎯 Gerçek Hayat Örnekleri</h3>
+
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>🎮</span>
+                            <h4>Oyun: Düşmana hasar verebilir miyim?</h4>
+                        </div>
+                        <pre><code>let hasarVerebilir = silahVar && mermiSayisi > 0 && !yenidenYukleniyorum;</code></pre>
+                    </div>
+
+                    <p>Bu ifade için doğruluk tablosu (3 değişken = 2³ = 8 satır):</p>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>silahVar</th>
+                                <th>mermi > 0</th>
+                                <th>yenidenYükl.</th>
+                                <th>!yenidenYükl.</th>
+                                <th>Sonuç</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>false</td>
+                                <td>false</td>
+                                <td>false</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                <td>Silah yok 🔫❌</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>false</td>
+                                <td>true</td>
+                                <td style="color: #ff6b6b;">false</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                <td>Silah yok 🔫❌</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>true</td>
+                                <td>false</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                <td>Silah yok 🔫❌</td>
+                            </tr>
+                            <tr>
+                                <td>false</td>
+                                <td>true</td>
+                                <td>true</td>
+                                <td style="color: #ff6b6b;">false</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                <td>Silah yok 🔫❌</td>
+                            </tr>
+                            <tr>
+                                <td>true</td>
+                                <td>false</td>
+                                <td>false</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                <td>Mermi bitti 💨</td>
+                            </tr>
+                            <tr>
+                                <td>true</td>
+                                <td>false</td>
+                                <td>true</td>
+                                <td style="color: #ff6b6b;">false</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                <td>Mermi bitti 💨</td>
+                            </tr>
+                            <tr>
+                                <td>true</td>
+                                <td>true</td>
+                                <td>true</td>
+                                <td style="color: #ff6b6b;">false</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                <td>Yükleniyor... ⏳</td>
+                            </tr>
+                            <tr>
+                                <td>true</td>
+                                <td>true</td>
+                                <td>false</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #51cf66;"><strong>true ✓</strong></td>
+                                <td>Ateş et! 🎯</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">
+                        💡 <strong>Dikkat:</strong> 8 satırdan sadece 1 tanesi <code>true</code>! Üç koşulun hepsi sağlanmalı.
+                    </p>
+
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>🛒</span>
+                            <h4>E-ticaret: Ücretsiz kargo hak ediyor mu?</h4>
+                        </div>
+                        <pre><code>let ucretsizKargo = (toplamFiyat >= 150) || premiumUye;</code></pre>
+                    </div>
+
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>toplamFiyat >= 150</th>
+                                <th>premiumUye</th>
+                                <th>Sonuç</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>false (₺100)</td>
+                                <td>false</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                <td>Kargo ücreti öde 📦💰</td>
+                            </tr>
+                            <tr>
+                                <td>false (₺100)</td>
+                                <td>true</td>
+                                <td style="color: #51cf66;"><strong>true ✓</strong></td>
+                                <td>Premium ayrıcalığı! ⭐</td>
+                            </tr>
+                            <tr>
+                                <td>true (₺200)</td>
+                                <td>false</td>
+                                <td style="color: #51cf66;"><strong>true ✓</strong></td>
+                                <td>150₺ üzeri = bedava 🎉</td>
+                            </tr>
+                            <tr>
+                                <td>true (₺200)</td>
+                                <td>true</td>
+                                <td style="color: #51cf66;"><strong>true ✓</strong></td>
+                                <td>Her iki şart da var 🌟</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>🚗</span>
+                            <h4>Trafik: Geçebilir miyim?</h4>
+                        </div>
+                        <pre><code>let gecebilir = (isikYesil || isikSari) && !yayadanGeciyorsa;</code></pre>
+                    </div>
+
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Işık Durumu</th>
+                                <th>Yaya Geçiyor</th>
+                                <th>!yaya</th>
+                                <th>Sonuç</th>
+                                <th>Ne Yapmalı?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>🔴 Kırmızı</td>
+                                <td>false</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                <td>DUR! 🛑</td>
+                            </tr>
+                            <tr>
+                                <td>🔴 Kırmızı</td>
+                                <td>true</td>
+                                <td style="color: #ff6b6b;">false</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                <td>DUR! 🛑</td>
+                            </tr>
+                            <tr>
+                                <td>🟢 Yeşil</td>
+                                <td>true</td>
+                                <td style="color: #ff6b6b;">false</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                <td>Yayaya yol ver 🚶</td>
+                            </tr>
+                            <tr>
+                                <td>🟡 Sarı</td>
+                                <td>true</td>
+                                <td style="color: #ff6b6b;">false</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                <td>Yayaya yol ver 🚶</td>
+                            </tr>
+                            <tr>
+                                <td>🟢 Yeşil</td>
+                                <td>false</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #51cf66;"><strong>true ✓</strong></td>
+                                <td>Geçebilirsin! 🚗💨</td>
+                            </tr>
+                            <tr>
+                                <td>🟡 Sarı</td>
+                                <td>false</td>
+                                <td style="color: #51cf66;">true</td>
+                                <td style="color: #51cf66;"><strong>true ✓</strong></td>
+                                <td>Dikkatli geç ⚠️</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>🎬</span>
+                            <h4>Film: İzleyebilir mi? (18+ içerik)</h4>
+                        </div>
+                        <pre><code>let izleyebilir = yas >= 18 || ebeveynIzniVar;</code></pre>
+                    </div>
+
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Yaş</th>
+                                <th>Ebeveyn İzni</th>
+                                <th>Sonuç</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>15 (< 18)</td>
+                                <td>false</td>
+                                <td style="color: #ff6b6b;"><strong>false</strong> - İzleyemez 🚫</td>
+                            </tr>
+                            <tr>
+                                <td>15 (< 18)</td>
+                                <td>true</td>
+                                <td style="color: #51cf66;"><strong>true ✓</strong> - Ebeveyn izniyle 👨‍👩‍👧</td>
+                            </tr>
+                            <tr>
+                                <td>20 (>= 18)</td>
+                                <td>false</td>
+                                <td style="color: #51cf66;"><strong>true ✓</strong> - Yetişkin 🎫</td>
+                            </tr>
+                            <tr>
+                                <td>20 (>= 18)</td>
+                                <td>true</td>
+                                <td style="color: #51cf66;"><strong>true ✓</strong> - Zaten yetişkin 🎫</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="editor4"></div>
+                </section>
+
+                <!-- Section: Practice Examples -->
+                <section id="ornekler" class="mt-4">
+                    <h2>Uygulama Örnekleri</h2>
+
+                    <h3>Örnek 1: Sınır Kontrolü (Zıplayan Top)</h3>
+                    <p>if ile duvarlardan sekme:</p>
+                    <div id="editor5"></div>
+
+                    <h3>Örnek 2: Fare Hover Efekti</h3>
+                    <p>Fare bir nesnenin üzerinde mi kontrolü:</p>
+                    <div id="editor6"></div>
+
+                    <h3>Örnek 3: Trafik Işığı</h3>
+                    <p>Koşullara göre renk değişimi:</p>
+                    <div id="editor7"></div>
+
+                    <h3>Örnek 4: Çarpışma Algılama</h3>
+                    <p>İki dairenin çarpışıp çarpışmadığını kontrol:</p>
+                    <div id="editor8"></div>
+                </section>
+
+                <!-- Key Concepts Summary -->
+                <section class="mt-4">
+                    <h2>Temel Kavramlar Özeti</h2>
+
+                    <div class="card" style="background: rgba(0, 217, 255, 0.05);">
+                        <h4>Bu Derste Öğrendikleriniz</h4>
+                        <ul>
+                            <li><strong>if:</strong> Koşul doğruysa kod bloğunu çalıştır</li>
+                            <li><strong>else:</strong> Koşul yanlışsa alternatif kod</li>
+                            <li><strong>else if:</strong> Ek koşul kontrolü</li>
+                            <li><strong>==, !=, <, >, <=, >=:</strong> Karşılaştırma operatörleri</li>
+                            <li><strong>&&:</strong> VE (her iki koşul da doğru)</li>
+                            <li><strong>||:</strong> VEYA (en az biri doğru)</li>
+                            <li><strong>!:</strong> DEĞİL (tersine çevir)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-nav">
+                    <a href="03-degiskenler.html" class="btn">← Önceki Ders</a>
+                    <a href="05-etkilesim.html" class="btn btn-primary">Sonraki Ders →</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="../js/editor.js"></script>
+    <script src="../js/theme.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Örnek 1: Temel if
+            new P5CodeEditor('editor1', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Fare sol yarıda mı sağ yarıda mı?
+  if (mouseX < width / 2) {
+    // Sol yarıda - mavi arka plan
+    background(30, 50, 100);
+    fill(100, 150, 255);
+  } else {
+    // Sağ yarıda - yeşil arka plan
+    background(30, 100, 50);
+    fill(100, 255, 150);
+  }
+  
+  // Fareyi takip eden daire
+  noStroke();
+  circle(mouseX, mouseY, 50);
+  
+  // Orta çizgi
+  stroke(255, 100);
+  strokeWeight(2);
+  line(width/2, 0, width/2, height);
+  
+  // Bilgi
+  fill(255);
+  noStroke();
+  textSize(14);
+  textAlign(CENTER);
+  text("Fareyi sağa ve sola hareket ettirin", width/2, 30);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 2: Karşılaştırma
+            new P5CodeEditor('editor2', {
+                initialCode: `let sayi = 50;
+
+function setup() {
+  createCanvas(400, 400);
+  textAlign(CENTER, CENTER);
+}
+
+function draw() {
+  background(30);
+  
+  // Sayıyı fareye göre güncelle
+  sayi = floor(map(mouseX, 0, width, 0, 100));
+  
+  fill(255);
+  textSize(48);
+  text(sayi, width/2, 80);
+  
+  // Karşılaştırma sonuçları
+  textSize(16);
+  let y = 150;
+  
+  // Her satır için: if true yeşil, else kırmızı
+  if (sayi == 50) { fill(0, 255, 0); }
+  else { fill(255, 100, 100); }
+  text("sayi == 50 (esit mi): " + (sayi == 50), width/2, y);
+  
+  y = y + 40;
+  if (sayi > 50) { fill(0, 255, 0); }
+  else { fill(255, 100, 100); }
+  text("sayi > 50 (buyuk mu): " + (sayi > 50), width/2, y);
+  
+  y = y + 40;
+  if (sayi < 50) { fill(0, 255, 0); }
+  else { fill(255, 100, 100); }
+  text("sayi < 50 (kucuk mu): " + (sayi < 50), width/2, y);
+  
+  y = y + 40;
+  if (sayi >= 50) { fill(0, 255, 0); }
+  else { fill(255, 100, 100); }
+  text("sayi >= 50 (buyuk esit): " + (sayi >= 50), width/2, y);
+  
+  y = y + 40;
+  if (sayi != 50) { fill(0, 255, 0); }
+  else { fill(255, 100, 100); }
+  text("sayi != 50 (esit degil): " + (sayi != 50), width/2, y);
+  
+  // Talimat
+  fill(150);
+  textSize(12);
+  text("Fareyi hareket ettirerek sayiyi degistirin", width/2, height - 20);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 3: else if
+            new P5CodeEditor('editor3', {
+                initialCode: `let puan = 75;
+
+function setup() {
+  createCanvas(400, 400);
+  textAlign(CENTER, CENTER);
+}
+
+function draw() {
+  // Puanı fareye göre güncelle (0-100)
+  puan = floor(map(mouseX, 0, width, 0, 100));
+  puan = constrain(puan, 0, 100);
+  
+  // Not hesaplama
+  let not;
+  let renk;
+  
+  if (puan >= 90) {
+    not = "AA";
+    renk = color(0, 200, 0);
+  } else if (puan >= 80) {
+    not = "BA";
+    renk = color(100, 200, 0);
+  } else if (puan >= 70) {
+    not = "BB";
+    renk = color(200, 200, 0);
+  } else if (puan >= 60) {
+    not = "CB";
+    renk = color(200, 150, 0);
+  } else if (puan >= 50) {
+    not = "CC";
+    renk = color(200, 100, 0);
+  } else if (puan >= 40) {
+    not = "DC";
+    renk = color(200, 50, 0);
+  } else {
+    not = "FF";
+    renk = color(200, 0, 0);
+  }
+  
+  background(renk);
+  
+  fill(255);
+  textSize(72);
+  text(not, width/2, height/2 - 30);
+  
+  textSize(24);
+  text("Puan: " + puan, width/2, height/2 + 40);
+  
+  textSize(14);
+  fill(255, 200);
+  text("Fareyi hareket ettirerek puanı değiştirin", width/2, height - 30);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 4: Mantıksal Operatörler
+            new P5CodeEditor('editor4', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // 4 bölgeye ayır
+  let solda = mouseX < width/2;
+  let ustte = mouseY < height/2;
+  
+  noStroke();
+  
+  // && (VE) - Sol üst köşe
+  if (solda && ustte) {
+    fill(255, 100, 100);
+    rect(0, 0, width/2, height/2);
+    fill(255);
+    textAlign(CENTER, CENTER);
+    text("&& (VE)\\nSolda VE Üstte", width/4, height/4);
+  }
+  
+  // || (VEYA) - Sağ üst veya sol alt
+  if ((!solda && ustte) || (solda && !ustte)) {
+    fill(100, 100, 255);
+    if (!solda && ustte) {
+      rect(width/2, 0, width/2, height/2);
+      fill(255);
+      text("XOR\\nSağda VE Üstte", width*3/4, height/4);
+    }
+    if (solda && !ustte) {
+      rect(0, height/2, width/2, height/2);
+      fill(255);
+      text("XOR\\nSolda VE Altta", width/4, height*3/4);
+    }
+  }
+  
+  // ! (DEĞİL) ile || - Sağ alt
+  if (!solda && !ustte) {
+    fill(100, 255, 100);
+    rect(width/2, height/2, width/2, height/2);
+    fill(0);
+    textAlign(CENTER, CENTER);
+    text("!solda && !ustte\\nSağda VE Altta", width*3/4, height*3/4);
+  }
+  
+  // Izgara çizgileri
+  stroke(255, 50);
+  line(width/2, 0, width/2, height);
+  line(0, height/2, width, height/2);
+  
+  // Fare konumu
+  fill(255);
+  noStroke();
+  circle(mouseX, mouseY, 20);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 5: Zıplayan Top
+            new P5CodeEditor('editor5', {
+                initialCode: `let x = 200, y = 200;
+let hizX = 4, hizY = 3;
+let r = 25;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Hareket
+  x += hizX;
+  y += hizY;
+  
+  // Sağ ve sol sınır kontrolü
+  if (x > width - r) {
+    x = width - r;
+    hizX = hizX * -1;  // Yön değiştir
+  }
+  if (x < r) {
+    x = r;
+    hizX = hizX * -1;
+  }
+  
+  // Üst ve alt sınır kontrolü
+  if (y > height - r) {
+    y = height - r;
+    hizY = hizY * -1;
+  }
+  if (y < r) {
+    y = r;
+    hizY = hizY * -1;
+  }
+  
+  // Top
+  fill(0, 200, 255);
+  noStroke();
+  circle(x, y, r * 2);
+  
+  // Hız vektörü göstergesi
+  stroke(255, 255, 0);
+  strokeWeight(2);
+  line(x, y, x + hizX * 5, y + hizY * 5);
+  
+  // Bilgi
+  fill(255);
+  noStroke();
+  textSize(12);
+  text("Hız: (" + hizX.toFixed(1) + ", " + hizY.toFixed(1) + ")", 10, 20);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 6: Hover (Basit - dizi/for olmadan)
+            new P5CodeEditor('editor6', {
+                initialCode: `// Fare kutu üzerinde mi? Basit hover kontrolü
+
+let kutuX = 150;
+let kutuY = 150;
+let kutuW = 100;
+let kutuH = 100;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Fare kutunun üzerinde mi kontrol et
+  // 4 koşulun hepsi doğru olmalı (AND - &&)
+  let uzerinde = mouseX > kutuX && 
+                 mouseX < kutuX + kutuW &&
+                 mouseY > kutuY && 
+                 mouseY < kutuY + kutuH;
+  
+  if (uzerinde) {
+    // Hover durumu - parlak renk ve büyük kutu
+    fill(255, 100, 100);
+    stroke(255);
+    strokeWeight(3);
+    cursor(HAND);
+    
+    // Büyütme efekti (-5, +10)
+    rect(kutuX - 5, kutuY - 5, kutuW + 10, kutuH + 10, 10);
+    
+    // Hover metni
+    fill(255);
+    noStroke();
+    textSize(16);
+    textAlign(CENTER);
+    text("HOVER!", kutuX + kutuW/2, kutuY + kutuH/2 + 5);
+  } else {
+    // Normal durum - soluk renk
+    fill(128, 50, 50);
+    stroke(100);
+    strokeWeight(1);
+    cursor(ARROW);
+    
+    rect(kutuX, kutuY, kutuW, kutuH, 5);
+  }
+  
+  // Açıklama
+  fill(255);
+  noStroke();
+  textSize(14);
+  textAlign(CENTER);
+  text("Kutunun üzerine gelin", width/2, 50);
+  
+  // Koşul bilgisi
+  textSize(12);
+  textAlign(LEFT);
+  text("mouseX: " + mouseX, 20, 330);
+  text("mouseY: " + mouseY, 20, 350);
+  text("Üzerinde mi: " + uzerinde, 20, 370);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 7: Trafik Işığı
+            new P5CodeEditor('editor7', {
+                initialCode: `let durum = 0;  // 0: Kırmızı, 1: Sarı, 2: Yeşil
+let zamanlayici = 0;
+
+// Her durum için süre (kare cinsinden)
+// 60 kare = 1 saniye
+let kirmizSure = 180;
+let sariSure = 60;
+let yesilSure = 180;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(100);
+  
+  // Zamanlayıcı
+  zamanlayici++;
+  
+  // Mevcut durumun süresini al
+  let mevcutSure;
+  if (durum == 0) {
+    mevcutSure = kirmizSure;
+  } else if (durum == 1) {
+    mevcutSure = sariSure;
+  } else {
+    mevcutSure = yesilSure;
+  }
+  
+  // Süre dolduysa sonraki duruma geç
+  if (zamanlayici > mevcutSure) {
+    zamanlayici = 0;
+    durum = (durum + 1) % 3;  // 0 -> 1 -> 2 -> 0...
+  }
+  
+  // Işık kutusu
+  fill(50);
+  stroke(30);
+  strokeWeight(5);
+  rect(160, 50, 80, 220, 15);
+  
+  // Kırmızı ışık
+  if (durum == 0) {
+    fill(255, 0, 0);
+  } else {
+    fill(100, 0, 0);
+  }
+  noStroke();
+  circle(200, 100, 50);
+  
+  // Sarı ışık
+  if (durum == 1) {
+    fill(255, 255, 0);
+  } else {
+    fill(100, 100, 0);
+  }
+  circle(200, 160, 50);
+  
+  // Yeşil ışık
+  if (durum == 2) {
+    fill(0, 255, 0);
+  } else {
+    fill(0, 100, 0);
+  }
+  circle(200, 220, 50);
+  
+  // Direk
+  fill(80);
+  rect(190, 270, 20, 100);
+  
+  // Durum bilgisi
+  fill(255);
+  textSize(18);
+  textAlign(CENTER);
+  
+  let durumMetni;
+  if (durum == 0) {
+    durumMetni = "KIRMIZI - DUR";
+  } else if (durum == 1) {
+    durumMetni = "SARI - HAZIRLAN";
+  } else {
+    durumMetni = "YEŞİL - GEÇEBİLİRSİN";
+  }
+  text(durumMetni, width/2, 330);
+  
+  // Kalan süre
+  let kalan = floor((mevcutSure - zamanlayici) / 60);
+  textSize(14);
+  text("Kalan: " + kalan + " saniye", width/2, 360);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 8: Çarpışma (Basit değişkenlerle)
+            new P5CodeEditor('editor8', {
+                initialCode: `// İki dairenin çarpışma kontrolü
+// Basit değişkenlerle
+
+// Daire 1 (fare ile kontrol)
+let d1X = 100;
+let d1Y = 200;
+let d1R = 40;  // yarıçap
+
+// Daire 2 (sabit)
+let d2X = 200;
+let d2Y = 200;
+let d2R = 50;  // yarıçap
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Daire 1 fareyi takip etsin
+  d1X = mouseX;
+  d1Y = mouseY;
+  
+  // Çarpışma kontrolü:
+  // İki daire arası mesafe < yarıçapların toplamı
+  // ise çarpışmışlardır
+  let mesafe = dist(d1X, d1Y, d2X, d2Y);
+  let carpisti = mesafe < d1R + d2R;
+  
+  // Çarpışma durumuna göre arka plan
+  if (carpisti) {
+    background(50, 0, 0);  // Kırmızımsı
+  }
+  
+  // Mesafe çizgisi
+  stroke(255, 100);
+  strokeWeight(1);
+  line(d1X, d1Y, d2X, d2Y);
+  
+  // Daire 1 çiz
+  noStroke();
+  if (carpisti) {
+    fill(255, 50, 50);  // Kırmızı
+  } else {
+    fill(50, 200, 255);  // Mavi
+  }
+  circle(d1X, d1Y, d1R * 2);
+  
+  // Daire 2 çiz
+  if (carpisti) {
+    fill(255, 100, 100);  // Açık kırmızı
+  } else {
+    fill(100, 255, 100);  // Yeşil
+  }
+  circle(d2X, d2Y, d2R * 2);
+  
+  // Bilgi
+  fill(255);
+  textSize(14);
+  textAlign(CENTER);
+  text("Mesafe: " + floor(mesafe), width/2, 30);
+  text("Yarıçaplar toplamı: " + (d1R + d2R), width/2, 50);
+  
+  if (carpisti) {
+    fill(255, 100, 100);
+    text("ÇARPIŞMA!", width/2, 80);
+  } else {
+    text("Çarpışma yok", width/2, 80);
+  }
+  
+  fill(200);
+  textSize(12);
+  text("Mavi daireyi yeşilin üzerine getirin", width/2, height - 20);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+        });
+    </script>
+</body>
+</html>

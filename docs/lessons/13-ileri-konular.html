@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    
+    
+    <title>Ders 13: İleri - Modern JavaScript - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                    <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                    <li><a href="13-ileri-konular.html" class="active">13. İleri: Modern JS</a></li>
+                    <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                    <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                    <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                    <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#arrow-functions">Arrow Functions</a></li>
+                    <li><a href="#foreach">forEach ve Dizi Metodları</a></li>
+                    <li><a href="#zamanlayicilar">Zamanlayıcılar</a></li>
+                    <li><a href="#transformasyonlar">Transformasyonlar</a></li>
+                    <li><a href="#push-pop">push() ve pop()</a></li>
+                    <li><a href="#ornekler">Uygulama Örnekleri</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 13: İleri - Modern JavaScript</h1>
+                <div class="lesson-meta">
+                    <span>📚 İleri Seviye</span>
+                    <span>⏱️ 75 dakika</span>
+                    <span>🎯 Modern JavaScript & Transformasyonlar</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: Arrow Functions -->
+                <section id="arrow-functions" class="lesson-section">
+                    <h2>🏹 Arrow Functions (Ok Fonksiyonları)</h2>
+                    
+                    <p>
+                        Modern JavaScript'te fonksiyonları daha kısa yazmanın bir yolu var: 
+                        <strong>Arrow Functions</strong> (Lambda fonksiyonları olarak da bilinir).
+                    </p>
+
+                    <h3>Geleneksel vs Arrow Function</h3>
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Geleneksel Fonksiyon</th>
+                                <th>Arrow Function</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><pre><code>function topla(a, b) {
+  return a + b;
+}</code></pre></td>
+                                <td><pre><code>const topla = (a, b) => {
+  return a + b;
+};</code></pre></td>
+                            </tr>
+                            <tr>
+                                <td><pre><code>function kare(x) {
+  return x * x;
+}</code></pre></td>
+                                <td><pre><code>const kare = x => x * x;</code></pre>
+                                <span class="comment">Tek satır ve tek parametre için ultra kısa!</span></td>
+                            </tr>
+                            <tr>
+                                <td><pre><code>function selamla() {
+  return "Merhaba!";
+}</code></pre></td>
+                                <td><pre><code>const selamla = () => "Merhaba!";</code></pre></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 Ne Zaman Kullanmalı?</div>
+                        <ul>
+                            <li><strong>Kısa işlemler</strong> için arrow function kullanın</li>
+                            <li><strong>Callback fonksiyonlar</strong> (forEach, map, filter içinde) için ideal</li>
+                            <li><code>setup()</code> ve <code>draw()</code> gibi p5.js fonksiyonlarını geleneksel yazın</li>
+                        </ul>
+                    </div>
+
+                    <div id="editor-arrow"></div>
+                </section>
+
+                <!-- Section: forEach and Array Methods -->
+                <section id="foreach" class="lesson-section">
+                    <h2>🔄 forEach ve Modern Dizi Metodları</h2>
+                    
+                    <p>
+                        Diziler üzerinde işlem yapmak için <code>for</code> döngüsü yerine daha modern 
+                        ve okunabilir metodlar kullanabilirsiniz.
+                    </p>
+
+                    <h3>forEach - Dizi Elemanlarını Gezme</h3>
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>for Döngüsü</th>
+                                <th>forEach Metodu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><pre><code>let renkler = ["kırmızı", "yeşil", "mavi"];
+
+for (let i = 0; i < renkler.length; i++) {
+  console.log(renkler[i]);
+}</code></pre></td>
+                                <td><pre><code>let renkler = ["kırmızı", "yeşil", "mavi"];
+
+renkler.forEach(renk => {
+  console.log(renk);
+});</code></pre>
+                                <span class="result">Daha temiz ve okunabilir!</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Diğer Faydalı Dizi Metodları</h3>
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Metod</th>
+                                <th>Açıklama</th>
+                                <th>Örnek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>forEach()</code></td>
+                                <td>Her eleman için bir fonksiyon çalıştırır</td>
+                                <td><code>dizi.forEach(x => console.log(x))</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>map()</code></td>
+                                <td>Her elemanı dönüştürüp yeni dizi oluşturur</td>
+                                <td><code>[1,2,3].map(x => x * 2)</code> → <span class="result">[2,4,6]</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>filter()</code></td>
+                                <td>Koşula uyanları yeni diziye alır</td>
+                                <td><code>[1,2,3,4].filter(x => x > 2)</code> → <span class="result">[3,4]</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>find()</code></td>
+                                <td>Koşula uyan ilk elemanı döndürür</td>
+                                <td><code>[1,5,10].find(x => x > 3)</code> → <span class="result">5</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>reduce()</code></td>
+                                <td>Tüm elemanları tek değere indirger</td>
+                                <td><code>[1,2,3].reduce((t,x) => t+x, 0)</code> → <span class="result">6</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="editor-foreach"></div>
+                </section>
+
+                <!-- Section: Timers -->
+                <section id="zamanlayicilar" class="lesson-section">
+                    <h2>⏰ Zamanlayıcılar (setTimeout & setInterval)</h2>
+                    
+                    <p>
+                        Belirli bir süre sonra veya düzenli aralıklarla kod çalıştırmak istediğinizde 
+                        zamanlayıcı fonksiyonlarını kullanabilirsiniz.
+                    </p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Fonksiyon</th>
+                                <th>Ne Yapar?</th>
+                                <th>Örnek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>setTimeout(fn, ms)</code></td>
+                                <td>Belirtilen süre sonra <strong>bir kez</strong> çalışır</td>
+                                <td><pre><code>setTimeout(() => {
+  console.log("3 saniye geçti!");
+}, 3000);</code></pre></td>
+                            </tr>
+                            <tr>
+                                <td><code>setInterval(fn, ms)</code></td>
+                                <td>Belirtilen aralıklarla <strong>sürekli</strong> çalışır</td>
+                                <td><pre><code>setInterval(() => {
+  console.log("Her 1 saniyede!");
+}, 1000);</code></pre></td>
+                            </tr>
+                            <tr>
+                                <td><code>clearTimeout(id)</code></td>
+                                <td>setTimeout'u iptal eder</td>
+                                <td><code>let id = setTimeout(...); clearTimeout(id);</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>clearInterval(id)</code></td>
+                                <td>setInterval'ı durdurur</td>
+                                <td><code>let id = setInterval(...); clearInterval(id);</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="info-box warning">
+                        <div class="info-box-title">⚠️ p5.js'de Zamanlayıcı Kullanımı</div>
+                        <p>
+                            p5.js zaten <code>draw()</code> fonksiyonunu saniyede ~60 kez çağırır. 
+                            <code>frameCount</code> ve mod operatörü (%) ile çoğu zamanlama işini yapabilirsiniz:
+                        </p>
+                        <pre><code>// Her 60 karede bir (yaklaşık 1 saniye)
+if (frameCount % 60 == 0) {
+  // Her saniye yapılacak iş
+}</code></pre>
+                    </div>
+
+                    <div id="editor-timer"></div>
+                </section>
+
+                <!-- Section: Transformations -->
+                <section id="transformasyonlar" class="lesson-section">
+                    <h2>🔄 Transformasyonlar (translate, rotate, scale)</h2>
+                    
+                    <p>
+                        Şekilleri döndürmek, kaydırmak veya boyutlandırmak için 
+                        <strong>transformasyon</strong> fonksiyonlarını kullanırız. 
+                        Bu fonksiyonlar koordinat sistemini değiştirir.
+                    </p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Fonksiyon</th>
+                                <th>Ne Yapar?</th>
+                                <th>Örnek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>translate(x, y)</code></td>
+                                <td>Koordinat merkezini (0,0) kaydırır</td>
+                                <td><code>translate(200, 200);</code> → Merkez artık (200,200)</td>
+                            </tr>
+                            <tr>
+                                <td><code>rotate(açı)</code></td>
+                                <td>Koordinat sistemini döndürür (radyan)</td>
+                                <td><code>rotate(PI/4);</code> → 45 derece döndür</td>
+                            </tr>
+                            <tr>
+                                <td><code>scale(s)</code></td>
+                                <td>Koordinat sistemini ölçekler</td>
+                                <td><code>scale(2);</code> → Her şey 2 kat büyük</td>
+                            </tr>
+                            <tr>
+                                <td><code>angleMode(DEGREES)</code></td>
+                                <td>Açıları derece olarak kullanmak için</td>
+                                <td><code>angleMode(DEGREES); rotate(45);</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Önemli: Transformasyon Sırası</h3>
+                    <p>
+                        Transformasyonlar <strong>sırayla uygulanır</strong> ve birbirine eklenir. 
+                        Önce translate, sonra rotate yaparsanız, döndürme yeni merkez etrafında olur.
+                    </p>
+
+                    <div id="editor-transform"></div>
+                </section>
+
+                <!-- Section: push() and pop() -->
+                <section id="push-pop" class="lesson-section">
+                    <h2>📦 push() ve pop() - Durum Kaydetme</h2>
+                    
+                    <p>
+                        Transformasyonlar kalıcıdır - bir kez <code>translate()</code> yaparsanız, 
+                        sonraki tüm çizimler etkilenir. <code>push()</code> ve <code>pop()</code> 
+                        ile mevcut durumu kaydedip geri yükleyebilirsiniz.
+                    </p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Fonksiyon</th>
+                                <th>Ne Yapar?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>push()</code></td>
+                                <td>Mevcut çizim ayarlarını kaydeder (renk, stroke, transformasyonlar)</td>
+                            </tr>
+                            <tr>
+                                <td><code>pop()</code></td>
+                                <td>Son kaydedilen duruma geri döner</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Neden Gerekli?</h3>
+                    <pre><code>// ❌ YANLIŞ: Transformasyonlar birikir
+function draw() {
+  translate(200, 200);
+  rotate(frameCount * 0.01);  // Her karede daha çok döner!
+  rect(0, 0, 50, 50);
+}
+
+// ✅ DOĞRU: Her karede sıfırdan başla
+function draw() {
+  background(30);
+  push();                      // Durumu kaydet
+  translate(200, 200);
+  rotate(frameCount * 0.01);
+  rect(0, 0, 50, 50);
+  pop();                       // Duruma geri dön
+}</code></pre>
+
+                    <div id="editor-pushpop"></div>
+
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 İpucu: İç İçe push/pop</div>
+                        <p>
+                            <code>push()</code> ve <code>pop()</code> iç içe kullanılabilir. 
+                            Her <code>push()</code> için bir <code>pop()</code> olmalıdır.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Section: Practice Examples -->
+                <section id="ornekler" class="lesson-section">
+                    <h2>🎮 Uygulama Örnekleri</h2>
+
+                    <h3>Örnek 1: Dönen Çiçek</h3>
+                    <p>translate ve rotate ile merkez etrafında dönen yapraklar:</p>
+                    <div id="editor-flower"></div>
+
+                    <h3>Örnek 2: Parçacık Sistemi</h3>
+                    <p>forEach ve sınıflarla parçacık efekti:</p>
+                    <div id="editor-particles"></div>
+
+                    <h3>Örnek 3: Animasyonlu Menü</h3>
+                    <p>setTimeout ve scale ile animasyonlu butonlar:</p>
+                    <div id="editor-menu"></div>
+                </section>
+
+                <!-- Key Concepts Summary -->
+                <section class="lesson-section">
+                    <h2>📋 Özet</h2>
+                    
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Konu</th>
+                                <th>Önemli Noktalar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Arrow Functions</strong></td>
+                                <td><code>const fn = (x) => x * 2</code> - Kısa fonksiyon yazımı</td>
+                            </tr>
+                            <tr>
+                                <td><strong>forEach</strong></td>
+                                <td><code>dizi.forEach(x => ...)</code> - Dizi elemanlarını gezme</td>
+                            </tr>
+                            <tr>
+                                <td><strong>map/filter</strong></td>
+                                <td>Dizi dönüştürme ve filtreleme metodları</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Zamanlayıcılar</strong></td>
+                                <td><code>setTimeout</code> (bir kez), <code>setInterval</code> (sürekli)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>translate</strong></td>
+                                <td>Koordinat merkezini kaydırır</td>
+                            </tr>
+                            <tr>
+                                <td><strong>rotate</strong></td>
+                                <td>Koordinat sistemini döndürür (radyan veya derece)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>scale</strong></td>
+                                <td>Koordinat sistemini ölçekler</td>
+                            </tr>
+                            <tr>
+                                <td><strong>push/pop</strong></td>
+                                <td>Çizim durumunu kaydet/geri yükle</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-nav">
+                    <a href="12-hata-ayiklama.html" class="btn">← Önceki Ders</a>
+                    <a href="14-ileri-gorseller.html" class="btn btn-primary">Sonraki Ders →</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="text-align: center; padding: 1.5rem 0;">
+                <p style="margin: 0;">İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="../js/editor.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Arrow Functions Örneği
+            new P5CodeEditor('editor-arrow', {
+                initialCode: `// ARROW FUNCTIONS ÖRNEĞİ
+
+// Geleneksel fonksiyon
+function karesiniAl(x) {
+  return x * x;
+}
+
+// Arrow function versiyonu
+const kareAl = x => x * x;
+
+// Birden fazla parametre
+const topla = (a, b) => a + b;
+
+// Çok satırlı arrow function
+const daireCiz = (x, y, r) => {
+  fill(random(255), random(255), random(255));
+  circle(x, y, r);
+};
+
+function setup() {
+  createCanvas(400, 400);
+  background(30);
+  
+  // Fonksiyonları test edelim
+  console.log("5'in karesi:", karesiniAl(5));
+  console.log("5'in karesi (arrow):", kareAl(5));
+  console.log("3 + 7 =", topla(3, 7));
+}
+
+function draw() {
+  // Her tıklamada daire çiz
+}
+
+function mousePressed() {
+  daireCiz(mouseX, mouseY, random(20, 60));
+}`,
+                autoRun: true,
+                showConsole: true
+            });
+
+            // forEach Örneği
+            new P5CodeEditor('editor-foreach', {
+                initialCode: `// forEach VE DİZİ METODLARI
+
+let sayilar = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+let renkler = [];
+
+function setup() {
+  createCanvas(400, 400);
+  background(30);
+  
+  // map: Her sayıyı 2 ile çarp
+  let ciftler = sayilar.map(x => x * 2);
+  console.log("Çiftler:", ciftler);
+  
+  // filter: Sadece 5'ten büyükleri al
+  let buyukler = sayilar.filter(x => x > 5);
+  console.log("5'ten büyükler:", buyukler);
+  
+  // find: İlk çift sayıyı bul
+  let ilkCift = sayilar.find(x => x % 2 == 0);
+  console.log("İlk çift:", ilkCift);
+  
+  // reduce: Toplamı hesapla
+  let toplam = sayilar.reduce((t, x) => t + x, 0);
+  console.log("Toplam:", toplam);
+  
+  // 10 rastgele renk oluştur
+  for (let i = 0; i < 10; i++) {
+    renkler.push(color(random(255), random(255), random(255)));
+  }
+}
+
+function draw() {
+  background(30);
+  
+  // forEach ile renkleri göster
+  let x = 25;
+  renkler.forEach((renk, index) => {
+    fill(renk);
+    noStroke();
+    rect(x, 150, 30, 100, 5);
+    
+    fill(255);
+    textAlign(CENTER);
+    textSize(12);
+    text(index, x + 15, 280);
+    
+    x += 38;
+  });
+  
+  fill(255);
+  textSize(16);
+  textAlign(CENTER);
+  text("forEach ile 10 renkli kutu", width/2, 50);
+  text("Tıklayınca yeni renkler!", width/2, 350);
+}
+
+function mousePressed() {
+  // map ile tüm renkleri değiştir
+  renkler = renkler.map(() => color(random(255), random(255), random(255)));
+}`,
+                autoRun: true,
+                showConsole: true
+            });
+
+            // Timer Örneği
+            new P5CodeEditor('editor-timer', {
+                initialCode: `// ZAMANLAYICILAR ÖRNEĞİ
+
+let mesaj = "Başlamak için tıklayın";
+let sayac = 0;
+let intervalId = null;
+let aktif = false;
+
+function setup() {
+  createCanvas(400, 400);
+  textAlign(CENTER, CENTER);
+}
+
+function draw() {
+  background(30);
+  
+  // Arka plan rengi sayaca göre
+  if (aktif) {
+    let r = map(sin(sayac * 0.1), -1, 1, 30, 80);
+    background(r, 30, 50);
+  }
+  
+  // Sayaç
+  fill(255);
+  textSize(64);
+  text(sayac, width/2, height/2);
+  
+  // Mesaj
+  textSize(16);
+  text(mesaj, width/2, height - 50);
+  
+  // frameCount ile zamanlama (alternatif)
+  if (frameCount % 60 == 0 && aktif) {
+    // Bu her saniye çalışır
+  }
+}
+
+function mousePressed() {
+  if (!aktif) {
+    // Başlat
+    aktif = true;
+    mesaj = "Durdurmak için tıklayın";
+    
+    // Her saniye sayacı artır
+    intervalId = setInterval(() => {
+      sayac++;
+    }, 1000);
+    
+    // 3 saniye sonra bir kez mesaj göster
+    setTimeout(() => {
+      console.log("3 saniye oldu!");
+    }, 3000);
+    
+  } else {
+    // Durdur
+    aktif = false;
+    mesaj = "Başlamak için tıklayın";
+    clearInterval(intervalId);
+  }
+}`,
+                autoRun: true,
+                showConsole: true
+            });
+
+            // Transform Örneği
+            new P5CodeEditor('editor-transform', {
+                initialCode: `// TRANSFORMASYONLAR
+
+function setup() {
+  createCanvas(400, 400);
+  angleMode(DEGREES);  // Açıları derece olarak kullan
+}
+
+function draw() {
+  background(30);
+  
+  // 1. translate: Merkeze taşı
+  translate(width/2, height/2);
+  
+  // Merkez noktası (referans için)
+  fill(255, 0, 0);
+  circle(0, 0, 10);
+  
+  // 2. rotate: Fareye göre döndür
+  let aci = map(mouseX, 0, width, 0, 360);
+  rotate(aci);
+  
+  // Dönen dikdörtgen
+  fill(0, 200, 255, 150);
+  stroke(255);
+  strokeWeight(2);
+  rectMode(CENTER);
+  rect(0, 0, 150, 100);
+  
+  // 3. scale: Fareye göre ölçekle
+  let olcek = map(mouseY, 0, height, 0.5, 2);
+  scale(olcek);
+  
+  // Ölçeklenen iç kare
+  fill(255, 200, 0, 150);
+  rect(0, 0, 50, 50);
+  
+  // Bilgi (transform dışında göstermek için sıfırla)
+  resetMatrix();
+  fill(255);
+  textSize(14);
+  textAlign(LEFT);
+  text("Açı: " + int(aci) + "°", 20, 30);
+  text("Ölçek: " + olcek.toFixed(2), 20, 50);
+  text("Fareyi hareket ettirin!", 20, height - 20);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // push/pop Örneği
+            new P5CodeEditor('editor-pushpop', {
+                initialCode: `// PUSH ve POP KULLANIMI
+
+function setup() {
+  createCanvas(400, 400);
+  angleMode(DEGREES);
+}
+
+function draw() {
+  background(30);
+  
+  // İlk kare: Sol üst, kırmızı, dönen
+  push();  // Durumu kaydet
+  translate(100, 100);
+  rotate(frameCount * 2);
+  fill(255, 100, 100);
+  rectMode(CENTER);
+  rect(0, 0, 80, 80);
+  pop();   // Durumu geri yükle
+  
+  // İkinci kare: Sağ üst, yeşil, zıplayan
+  push();
+  translate(300, 100);
+  let zipla = sin(frameCount * 5) * 20;
+  translate(0, zipla);
+  fill(100, 255, 100);
+  rectMode(CENTER);
+  rect(0, 0, 80, 80);
+  pop();
+  
+  // Üçüncü kare: Sol alt, mavi, büyüyüp küçülen
+  push();
+  translate(100, 300);
+  let olcek = map(sin(frameCount * 3), -1, 1, 0.5, 1.5);
+  scale(olcek);
+  fill(100, 100, 255);
+  rectMode(CENTER);
+  rect(0, 0, 80, 80);
+  pop();
+  
+  // Dördüncü kare: Sağ alt, sarı, fareyi takip eden
+  push();
+  translate(300, 300);
+  // Fareye doğru dön
+  let aci = atan2(mouseY - 300, mouseX - 300);
+  rotate(aci);
+  fill(255, 255, 100);
+  rectMode(CENTER);
+  rect(0, 0, 80, 40);  // Ok şekli
+  triangle(40, 0, 20, -20, 20, 20);
+  pop();
+  
+  // Her kare bağımsız - push/pop sayesinde!
+  fill(255);
+  textSize(12);
+  textAlign(CENTER);
+  text("Her kare bağımsız hareket eder", width/2, 380);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Dönen Çiçek Örneği
+            new P5CodeEditor('editor-flower', {
+                initialCode: `// DÖNEN ÇİÇEK
+
+let yaprakSayisi = 8;
+let donusHizi = 1;
+
+function setup() {
+  createCanvas(400, 400);
+  angleMode(DEGREES);
+}
+
+function draw() {
+  background(30);
+  translate(width/2, height/2);
+  
+  // Çiçek gövdesi
+  stroke(100, 200, 100);
+  strokeWeight(8);
+  line(0, 0, 0, 150);
+  
+  // Yapraklar
+  let aci = 360 / yaprakSayisi;
+  
+  for (let i = 0; i < yaprakSayisi; i++) {
+    push();
+    rotate(i * aci + frameCount * donusHizi);
+    
+    // Yaprak rengi (gökkuşağı)
+    let renk = map(i, 0, yaprakSayisi, 0, 360);
+    colorMode(HSB);
+    fill(renk, 80, 90, 0.8);
+    noStroke();
+    
+    // Yaprak şekli
+    ellipse(50, 0, 80, 30);
+    colorMode(RGB);
+    pop();
+  }
+  
+  // Ortadaki daire
+  fill(255, 220, 100);
+  noStroke();
+  circle(0, 0, 40);
+  
+  // Kontroller
+  fill(255);
+  textAlign(CENTER);
+  textSize(12);
+  resetMatrix();
+  text("↑↓: Yaprak sayısı (" + yaprakSayisi + ")", width/2, height - 40);
+  text("←→: Hız (" + donusHizi.toFixed(1) + ")", width/2, height - 20);
+}
+
+function keyPressed() {
+  if (keyCode == UP_ARROW) yaprakSayisi = min(yaprakSayisi + 1, 20);
+  if (keyCode == DOWN_ARROW) yaprakSayisi = max(yaprakSayisi - 1, 3);
+  if (keyCode == RIGHT_ARROW) donusHizi += 0.5;
+  if (keyCode == LEFT_ARROW) donusHizi -= 0.5;
+  return false;
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Parçacık Sistemi Örneği
+            new P5CodeEditor('editor-particles', {
+                initialCode: `// PARÇACIK SİSTEMİ
+
+class Parcacik {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.hizX = random(-3, 3);
+    this.hizY = random(-5, -1);
+    this.boyut = random(5, 15);
+    this.renk = color(random(255), random(255), random(255), 200);
+    this.yasam = 255;
+  }
+  
+  guncelle() {
+    this.x += this.hizX;
+    this.y += this.hizY;
+    this.hizY += 0.1;  // Yerçekimi
+    this.yasam -= 3;   // Solma
+  }
+  
+  goster() {
+    noStroke();
+    fill(red(this.renk), green(this.renk), blue(this.renk), this.yasam);
+    circle(this.x, this.y, this.boyut);
+  }
+  
+  bitti() {
+    return this.yasam <= 0;
+  }
+}
+
+let parcaciklar = [];
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30, 30, 50);
+  
+  // forEach ile tüm parçacıkları güncelle ve göster
+  parcaciklar.forEach(p => {
+    p.guncelle();
+    p.goster();
+  });
+  
+  // filter ile ölü parçacıkları temizle
+  parcaciklar = parcaciklar.filter(p => !p.bitti());
+  
+  // Bilgi
+  fill(255);
+  textSize(14);
+  text("Parçacık: " + parcaciklar.length, 20, 30);
+  text("Tıklayarak parçacık ekleyin!", 20, height - 20);
+}
+
+function mousePressed() {
+  // Tıklanan yerde 20 parçacık oluştur
+  for (let i = 0; i < 20; i++) {
+    parcaciklar.push(new Parcacik(mouseX, mouseY));
+  }
+}
+
+function mouseDragged() {
+  // Sürüklerken de parçacık ekle
+  parcaciklar.push(new Parcacik(mouseX, mouseY));
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Animasyonlu Menü Örneği
+            new P5CodeEditor('editor-menu', {
+                initialCode: `// ANİMASYONLU MENÜ
+
+let butonlar = [];
+
+class Buton {
+  constructor(x, y, w, h, metin, renk) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.metin = metin;
+    this.renk = renk;
+    this.olcek = 1;
+    this.hedefOlcek = 1;
+  }
+  
+  guncelle() {
+    // Yumuşak animasyon
+    this.olcek = lerp(this.olcek, this.hedefOlcek, 0.2);
+    
+    // Fare üzerinde mi?
+    if (this.uzerindeMi()) {
+      this.hedefOlcek = 1.1;
+    } else {
+      this.hedefOlcek = 1;
+    }
+  }
+  
+  goster() {
+    push();
+    translate(this.x + this.w/2, this.y + this.h/2);
+    scale(this.olcek);
+    
+    // Gölge
+    fill(0, 50);
+    noStroke();
+    rect(-this.w/2 + 3, -this.h/2 + 3, this.w, this.h, 10);
+    
+    // Buton
+    fill(this.renk);
+    stroke(255, 100);
+    strokeWeight(2);
+    rect(-this.w/2, -this.h/2, this.w, this.h, 10);
+    
+    // Metin
+    fill(255);
+    noStroke();
+    textAlign(CENTER, CENTER);
+    textSize(16);
+    text(this.metin, 0, 0);
+    
+    pop();
+  }
+  
+  uzerindeMi() {
+    return mouseX > this.x && mouseX < this.x + this.w &&
+           mouseY > this.y && mouseY < this.y + this.h;
+  }
+}
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // Butonları oluştur
+  butonlar.push(new Buton(100, 100, 200, 50, "🎮 Oyuna Başla", color(50, 150, 50)));
+  butonlar.push(new Buton(100, 170, 200, 50, "⚙️ Ayarlar", color(50, 100, 150)));
+  butonlar.push(new Buton(100, 240, 200, 50, "📊 Skorlar", color(150, 100, 50)));
+  butonlar.push(new Buton(100, 310, 200, 50, "❌ Çıkış", color(150, 50, 50)));
+}
+
+function draw() {
+  // Gradient arka plan
+  for (let y = 0; y < height; y++) {
+    let c = lerpColor(color(30, 30, 60), color(60, 30, 60), y/height);
+    stroke(c);
+    line(0, y, width, y);
+  }
+  
+  // Başlık
+  fill(255);
+  textAlign(CENTER);
+  textSize(28);
+  text("🎨 Oyun Menüsü", width/2, 50);
+  
+  // Butonları güncelle ve göster
+  butonlar.forEach(b => {
+    b.guncelle();
+    b.goster();
+  });
+}
+
+function mousePressed() {
+  butonlar.forEach(b => {
+    if (b.uzerindeMi()) {
+      console.log(b.metin + " tıklandı!");
+    }
+  });
+}`,
+                autoRun: true,
+                showConsole: true
+            });
+
+        });
+    </script>
+    
+    <script src="../js/theme.js"></script>
+</body>
+</html>

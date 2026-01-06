@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <title>Ders 2: Şekiller ve Renkler - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html" class="active">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#temel-sekiller">Temel Şekiller</a></li>
+                    <li><a href="#renkler">Renkler (RGB)</a></li>
+                    <li><a href="#hex-sistemi">Hex Sayı Sistemi</a></li>
+                    <li><a href="#fill-stroke">fill() ve stroke()</a></li>
+                    <li><a href="#seffaflik">Şeffaflık (Alpha)</a></li>
+                    <li><a href="#metin">Metin Yazdırma</a></li>
+                    <li><a href="#ornekler">Uygulama Örnekleri</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 2: Şekiller ve Renkler</h1>
+                <div class="lesson-meta">
+                    <span>📚 Başlangıç</span>
+                    <span>⏱️ 45 dakika</span>
+                    <span>🎯 Çizim Temelleri</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: Basic Shapes -->
+                <section id="temel-sekiller">
+                    <h2>Temel Şekiller</h2>
+                    
+                    <p>
+                        p5.js ile çizim yapmak için önce temel şekilleri öğrenmeniz gerekiyor. 
+                        Her şekil bir fonksiyondur ve parantez içinde konumunu ve boyutunu belirtirsiniz.
+                    </p>
+
+                    <h3>Dikdörtgen - rect()</h3>
+                    <p>
+                        <code>rect(x, y, genişlik, yükseklik)</code> - Sol üst köşeden başlayarak 
+                        dikdörtgen çizer.
+                    </p>
+                    <pre><code>rect(50, 50, 100, 80);  // x=50, y=50'de, 100 genişlik, 80 yükseklik</code></pre>
+
+                    <h3>Kare - square()</h3>
+                    <p>
+                        <code>square(x, y, boyut)</code> - Eşit kenarlı dikdörtgen (kare) çizer.
+                    </p>
+                    <pre><code>square(50, 50, 100);  // x=50, y=50'de, 100x100 kare</code></pre>
+
+                    <h3>Daire - circle()</h3>
+                    <p>
+                        <code>circle(merkezX, merkezY, çap)</code> - Merkez noktasından daire çizer.
+                    </p>
+                    <pre><code>circle(200, 200, 80);  // Merkez (200,200), çap 80 piksel</code></pre>
+
+                    <h3>Elips - ellipse()</h3>
+                    <p>
+                        <code>ellipse(merkezX, merkezY, genişlik, yükseklik)</code> - Oval şekil çizer.
+                    </p>
+                    <pre><code>ellipse(200, 200, 120, 80);  // Yatay oval</code></pre>
+
+                    <h3>Çizgi - line()</h3>
+                    <p>
+                        <code>line(x1, y1, x2, y2)</code> - İki nokta arasında çizgi çizer.
+                    </p>
+                    <pre><code>line(50, 50, 350, 350);  // (50,50)'den (350,350)'ye çizgi</code></pre>
+
+                    <h3>Üçgen - triangle()</h3>
+                    <p>
+                        <code>triangle(x1, y1, x2, y2, x3, y3)</code> - Üç köşe noktası belirterek üçgen çizer.
+                    </p>
+                    <pre><code>triangle(200, 50, 100, 200, 300, 200);  // Yukarı bakan üçgen</code></pre>
+
+                    <h3>Nokta - point()</h3>
+                    <p>
+                        <code>point(x, y)</code> - Tek bir piksel çizer.
+                    </p>
+                    <pre><code>point(100, 100);  // (100,100)'de bir nokta</code></pre>
+
+                    <div id="editor1"></div>
+
+                    <div class="challenge-box">
+                        <h4>🧪 Şekil Deneyleri</h4>
+                        <ul>
+                            <li>Her şeklin konumunu değiştirmeyi deneyin</li>
+                            <li>Boyutları büyütüp küçültün</li>
+                            <li>Yeni şekiller ekleyin</li>
+                            <li><code>ellipse(200, 300, 150, 50)</code> ekleyerek yatık bir oval çizin</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Section: Colors -->
+                <section id="renkler" class="mt-4">
+                    <h2>Renkler (RGB Modeli)</h2>
+
+                    <p>
+                        Bilgisayar ekranlarında renkler <strong>RGB</strong> sistemi ile oluşturulur: 
+                        <strong>R</strong>ed (Kırmızı), <strong>G</strong>reen (Yeşil), <strong>B</strong>lue (Mavi).
+                    </p>
+
+                    <div class="info-box note">
+                        <div class="info-box-title">💡 RGB Nasıl Çalışır?</div>
+                        <p>
+                            Her renk kanalı 0 ile 255 arasında bir değer alır. 
+                            0 = O renk yok, 255 = O renk maksimum.
+                            Üç rengi karıştırarak milyonlarca farklı renk oluşturabilirsiniz!
+                        </p>
+                    </div>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Renk</th>
+                                <th>Kod</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="color: #ff0000; font-weight: bold;">● Kırmızı</td>
+                                <td><code>fill(255, 0, 0)</code></td>
+                                <td>R=255, G=0, B=0</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #00ff00; font-weight: bold;">● Yeşil</td>
+                                <td><code>fill(0, 255, 0)</code></td>
+                                <td>R=0, G=255, B=0</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #0088ff; font-weight: bold;">● Mavi</td>
+                                <td><code>fill(0, 0, 255)</code></td>
+                                <td>R=0, G=0, B=255</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #ffff00; font-weight: bold;">● Sarı</td>
+                                <td><code>fill(255, 255, 0)</code></td>
+                                <td>Kırmızı + Yeşil = Sarı</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #ff00ff; font-weight: bold;">● Mor</td>
+                                <td><code>fill(128, 0, 128)</code></td>
+                                <td>Kırmızı + Mavi</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #00ffff; font-weight: bold;">● Turkuaz</td>
+                                <td><code>fill(0, 255, 255)</code></td>
+                                <td>Yeşil + Mavi</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Gri Tonları</h3>
+                    <p>
+                        Tek bir sayı kullanarak gri tonları elde edebilirsiniz:
+                    </p>
+                    <ul>
+                        <li><code>fill(0)</code> - Siyah (hiç ışık yok)</li>
+                        <li><code>fill(128)</code> - Orta gri</li>
+                        <li><code>fill(255)</code> - Beyaz (tüm ışık)</li>
+                    </ul>
+
+                    <h3 id="hex-sistemi">Hex (Onaltılık) Sayı Sistemi</h3>
+                    
+                    <p>
+                        Günlük hayatta <strong>onluk (decimal)</strong> sayı sistemi kullanırız: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9.
+                        Ancak bilgisayar bilimlerinde <strong>onaltılık (hexadecimal)</strong> sistem çok yaygındır.
+                    </p>
+
+                    <div class="info-box">
+                        <h4>🔢 Neden Onaltılık Sistem?</h4>
+                        <p>Bilgisayarlar ikili (binary: 0 ve 1) sistemle çalışır. Ancak ikili sayılar çok uzun olur:</p>
+                        <ul>
+                            <li>255 sayısı ikili sistemde: <code>11111111</code> (8 basamak)</li>
+                            <li>255 sayısı onaltılık sistemde: <code>FF</code> (sadece 2 basamak!)</li>
+                        </ul>
+                        <p>Onaltılık sistem, ikili sayıları kısa ve okunabilir yapmak için kullanılır.
+                        Her hex basamak tam olarak 4 bit'e (binary digit) karşılık gelir.</p>
+                    </div>
+
+                    <h4>Onaltılık Rakamlar</h4>
+                    <p>
+                        Onluk sistemde 10 rakam vardır (0-9). Onaltılık sistemde ise 16 "rakam" gerekir.
+                        10'dan sonrası için harfler kullanılır:
+                    </p>
+                    
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Decimal (10'luk)</th>
+                                <th>Hex (16'lık)</th>
+                                <th>Binary (2'lik)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>0</td><td>0</td><td>0000</td></tr>
+                            <tr><td>1</td><td>1</td><td>0001</td></tr>
+                            <tr><td>2</td><td>2</td><td>0010</td></tr>
+                            <tr><td>3</td><td>3</td><td>0011</td></tr>
+                            <tr><td>4</td><td>4</td><td>0100</td></tr>
+                            <tr><td>5</td><td>5</td><td>0101</td></tr>
+                            <tr><td>6</td><td>6</td><td>0110</td></tr>
+                            <tr><td>7</td><td>7</td><td>0111</td></tr>
+                            <tr><td>8</td><td>8</td><td>1000</td></tr>
+                            <tr><td>9</td><td>9</td><td>1001</td></tr>
+                            <tr><td>10</td><td style="color: #00d9ff; font-weight: bold;">A</td><td>1010</td></tr>
+                            <tr><td>11</td><td style="color: #00d9ff; font-weight: bold;">B</td><td>1011</td></tr>
+                            <tr><td>12</td><td style="color: #00d9ff; font-weight: bold;">C</td><td>1100</td></tr>
+                            <tr><td>13</td><td style="color: #00d9ff; font-weight: bold;">D</td><td>1101</td></tr>
+                            <tr><td>14</td><td style="color: #00d9ff; font-weight: bold;">E</td><td>1110</td></tr>
+                            <tr><td>15</td><td style="color: #00d9ff; font-weight: bold;">F</td><td>1111</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Hex → Decimal Dönüşümü</h4>
+                    <p>
+                        Her basamağı, konumuna göre 16'nın kuvvetiyle çarpıp topluyoruz.
+                        Sağdan sola: 16⁰=1, 16¹=16, 16²=256...
+                    </p>
+                    
+                    <div class="info-box">
+                        <h4>📝 Örnek: <code>3F</code> → Decimal</h4>
+                        <table class="code-table">
+                            <thead><tr><th>Basamak</th><th>Hex Değer</th><th>× Konum</th><th>= Sonuç</th></tr></thead>
+                            <tbody>
+                                <tr><td>Sol (16¹)</td><td>3</td><td>× 16</td><td>= 48</td></tr>
+                                <tr><td>Sağ (16⁰)</td><td>F = 15</td><td>× 1</td><td>= 15</td></tr>
+                                <tr><td colspan="3" style="text-align: right;"><strong>Toplam:</strong></td><td><strong>= 63</strong></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>📝 Örnek: <code>A7</code> → Decimal</h4>
+                        <table class="code-table">
+                            <thead><tr><th>Basamak</th><th>Hex Değer</th><th>× Konum</th><th>= Sonuç</th></tr></thead>
+                            <tbody>
+                                <tr><td>Sol (16¹)</td><td>A = 10</td><td>× 16</td><td>= 160</td></tr>
+                                <tr><td>Sağ (16⁰)</td><td>7</td><td>× 1</td><td>= 7</td></tr>
+                                <tr><td colspan="3" style="text-align: right;"><strong>Toplam:</strong></td><td><strong>= 167</strong></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>📝 Örnek: <code>FF</code> → Decimal (Maksimum renk değeri)</h4>
+                        <table class="code-table">
+                            <thead><tr><th>Basamak</th><th>Hex Değer</th><th>× Konum</th><th>= Sonuç</th></tr></thead>
+                            <tbody>
+                                <tr><td>Sol (16¹)</td><td>F = 15</td><td>× 16</td><td>= 240</td></tr>
+                                <tr><td>Sağ (16⁰)</td><td>F = 15</td><td>× 1</td><td>= 15</td></tr>
+                                <tr><td colspan="3" style="text-align: right;"><strong>Toplam:</strong></td><td><strong>= 255</strong></td></tr>
+                            </tbody>
+                        </table>
+                        <p>Bu yüzden RGB değerleri 0-255 arasıdır: <code>00</code> ile <code>FF</code> arası!</p>
+                    </div>
+
+                    <h4>Decimal → Hex Dönüşümü</h4>
+                    <p>
+                        Sayıyı 16'ya bölüp kalanları alıyoruz. Kalanlar ters sırada hex rakamlarını verir.
+                    </p>
+                    
+                    <div class="info-box">
+                        <h4>📝 Örnek: <code>200</code> → Hex</h4>
+                        <table class="code-table">
+                            <thead><tr><th>İşlem</th><th>Bölüm</th><th>Kalan</th><th>Hex Rakam</th></tr></thead>
+                            <tbody>
+                                <tr><td>200 ÷ 16</td><td>12</td><td>8</td><td>8</td></tr>
+                                <tr><td>12 ÷ 16</td><td>0</td><td>12</td><td>C</td></tr>
+                            </tbody>
+                        </table>
+                        <p>Kalanları aşağıdan yukarı oku: <strong>C8</strong></p>
+                        <p>Doğrulama: C×16 + 8 = 12×16 + 8 = 192 + 8 = 200 ✓</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>📝 Örnek: <code>175</code> → Hex</h4>
+                        <table class="code-table">
+                            <thead><tr><th>İşlem</th><th>Bölüm</th><th>Kalan</th><th>Hex Rakam</th></tr></thead>
+                            <tbody>
+                                <tr><td>175 ÷ 16</td><td>10</td><td>15</td><td>F</td></tr>
+                                <tr><td>10 ÷ 16</td><td>0</td><td>10</td><td>A</td></tr>
+                            </tbody>
+                        </table>
+                        <p>Kalanları aşağıdan yukarı oku: <strong>AF</strong></p>
+                        <p>Doğrulama: A×16 + F = 10×16 + 15 = 160 + 15 = 175 ✓</p>
+                    </div>
+
+                    <h3>Hex Renk Kodları</h3>
+                    <p>
+                        Web tasarımında sıkça kullanılan <strong>Hex renk kodları</strong>, 
+                        <code>#</code> işareti ile başlar ve 6 karakter içerir: <code>#RRGGBB</code>
+                    </p>
+                    <p>
+                        Her iki karakter bir renk kanalını temsil eder:
+                        <code>#<span style="color:#ff6666">RR</span><span style="color:#66ff66">GG</span><span style="color:#6666ff">BB</span></code>
+                    </p>
+                    
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Hex Kod</th>
+                                <th>RGB Karşılığı</th>
+                                <th>Renk</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>'#FF0000'</code></td>
+                                <td><code>fill(255, 0, 0)</code></td>
+                                <td style="color: #ff0000; font-weight: bold;">● Kırmızı</td>
+                            </tr>
+                            <tr>
+                                <td><code>'#00FF00'</code></td>
+                                <td><code>fill(0, 255, 0)</code></td>
+                                <td style="color: #00ff00; font-weight: bold;">● Yeşil</td>
+                            </tr>
+                            <tr>
+                                <td><code>'#0000FF'</code></td>
+                                <td><code>fill(0, 0, 255)</code></td>
+                                <td style="color: #0000ff; font-weight: bold;">● Mavi</td>
+                            </tr>
+                            <tr>
+                                <td><code>'#FFFF00'</code></td>
+                                <td><code>fill(255, 255, 0)</code></td>
+                                <td style="color: #ffff00; font-weight: bold;">● Sarı</td>
+                            </tr>
+                            <tr>
+                                <td><code>'#FF8C00'</code></td>
+                                <td><code>fill(255, 140, 0)</code></td>
+                                <td style="color: #ff8c00; font-weight: bold;">● Turuncu</td>
+                            </tr>
+                            <tr>
+                                <td><code>'#800080'</code></td>
+                                <td><code>fill(128, 0, 128)</code></td>
+                                <td style="color: #800080; font-weight: bold;">● Mor</td>
+                            </tr>
+                            <tr>
+                                <td><code>'#000000'</code></td>
+                                <td><code>fill(0, 0, 0)</code></td>
+                                <td style="font-weight: bold;">● Siyah</td>
+                            </tr>
+                            <tr>
+                                <td><code>'#FFFFFF'</code></td>
+                                <td><code>fill(255, 255, 255)</code></td>
+                                <td style="font-weight: bold;">○ Beyaz</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="info-box">
+                        <h4>💡 p5.js'de Hex Kullanımı</h4>
+                        <p>Hex kodları <strong>tırnak içinde</strong> yazmalısınız:</p>
+                        <ul>
+                            <li><code>fill('#FF8C00')</code> - Turuncu</li>
+                            <li><code>background('#1a1a2e')</code> - Koyu lacivert</li>
+                            <li><code>stroke('#00d9ff')</code> - Parlak mavi</li>
+                        </ul>
+                    </div>
+
+                    <div id="editor2"></div>
+
+                    <div class="challenge-box">
+                        <h4>🧪 Renk Deneyleri</h4>
+                        <ul>
+                            <li>Mor yapmak için: <code>fill(128, 0, 128)</code></li>
+                            <li>Turuncu yapmak için: <code>fill(255, 165, 0)</code></li>
+                            <li>Pembe yapmak için: <code>fill(255, 192, 203)</code></li>
+                            <li>Kendi renk kombinasyonlarınızı deneyin!</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Section: fill and stroke -->
+                <section id="fill-stroke" class="mt-4">
+                    <h2>fill() ve stroke() Fonksiyonları</h2>
+
+                    <p>
+                        Şekillerin görünümünü kontrol eden iki önemli fonksiyon vardır:
+                    </p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Fonksiyon</th>
+                                <th>Açıklama</th>
+                                <th>Örnek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>fill(r, g, b)</code></td>
+                                <td>Şeklin içini dolduran rengi belirler</td>
+                                <td><code>fill(255, 0, 0);</code> → Kırmızı dolgu</td>
+                            </tr>
+                            <tr>
+                                <td><code>stroke(r, g, b)</code></td>
+                                <td>Şeklin kenar çizgisinin rengini belirler</td>
+                                <td><code>stroke(0, 0, 255);</code> → Mavi kenar</td>
+                            </tr>
+                            <tr>
+                                <td><code>noFill()</code></td>
+                                <td>İç dolguyu kaldırır (sadece kenar görünür)</td>
+                                <td><code>noFill(); rect(50, 50, 80, 80);</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>noStroke()</code></td>
+                                <td>Kenar çizgisini kaldırır</td>
+                                <td><code>noStroke(); circle(100, 100, 50);</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>strokeWeight(n)</code></td>
+                                <td>Kenar çizgisinin kalınlığını ayarlar</td>
+                                <td><code>strokeWeight(5);</code> → 5 piksel kalın</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="info-box warning">
+                        <div class="info-box-title">⚠️ Önemli: Sıralama Önemlidir!</div>
+                        <p>
+                            <code>fill()</code> ve <code>stroke()</code> ayarları, onlardan 
+                            <strong>sonra</strong> çizilen şekilleri etkiler. Ayar yapmadan 
+                            önce bir şekil çizerseniz, o şekil varsayılan renklerde (beyaz dolgu, 
+                            siyah kenar) çizilir.
+                        </p>
+                    </div>
+
+                    <div id="editor3"></div>
+                </section>
+
+                <!-- Section: Transparency -->
+                <section id="seffaflik" class="mt-4">
+                    <h2>Şeffaflık (Alpha Değeri)</h2>
+
+                    <p>
+                        RGB'ye dördüncü bir değer ekleyerek şeffaflık kontrol edebilirsiniz. 
+                        Buna <strong>Alpha</strong> değeri denir.
+                    </p>
+
+                    <pre><code>fill(255, 0, 0, 128);  // Yarı saydam kırmızı
+// R=255, G=0, B=0, Alpha=128</code></pre>
+
+                    <ul>
+                        <li><code>Alpha = 0</code> → Tamamen saydam (görünmez)</li>
+                        <li><code>Alpha = 128</code> → Yarı saydam</li>
+                        <li><code>Alpha = 255</code> → Tamamen opak (varsayılan)</li>
+                    </ul>
+
+                    <div id="editor4"></div>
+
+                    <div class="challenge-box">
+                        <h4>🧪 Şeffaflık Deneyleri</h4>
+                        <ul>
+                            <li>Alpha değerlerini 50, 100, 200 yaparak farkı görün</li>
+                            <li>Üst üste binen dairelerle renk karışımları oluşturun</li>
+                            <li>Daha fazla daire ekleyerek katmanlı bir efekt yapın</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Section: Text -->
+                <section id="metin" class="mt-4">
+                    <h2>Metin Yazdırma</h2>
+
+                    <p>
+                        Ekrana metin yazdırmak için <code>text()</code> fonksiyonunu kullanırız.
+                    </p>
+
+                    <h3>Temel Metin Fonksiyonları</h3>
+                    <ul>
+                        <li><code>text("metin", x, y)</code> - Belirtilen konumda metin yazar</li>
+                        <li><code>textSize(boyut)</code> - Yazı boyutunu ayarlar</li>
+                        <li><code>textAlign(yatay, dikey)</code> - Metin hizalamasını ayarlar</li>
+                        <li><code>textFont(font)</code> - Yazı tipini değiştirir</li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 textAlign() Seçenekleri</div>
+                        <p>
+                            <strong>Yatay:</strong> LEFT (sol), CENTER (orta), RIGHT (sağ)<br>
+                            <strong>Dikey:</strong> TOP (üst), CENTER (orta), BOTTOM (alt), BASELINE (taban çizgisi)
+                        </p>
+                    </div>
+
+                    <div id="editor5"></div>
+                </section>
+
+                <!-- Section: Practice Examples -->
+                <section id="ornekler" class="mt-4">
+                    <h2>Uygulama Örnekleri</h2>
+
+                    <h3>Örnek 1: Gökkuşağı Daireleri</h3>
+                    <p>İç içe dairelerle gökkuşağı efekti:</p>
+                    <div id="editor6"></div>
+
+                    <h3>Örnek 2: Basit Yüz Çizimi</h3>
+                    <p>Temel şekillerle bir yüz oluşturun:</p>
+                    <div id="editor7"></div>
+
+                    <h3>Örnek 3: Manzara</h3>
+                    <p>Şekilleri birleştirerek basit bir manzara:</p>
+                    <div id="editor8"></div>
+
+                    <h3>Örnek 4: Rastgele Sanat</h3>
+                    <p>Her çalıştırdığınızda farklı bir sonuç:</p>
+                    <div id="editor9"></div>
+                </section>
+
+                <!-- Key Concepts Summary -->
+                <section class="mt-4">
+                    <h2>Temel Kavramlar Özeti</h2>
+
+                    <div class="card" style="background: rgba(0, 217, 255, 0.05);">
+                        <h4>Bu Derste Öğrendikleriniz</h4>
+                        <ul>
+                            <li><strong>Temel Şekiller:</strong> rect(), circle(), ellipse(), line(), triangle(), point()</li>
+                            <li><strong>RGB Renk Modeli:</strong> Her kanal 0-255 arası, üç kanalın kombinasyonu</li>
+                            <li><strong>fill():</strong> Şeklin iç dolgusunu belirler</li>
+                            <li><strong>stroke():</strong> Kenar çizgisinin rengini belirler</li>
+                            <li><strong>strokeWeight():</strong> Kenar kalınlığını ayarlar</li>
+                            <li><strong>noFill() / noStroke():</strong> Dolgu veya kenarı kaldırır</li>
+                            <li><strong>Alpha değeri:</strong> Dördüncü parametre ile şeffaflık kontrolü</li>
+                            <li><strong>text():</strong> Ekrana metin yazdırma</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box note mt-3">
+                        <div class="info-box-title">📚 Daha Fazla Öğrenmek İçin</div>
+                        <p>
+                            p5.js'in tüm çizim fonksiyonlarını görmek için 
+                            <a href="https://p5js.org/reference/" target="_blank">resmi referans sayfasını</a> 
+                            ziyaret edin. Ayrıca <a href="https://www.youtube.com/c/TheCodingTrain" target="_blank">
+                            The Coding Train</a> YouTube kanalında harika video dersleri bulabilirsiniz.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <section class="mt-4" style="display: flex; justify-content: space-between; padding: 2rem 0; border-top: 1px solid var(--border-color);">
+                    <a href="01-giris.html" class="btn btn-secondary">
+                        ← Önceki: Giriş
+                    </a>
+                    <a href="03-degiskenler.html" class="btn btn-primary">
+                        Sonraki Ders: Değişkenler →
+                    </a>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="../js/editor.js"></script>
+    <script src="../js/theme.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Örnek 1: Temel Şekiller
+            new P5CodeEditor('editor1', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+  background(240);
+}
+
+function draw() {
+  background(240);
+  
+  // Dikdörtgen (sol üst köşeden çizilir)
+  fill(200, 100, 100);
+  rect(20, 20, 100, 60);
+  
+  // Kare
+  fill(100, 200, 100);
+  square(150, 20, 60);
+  
+  // Daire (merkezden çizilir)
+  fill(100, 100, 200);
+  circle(300, 50, 80);
+  
+  // Elips (oval)
+  fill(200, 200, 100);
+  ellipse(100, 150, 120, 60);
+  
+  // Çizgi
+  stroke(0);
+  strokeWeight(3);
+  line(200, 120, 380, 180);
+  
+  // Üçgen
+  fill(200, 100, 200);
+  strokeWeight(1);
+  triangle(200, 250, 150, 350, 250, 350);
+  
+  // Noktalar (kalın çizgi ile görünür)
+  stroke(255, 0, 0);
+  strokeWeight(10);
+  point(300, 300);
+  point(330, 280);
+  point(360, 310);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 2: RGB ve Hex Renkler
+            new P5CodeEditor('editor2', {
+                initialCode: `function setup() {
+  createCanvas(400, 300);
+  noStroke();
+}
+
+function draw() {
+  background(30);
+  
+  // RGB formatı (sayılarla)
+  fill(255, 0, 0);     // Kırmızı
+  circle(70, 70, 80);
+  
+  fill(0, 255, 0);     // Yeşil
+  circle(200, 70, 80);
+  
+  fill(0, 0, 255);     // Mavi
+  circle(330, 70, 80);
+  
+  // HEX formatı (tırnak içinde # ile)
+  fill('#FF8C00');     // Turuncu
+  circle(70, 200, 80);
+  
+  fill('#9932CC');     // Mor
+  circle(200, 200, 80);
+  
+  fill('#20B2AA');     // Turkuaz
+  circle(330, 200, 80);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 3: fill ve stroke
+            new P5CodeEditor('editor3', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(220);
+  
+  // 1. Normal: fill + stroke
+  fill(255, 0, 0);       // Kırmızı dolgu
+  stroke(0);             // Siyah kenar
+  strokeWeight(2);       // Kenar kalınlığı 2
+  rect(30, 30, 80, 80);
+  
+  // 2. noFill: Sadece kenar (dolgu yok)
+  noFill();
+  stroke(0, 0, 255);     // Mavi kenar
+  strokeWeight(4);       // Kalın kenar
+  rect(140, 30, 80, 80);
+  
+  // 3. noStroke: Sadece dolgu (kenar yok)
+  fill(0, 255, 0);       // Yeşil dolgu
+  noStroke();
+  rect(250, 30, 80, 80);
+  
+  // 4. Kalın kenar örneği
+  fill(255, 255, 0);     // Sarı dolgu
+  stroke(255, 0, 0);     // Kırmızı kenar
+  strokeWeight(10);      // Çok kalın kenar
+  circle(80, 200, 80);
+  
+  // 5. İnce kenar örneği
+  fill(255, 200, 200);
+  stroke(100, 0, 0);
+  strokeWeight(1);       // İnce kenar
+  circle(200, 200, 80);
+  
+  // 6. Köşeli dikdörtgen (son parametre köşe yarıçapı)
+  fill(200, 100, 255);
+  stroke(100, 0, 150);
+  strokeWeight(3);
+  rect(260, 160, 100, 80, 15);  // 15 piksel yuvarlatılmış köşe
+  
+  // Açıklamalar
+  fill(0);
+  noStroke();
+  textSize(11);
+  text("fill + stroke", 30, 130);
+  text("noFill", 150, 130);
+  text("noStroke", 255, 130);
+  text("strokeWeight(10)", 30, 260);
+  text("strokeWeight(1)", 150, 260);
+  text("Yuvarlatılmış köşe", 260, 260);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 4: Şeffaflık
+            new P5CodeEditor('editor4', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  noStroke();
+  
+  // Kırmızı daire (yarı saydam)
+  fill(255, 0, 0, 150);  // Alpha = 150
+  circle(150, 200, 200);
+  
+  // Yeşil daire (yarı saydam)
+  fill(0, 255, 0, 150);
+  circle(250, 200, 200);
+  
+  // Mavi daire (yarı saydam)
+  fill(0, 0, 255, 150);
+  circle(200, 280, 200);
+  
+  // Üst üste geldiğinde renk karışımları oluşur!
+  
+  // Açıklama
+  fill(255);
+  textSize(14);
+  textAlign(CENTER);
+  text("Şeffaflık ile renk karışımları", 200, 30);
+  text("Dairelerin kesiştiği yerlere bakın!", 200, 50);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 5: Metin
+            new P5CodeEditor('editor5', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(240);
+  
+  // Büyük başlık
+  fill(0);
+  textSize(32);
+  textAlign(CENTER);
+  text("Merhaba p5.js!", 200, 50);
+  
+  // Normal metin (sola hizalı)
+  textSize(16);
+  textAlign(LEFT);
+  text("Bu sola hizalı bir metin.", 20, 100);
+  
+  // Sağa hizalı
+  textAlign(RIGHT);
+  text("Bu sağa hizalı.", 380, 130);
+  
+  // Renkli metin
+  fill(255, 0, 0);
+  textAlign(CENTER);
+  textSize(24);
+  text("Kırmızı metin", 200, 180);
+  
+  fill(0, 0, 255);
+  text("Mavi metin", 200, 220);
+  
+  // Değişken ile metin
+  fill(0);
+  textSize(18);
+  let skor = 42;
+  text("Skor: " + skor, 200, 280);
+  
+  // Fare koordinatlarını göster
+  fill(100);
+  textSize(14);
+  text("Fare: (" + mouseX + ", " + mouseY + ")", 200, 350);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 6: Gökkuşağı
+            new P5CodeEditor('editor6', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+  noStroke();
+}
+
+function draw() {
+  background(30);
+  
+  // İç içe daireler - büyükten küçüğe
+  fill(255, 0, 0);      // Kırmızı (en dış)
+  circle(200, 200, 300);
+  
+  fill(255, 127, 0);    // Turuncu
+  circle(200, 200, 260);
+  
+  fill(255, 255, 0);    // Sarı
+  circle(200, 200, 220);
+  
+  fill(0, 255, 0);      // Yeşil
+  circle(200, 200, 180);
+  
+  fill(0, 0, 255);      // Mavi
+  circle(200, 200, 140);
+  
+  fill(75, 0, 130);     // Lacivert
+  circle(200, 200, 100);
+  
+  fill(148, 0, 211);    // Mor
+  circle(200, 200, 60);
+  
+  fill(30);             // Merkez (arka plan rengi)
+  circle(200, 200, 30);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 7: Yüz
+            new P5CodeEditor('editor7', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(135, 206, 235);  // Gökyüzü mavisi
+  
+  // Yüz (ana daire)
+  fill(255, 220, 180);  // Ten rengi
+  stroke(0);
+  strokeWeight(2);
+  circle(200, 200, 250);
+  
+  // Gözler
+  fill(255);  // Beyaz
+  circle(150, 170, 50);
+  circle(250, 170, 50);
+  
+  // Göz bebekleri
+  fill(0);
+  circle(150, 170, 20);
+  circle(250, 170, 20);
+  
+  // Göz parıltısı
+  fill(255);
+  noStroke();
+  circle(155, 165, 8);
+  circle(255, 165, 8);
+  
+  // Burun
+  stroke(0);
+  strokeWeight(2);
+  noFill();
+  arc(200, 210, 30, 20, 0, PI);
+  
+  // Ağız (gülümseyen)
+  fill(255, 100, 100);
+  arc(200, 260, 80, 50, 0, PI);
+  
+  // Kaşlar
+  stroke(100, 50, 0);
+  strokeWeight(4);
+  line(120, 130, 170, 140);
+  line(230, 140, 280, 130);
+  
+  // Yanaklar
+  noStroke();
+  fill(255, 180, 180, 150);
+  circle(120, 230, 40);
+  circle(280, 230, 40);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 8: Manzara (Basit)
+            new P5CodeEditor('editor8', {
+                initialCode: `// Basit manzara - sadece temel şekiller ve renklerle
+
+function setup() {
+  createCanvas(400, 400);
+  noLoop();  // Sadece bir kez çiz
+}
+
+function draw() {
+  // Gökyüzü
+  background(135, 206, 235);
+  
+  // Güneş
+  noStroke();
+  fill(255, 255, 0);
+  circle(320, 80, 80);
+  
+  // Güneş ışınları (elle çizilmiş 8 çizgi)
+  stroke(255, 200, 0);
+  strokeWeight(3);
+  // Yukarı
+  line(320, 30, 320, 15);
+  // Aşağı
+  line(320, 130, 320, 145);
+  // Sol
+  line(270, 80, 255, 80);
+  // Sağ
+  line(370, 80, 385, 80);
+  // Çaprazlar
+  line(285, 45, 270, 30);
+  line(355, 45, 370, 30);
+  line(285, 115, 270, 130);
+  line(355, 115, 370, 130);
+  
+  // Uzak dağlar
+  noStroke();
+  fill(100, 130, 100);
+  triangle(0, 250, 100, 150, 200, 250);
+  fill(80, 110, 80);
+  triangle(150, 250, 280, 120, 400, 250);
+  
+  // Çim (zemin)
+  fill(60, 160, 60);
+  rect(0, 250, 400, 150);
+  
+  // Ev gövdesi
+  fill(180, 120, 80);
+  rect(150, 280, 100, 80);
+  
+  // Çatı
+  fill(150, 50, 50);
+  triangle(200, 220, 130, 280, 270, 280);
+  
+  // Kapı
+  fill(100, 60, 40);
+  rect(185, 320, 30, 40);
+  
+  // Pencereler (sol ve sağ)
+  fill(200, 230, 255);
+  stroke(100, 60, 40);
+  strokeWeight(2);
+  rect(160, 295, 25, 25);  // Sol pencere
+  rect(215, 295, 25, 25);  // Sağ pencere
+  
+  // Ağaç
+  fill(101, 67, 33);
+  noStroke();
+  rect(50, 280, 20, 60);  // Gövde
+  fill(34, 139, 34);
+  circle(60, 260, 70);    // Yapraklar
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 9: Rastgele Sanat (Statik)
+            new P5CodeEditor('editor9', {
+                initialCode: `// random() fonksiyonu: Rastgele sayı üretir
+// random()       -> 0 ile 1 arası
+// random(100)    -> 0 ile 100 arası
+// random(50,100) -> 50 ile 100 arası
+
+// NOT: for döngüsü henüz anlatılmadı
+// Bu örnek sadece random() göstermek için
+// Elle birkaç rastgele daire çizeceğiz
+
+function setup() {
+  createCanvas(400, 400);
+  noLoop();  // Bir kez çiz (yenilemek için Sıfırla'ya tıkla)
+}
+
+function draw() {
+  background(20);
+  noStroke();
+  
+  // 10 rastgele daire (elle yazılmış)
+  // Her dairenin konumu, boyutu ve rengi rastgele
+  
+  fill(random(255), random(255), random(255), 150);
+  circle(random(width), random(height), random(20, 80));
+  
+  fill(random(255), random(255), random(255), 150);
+  circle(random(width), random(height), random(20, 80));
+  
+  fill(random(255), random(255), random(255), 150);
+  circle(random(width), random(height), random(20, 80));
+  
+  fill(random(255), random(255), random(255), 150);
+  circle(random(width), random(height), random(20, 80));
+  
+  fill(random(255), random(255), random(255), 150);
+  circle(random(width), random(height), random(20, 80));
+  
+  fill(random(255), random(255), random(255), 150);
+  circle(random(width), random(height), random(20, 80));
+  
+  fill(random(255), random(255), random(255), 150);
+  circle(random(width), random(height), random(20, 80));
+  
+  fill(random(255), random(255), random(255), 150);
+  circle(random(width), random(height), random(20, 80));
+  
+  fill(random(255), random(255), random(255), 150);
+  circle(random(width), random(height), random(20, 80));
+  
+  fill(random(255), random(255), random(255), 150);
+  circle(random(width), random(height), random(20, 80));
+  
+  // Bilgi
+  fill(255);
+  textSize(12);
+  text("Her Sıfırla'da farklı sonuç!", 10, 380);
+  text("(Döngüler dersinde bunu çok daha kolay yapacağız)", 10, 395);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+        });
+    </script>
+</body>
+</html>

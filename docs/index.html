@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>p5.js Giriş Kursu - Yaratıcı Kodlama Öğren</title>
+    <meta name="description" content="p5.js ve yaratıcı kodlamayı öğrenmek için başlangıç seviyesi kurs. Önceden programlama deneyimi gerekmiyor!">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', var(--font-main);
+        }
+        
+        code, pre, .CodeMirror {
+            font-family: 'Fira Code', var(--font-code);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">Ana Sayfa</a></li>
+                    <li><a href="lessons/01-giris.html">Dersler</a></li>
+                    <li><a href="kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>p5.js ile Yaratıcı Kodlama Öğren</h1>
+            <p>
+                Sanat, animasyon, <strong>oyunlar</strong> ve etkileşim yoluyla programlamaya başlangıç seviyesi giriş. 
+                Önceden kodlama deneyimi gerekmiyor! İlk günden görsel projeler oluşturun ve 
+                <strong>kendi oyunlarınızı</strong> yapın!
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="lessons/01-giris.html" class="btn btn-primary">
+                    🚀 Öğrenmeye Başla
+                </a>
+                <a href="#p5-nedir" class="btn btn-secondary">
+                    📖 p5.js Nedir?
+                </a>
+            </div>
+            <p style="margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-muted);">
+                🎮 Pong, Yılan, Flappy Bird gibi klasik oyunları kodlamayı öğrenin!
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- What is p5.js Section -->
+        <section id="p5-nedir" class="mt-4">
+            <h2>p5.js Nedir?</h2>
+            
+            <div class="info-box note">
+                <div class="info-box-title">💡 Basitçe Açıklarsak</div>
+                <p>
+                    <strong>p5.js</strong>, web tarayıcınızda görsel ve etkileşimli programlar oluşturmayı 
+                    kolaylaştıran bir JavaScript kütüphanesidir. Kodunuzun çizim, animasyon, oyun ve 
+                    sanata dönüştüğü sihirli bir çizim defteri gibi düşünün!
+                </p>
+            </div>
+
+            <h3>Kısa Bir Tarihçe</h3>
+            <p>
+                p5.js, <strong>Processing</strong>'in küçük kardeşidir. Processing, 2001 yılında 
+                MIT Media Lab'de <strong>Casey Reas</strong> ve <strong>Ben Fry</strong> tarafından 
+                oluşturulmuş bir programlama dilidir. Processing, kodlamayı sanatçılar, tasarımcılar 
+                ve yeni başlayanlar için—kendilerini "programcı" olarak görmeyen insanlar için—
+                erişilebilir kılmak amacıyla tasarlandı.
+            </p>
+            <p>
+                2014 yılında <strong>Lauren McCarthy</strong>, bu fikirleri web'e taşımak için p5.js'i 
+                yarattı. Artık web tarayıcısı olan herkes, özel bir yazılım kurmadan etkileşimli 
+                sanat eserleri oluşturabiliyor!
+            </p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h4>🎨 Sanatçılar İçin Tasarlandı</h4>
+                    <p>
+                        Birçok programlama aracının aksine, p5.js görsel yaratıcılık göz önünde 
+                        bulundurularak tasarlandı. Her şey şekil çizme, renkler ve animasyonlar 
+                        etrafında inşa edilmiştir.
+                    </p>
+                </div>
+                <div class="card">
+                    <h4>🌐 Tarayıcıda Çalışır</h4>
+                    <p>
+                        Kurulum gerekmez! Kodunuz doğrudan herhangi bir modern web tarayıcısında 
+                        çalışır. Eserlerinizi basit bir link ile herkesle paylaşabilirsiniz.
+                    </p>
+                </div>
+                <div class="card">
+                    <h4>👶 Başlangıç Dostu</h4>
+                    <p>
+                        p5.js karmaşık teknik detayları gizler, böylece siz yaratıcı olmaya 
+                        odaklanabilirsiniz. Tek satır kodla daire çizin!
+                    </p>
+                </div>
+                <div class="card">
+                    <h4>🚀 Aynı Zamanda Güçlü</h4>
+                    <p>
+                        Basitliği sizi yanıltmasın—p5.js ile karmaşık görselleştirmeler, oyunlar, 
+                        ses reaktif sanat, 3D grafikler ve daha fazlasını oluşturabilirsiniz.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Learn Section -->
+        <section class="mt-4">
+            <h2>Neden p5.js Öğrenmeliyim?</h2>
+            
+            <div class="lesson-content">
+                <h3>Mükemmel İlk Programlama Dili</h3>
+                <p>
+                    Birçok programlama kursu soyut kavramlar ve metin tabanlı alıştırmalarla başlar. 
+                    <strong>Bu sıkıcı!</strong> p5.js ile sonuçları anında görürsünüz. 
+                    Kod yaz → Şekiller görün → Tatmin hissedin.
+                </p>
+
+                <h3>Aktarılabilir Beceriler</h3>
+                <p>
+                    p5.js, dünyanın en yaygın kullanılan programlama dili olan JavaScript'i kullanır. 
+                    Burada öğrendiğiniz kavramlar—değişkenler, döngüler, fonksiyonlar, nesneler—
+                    <em>tüm</em> programlama dillerinde geçerlidir. Sadece p5.js öğrenmiyorsunuz; 
+                    bir programcı gibi düşünmeyi öğreniyorsunuz.
+                </p>
+
+                <h3>Neler Oluşturabilirsiniz?</h3>
+                <ul>
+                    <li><strong>Etkileşimli Sanat</strong> – Fare hareketine ve klavye girişine tepki veren çizimler</li>
+                    <li><strong>Animasyonlar</strong> – Zıplayan toplar, düşen kar taneleri, parçacık efektleri</li>
+                    <li><strong>Oyunlar</strong> – Pong, Yılan, Flappy Bird ve daha fazlası</li>
+                    <li><strong>Veri Görselleştirmeleri</strong> – Grafikler, çizelgeler ve infografikler</li>
+                    <li><strong>Üretken Sanat</strong> – Algoritmalar ve rastgelelik tarafından oluşturulan sanat</li>
+                    <li><strong>Simülasyonlar</strong> – Fizik, doğa, sürü davranışları</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Course Overview -->
+        <section class="mt-4">
+            <h2>Kurs İçeriği</h2>
+            <p>
+                Bu kurs sizi tam bir başlangıçtan özgüvenli bir kodlayıcıya taşır. Her ders bir 
+                öncekinin üzerine inşa edilir ve düzenleyip deneyebileceğiniz çok sayıda uygulamalı 
+                örnek içerir.
+            </p>
+
+            <div class="card-grid">
+                <a href="lessons/01-giris.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">01</span>
+                    <h3>p5.js'e Giriş</h3>
+                    <p>Kodlama ortamınızı kurun, p5.js'in nasıl çalıştığını anlayın ve ilk şekillerinizi çizin.</p>
+                    <span class="btn btn-small btn-primary">Derse Başla →</span>
+                </a>
+
+                <a href="lessons/02-sekiller-renkler.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">02</span>
+                    <h3>Şekiller ve Renkler</h3>
+                    <p>Koordinat sistemini, çizim fonksiyonlarını ve RGB renk modelini öğrenin.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/03-degiskenler.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">03</span>
+                    <h3>Değişkenler ve Veri</h3>
+                    <p>Bilgi depolayın ve işleyin. JavaScript'teki farklı veri türlerini öğrenin.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/07-animasyon.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">04</span>
+                    <h3>Animasyon ve Hareket</h3>
+                    <p>Çizimlerinize hayat verin! Draw döngüsünü anlayın ve akıcı animasyonlar oluşturun.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/04-kosullar.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">05</span>
+                    <h3>Karar Verme</h3>
+                    <p>Programınıza if/else ifadeleri ve karşılaştırmalarla karar vermeyi öğretin.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/05-etkilesim.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">06</span>
+                    <h3>Kullanıcı Etkileşimi</h3>
+                    <p>Fare tıklamalarına, klavye girişine tepki verin ve etkileşimli deneyimler oluşturun.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/06-donguler.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">07</span>
+                    <h3>Döngüler ve Tekrar</h3>
+                    <p>İşlemleri verimli bir şekilde tekrarlayın. Daha az kodla desenler, ızgaralar ve karmaşık tasarımlar oluşturun.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/08-fonksiyonlar.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">08</span>
+                    <h3>Fonksiyonlar</h3>
+                    <p>Kodunuzu yeniden kullanılabilir bloklara organize edin. Programlarınızı daha temiz ve güçlü yapın.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/09-diziler.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">09</span>
+                    <h3>Diziler ve Listeler</h3>
+                    <p>Veri koleksiyonlarıyla çalışın. Birden fazla değer depolayın ve bunlar üzerinde gezinin.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/10-nesneler.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">10</span>
+                    <h3>Nesneler ve Sınıflar</h3>
+                    <p>Özel veri türleri oluşturun. Nesne yönelimli düşünceyle karmaşık programlar inşa edin.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/11-stringler.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">11</span>
+                    <h3>Stringler (Metinler)</h3>
+                    <p>Karakter dizileri, metin işleme, string metodları ve Türkçe alfabetik sıralama.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/12-hata-ayiklama.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">12</span>
+                    <h3>Hata Ayıklama</h3>
+                    <p>Kodunuzdaki hataları bulma ve düzeltme teknikleri. console.log ve DevTools kullanımı.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/13-ileri-konular.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">13</span>
+                    <h3>İleri: Modern JavaScript</h3>
+                    <p>Arrow functions, forEach, map/filter, setTimeout ve transformasyonlar.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/14-ileri-gorseller.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">14</span>
+                    <h3>İleri: Görsel Yükleme</h3>
+                    <p>loadImage, createGraphics, tint ve piksel işlemleri ile görsel manipülasyonu.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/15-ileri-responsive.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">15</span>
+                    <h3>İleri: Responsive Tasarım</h3>
+                    <p>windowWidth/Height, windowResized ve ekran boyutuna uyumlu tasarımlar.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/16-ileri-vektorler.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">16</span>
+                    <h3>İleri: Vektörler</h3>
+                    <p>p5.Vector ile fizik simülasyonları, hareket ve kuvvet hesaplamaları.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+
+                <a href="lessons/17-ileri-trigonometri.html" class="card topic-card" style="text-decoration: none;">
+                    <span class="topic-number">17</span>
+                    <h3>İleri: Trigonometri</h3>
+                    <p>sin/cos ile dairesel hareketler, dalgalar, spiraller ve kutupsal koordinatlar.</p>
+                    <span class="btn btn-small btn-secondary">Derse Git →</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Getting Started Section -->
+        <section class="mt-4">
+            <h2>Bu Kursu Nasıl Kullanmalı?</h2>
+
+            <div class="info-box tip">
+                <div class="info-box-title">✨ Etkileşimli Öğrenme</div>
+                <p>
+                    Her ders <strong>canlı kod editörleri</strong> içerir. Kodu değiştirebilir 
+                    ve sonuçları anında görebilirsiniz! Sadece okumayın—deneyler yapın, bir şeyleri 
+                    bozun ve keşfedin.
+                </p>
+            </div>
+
+            <h3>Kodunuzu Nerede Yazabilirsiniz?</h3>
+            <p>p5.js ile kodlama için birkaç seçeneğiniz var:</p>
+
+            <div class="resources-grid">
+                <a href="https://editor.p5js.org/" target="_blank" class="resource-card">
+                    <div class="resource-icon">🌐</div>
+                    <div class="resource-info">
+                        <h4>p5.js Web Editörü</h4>
+                        <p>Resmi çevrimiçi editör. Kurulum gerekmez!</p>
+                    </div>
+                </a>
+
+                <a href="https://openprocessing.org/" target="_blank" class="resource-card">
+                    <div class="resource-icon">🎨</div>
+                    <div class="resource-info">
+                        <h4>OpenProcessing</h4>
+                        <p>Yaratıcı çizimleri paylaşın ve keşfedin</p>
+                    </div>
+                </a>
+
+                <a href="https://code.visualstudio.com/" target="_blank" class="resource-card">
+                    <div class="resource-icon">💻</div>
+                    <div class="resource-info">
+                        <h4>VS Code</h4>
+                        <p>Profesyonel kod editörü (yerel kurulum)</p>
+                    </div>
+                </a>
+
+                <a href="oyun-alani.html" class="resource-card">
+                    <div class="resource-icon">🎮</div>
+                    <div class="resource-info">
+                        <h4>Kurs Oyun Alanı</h4>
+                        <p>Bu sitedeki yerleşik editör</p>
+                    </div>
+                </a>
+            </div>
+
+            <h3>Önerilen Öğrenme Kaynakları</h3>
+            <p>Bu kaynaklar kursu tamamlar:</p>
+
+            <div class="resources-grid">
+                <a href="https://p5js.org/reference/" target="_blank" class="resource-card">
+                    <div class="resource-icon">📚</div>
+                    <div class="resource-info">
+                        <h4>p5.js Referans</h4>
+                        <p>Tüm fonksiyonlar için resmi dokümantasyon</p>
+                    </div>
+                </a>
+
+                <a href="https://www.youtube.com/c/TheCodingTrain" target="_blank" class="resource-card">
+                    <div class="resource-icon">🚂</div>
+                    <div class="resource-info">
+                        <h4>The Coding Train</h4>
+                        <p>Daniel Shiffman'ın video dersleri</p>
+                    </div>
+                </a>
+
+                <a href="https://www.youtube.com/@pattvira" target="_blank" class="resource-card">
+                    <div class="resource-icon">🎬</div>
+                    <div class="resource-info">
+                        <h4>Patt Vira</h4>
+                        <p>p5.js yaratıcı kodlama eğitimleri</p>
+                    </div>
+                </a>
+
+                <a href="https://thecodingtrain.com/tracks/code-programming-with-p5-js" target="_blank" class="resource-card">
+                    <div class="resource-icon">📺</div>
+                    <div class="resource-info">
+                        <h4>Code! Programming with p5.js</h4>
+                        <p>Daniel Shiffman'ın tam video kursu</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Programming Concepts Preview -->
+        <section class="mt-4">
+            <h2>Neler Öğreneceksiniz (Programlama Kavramları)</h2>
+            
+            <div class="lesson-content">
+                <p>
+                    p5.js'in ötesinde, bu kurs <em>tüm</em> programlama dillerinde geçerli olan 
+                    temel programlama kavramlarını öğretir:
+                </p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <h4>Değişkenler ve Veri Türleri</h4>
+                        <p>
+                            Bilgiyi isimli kaplarda saklayın. Sayılar, metin (string), 
+                            doğru/yanlış değerleri (boolean) ve daha fazlasını öğrenin.
+                        </p>
+                        <div class="info-box note" style="margin: 1rem 0 0 0; padding: 0.75rem;">
+                            <small>
+                                <strong>İlginç bilgi:</strong> JavaScript "dinamik türleme" kullanır—
+                                türleri açıkça belirtmezsiniz. Java veya C++ gibi dillerde 
+                                <code>int x = 5</code> yazmanız gerekir ama JS'de sadece 
+                                <code>let x = 5</code> yazarsınız.
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4>Kontrol Akışı</h4>
+                        <p>
+                            <code>if</code>/<code>else</code> ifadeleriyle kararlar verin. 
+                            <code>for</code> ve <code>while</code> döngüleriyle işlemleri tekrarlayın.
+                        </p>
+                    </div>
+
+                    <div class="card">
+                        <h4>Fonksiyonlar</h4>
+                        <p>
+                            Kodu yeniden kullanılabilir bloklara organize edin. Parametreleri, 
+                            dönüş değerlerini ve "kapsam" kavramını anlayın.
+                        </p>
+                    </div>
+
+                    <div class="card">
+                        <h4>Diziler ve Nesneler</h4>
+                        <p>
+                            Veri koleksiyonlarıyla çalışın. Karmaşık bilgiyi temsil etmek için 
+                            özel veri yapıları oluşturun.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="mt-4 text-center" style="padding: 3rem 0;">
+            <h2>Başlamaya Hazır mısınız?</h2>
+            <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto 2rem;">
+                1. Derse atlayın ve ilk kod satırlarınızı yazın. 
+                Sadece birkaç dakika içinde ekranda şekiller çizeceksiniz!
+            </p>
+            <a href="lessons/01-giris.html" class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">
+                🚀 Ders 1'e Başla: Giriş
+            </a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="text-align: center; padding: 1.5rem 0;">
+                <p style="margin: 0;">İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+                <p style="margin: 0.5rem 0 0 0; font-size: 0.85rem; color: var(--text-muted);">Katkıda bulunmak için <a href="https://github.com/gusanmaz/p5js-course/issues" target="_blank">issue</a> açabilir veya <a href="https://github.com/gusanmaz/p5js-course/pulls" target="_blank">pull request</a> gönderebilirsiniz.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/theme.js"></script>
+</body>
+</html>

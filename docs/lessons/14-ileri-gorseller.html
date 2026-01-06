@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    
+    
+    <title>Ders 14: İleri - Görsel Yükleme - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                    <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                    <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                    <li><a href="14-ileri-gorseller.html" class="active">14. İleri: Görseller</a></li>
+                    <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                    <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                    <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#preload">preload() Fonksiyonu</a></li>
+                    <li><a href="#loadImage">loadImage() ile Görsel Yükleme</a></li>
+                    <li><a href="#image">image() ile Görsel Çizme</a></li>
+                    <li><a href="#imageMode">imageMode ve Boyutlandırma</a></li>
+                    <li><a href="#tint">tint() ile Renklendirme</a></li>
+                    <li><a href="#pixel">Piksel İşlemleri</a></li>
+                    <li><a href="#ornekler">Uygulama Örnekleri</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 14: İleri - Görsel Yükleme</h1>
+                <div class="lesson-meta">
+                    <span>📚 İleri Seviye</span>
+                    <span>⏱️ 45 dakika</span>
+                    <span>🎯 Harici görselleri kullanma</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: preload -->
+                <section id="preload" class="lesson-section">
+                    <h2>⏳ preload() Fonksiyonu</h2>
+                    
+                    <p>
+                        p5.js'de harici dosyaları (görsel, ses, font vb.) yüklemek için özel bir fonksiyon 
+                        kullanırız: <code>preload()</code>. Bu fonksiyon <code>setup()</code>'tan önce çalışır 
+                        ve içindeki tüm dosyalar yüklenene kadar program bekler.
+                    </p>
+                    
+                    <div class="info-box tip">
+                        <h4>💡 Neden preload() Gerekli?</h4>
+                        <p>
+                            İnternetten bir görsel yüklemek zaman alır. Eğer <code>setup()</code> içinde yüklemeye 
+                            çalışırsak, görsel henüz yüklenmeden kullanmaya çalışabiliriz ve hata alırız. 
+                            <code>preload()</code> bu sorunu çözer.
+                        </p>
+                    </div>
+                    
+                    <div class="code-box">
+                        <pre><code>let img;  // Görsel değişkeni
+
+// preload: setup'tan ÖNCE çalışır
+function preload() {
+  // Görsel yüklenene kadar program bekler
+  img = loadImage('resim.jpg');
+}
+
+function setup() {
+  createCanvas(400, 400);
+  // Artık img kullanıma hazır!
+}
+
+function draw() {
+  image(img, 0, 0);
+}</code></pre>
+                    </div>
+                    
+                    <div class="info-box warning">
+                        <h4>⚠️ Önemli: CORS Kısıtlaması</h4>
+                        <p>
+                            Tarayıcılar güvenlik nedeniyle farklı sitelerden görsel yüklemeyi kısıtlayabilir (CORS). 
+                            Bu yüzden örneklerimizde kod ile oluşturulan görseller veya <code>createGraphics()</code> 
+                            kullanacağız. Kendi projelerinizde görselleri aynı klasöre koyarak bu sorunu çözebilirsiniz.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Section: loadImage -->
+                <section id="loadImage" class="lesson-section">
+                    <h2>🖼️ loadImage() ile Görsel Yükleme</h2>
+                    
+                    <p>
+                        <code>loadImage()</code> fonksiyonu bir görsel dosyasını yükler ve bir <code>p5.Image</code> 
+                        nesnesi döndürür. Bu nesne ile görselin boyutlarına erişebilir ve çeşitli işlemler yapabilirsiniz.
+                    </p>
+                    
+                    <div class="code-box">
+                        <pre><code>// Temel kullanım
+img = loadImage('resim.png');
+
+// Callback fonksiyonları ile
+img = loadImage('resim.png', 
+  () => console.log('Yüklendi!'),     // Başarılı
+  () => console.log('Hata oluştu!')   // Hata
+);
+
+// Görselin özellikleri
+console.log(img.width);   // Genişlik
+console.log(img.height);  // Yükseklik</code></pre>
+                    </div>
+                    
+                    <p>
+                        CORS kısıtlaması nedeniyle, bu derste <code>createGraphics()</code> ile kendi görsellerimizi 
+                        oluşturacağız. Bu yöntem görsel yükleme mantığını öğrenmek için mükemmeldir:
+                    </p>
+                    
+                    <div id="editor-create-image"></div>
+                </section>
+
+                <!-- Section: image -->
+                <section id="image" class="lesson-section">
+                    <h2>✏️ image() ile Görsel Çizme</h2>
+                    
+                    <p>
+                        Yüklenen görseli canvas üzerine çizmek için <code>image()</code> fonksiyonunu kullanırız. 
+                        Bu fonksiyon farklı parametrelerle esnek kullanım sağlar.
+                    </p>
+                    
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Kullanım</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>image(img, x, y)</code></td>
+                                <td>Orijinal boyutta çiz</td>
+                            </tr>
+                            <tr>
+                                <td><code>image(img, x, y, w, h)</code></td>
+                                <td>Belirli boyutta çiz</td>
+                            </tr>
+                            <tr>
+                                <td><code>image(img, dx, dy, dw, dh, sx, sy, sw, sh)</code></td>
+                                <td>Kaynak bölgeden hedef bölgeye çiz (sprite sheet için)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div id="editor-image-draw"></div>
+                </section>
+
+                <!-- Section: imageMode -->
+                <section id="imageMode" class="lesson-section">
+                    <h2>📐 imageMode ve Boyutlandırma</h2>
+                    
+                    <p>
+                        <code>rectMode()</code> gibi, <code>imageMode()</code> da görselin referans noktasını belirler:
+                    </p>
+                    
+                    <ul>
+                        <li><code>CORNER</code> (varsayılan): Sol üst köşe referans</li>
+                        <li><code>CENTER</code>: Merkez referans</li>
+                        <li><code>CORNERS</code>: İki köşe koordinatı</li>
+                    </ul>
+                    
+                    <div id="editor-image-mode"></div>
+                </section>
+
+                <!-- Section: tint -->
+                <section id="tint" class="lesson-section">
+                    <h2>🎨 tint() ile Renklendirme</h2>
+                    
+                    <p>
+                        <code>tint()</code> fonksiyonu görsellere renk filtresi uygular. Bu sayede görselleri 
+                        renklendirebilir veya saydamlık ekleyebilirsiniz.
+                    </p>
+                    
+                    <div class="code-box">
+                        <pre><code>// Renk filtresi
+tint(255, 0, 0);    // Kırmızı ton
+image(img, 0, 0);
+
+// Saydamlık
+tint(255, 128);     // %50 saydam
+image(img, 0, 0);
+
+// Hem renk hem saydamlık
+tint(0, 150, 255, 200);  // Mavi ton, biraz saydam
+
+// tint'i kaldır
+noTint();</code></pre>
+                    </div>
+                    
+                    <div id="editor-tint"></div>
+                </section>
+
+                <!-- Section: pixel -->
+                <section id="pixel" class="lesson-section">
+                    <h2>🔬 Piksel İşlemleri</h2>
+                    
+                    <p>
+                        p5.js ile görsellerin piksellerine erişebilir ve değiştirebilirsiniz. Bu özellik 
+                        görüntü işleme, filtreler ve efektler için kullanılır.
+                    </p>
+                    
+                    <div class="code-box">
+                        <pre><code>// Görselin piksellerini yükle
+img.loadPixels();
+
+// pixels dizisi: [R, G, B, A, R, G, B, A, ...]
+// Her piksel 4 değer içerir
+
+// (x, y) konumundaki piksele erişim
+let index = (x + y * img.width) * 4;
+let r = img.pixels[index];     // Kırmızı
+let g = img.pixels[index + 1]; // Yeşil
+let b = img.pixels[index + 2]; // Mavi
+let a = img.pixels[index + 3]; // Alpha
+
+// Pikseli değiştir
+img.pixels[index] = 255;       // Kırmızıyı maksimum yap
+
+// Değişiklikleri uygula
+img.updatePixels();</code></pre>
+                    </div>
+                    
+                    <div id="editor-pixels"></div>
+                </section>
+
+                <!-- Section: ornekler -->
+                <section id="ornekler" class="lesson-section">
+                    <h2>🎯 Uygulama Örnekleri</h2>
+                    
+                    <h3>Sprite Animasyonu</h3>
+                    <p>
+                        Oyunlarda sık kullanılan sprite sheet tekniği - tek bir görselden farklı kareler gösterme:
+                    </p>
+                    <div id="editor-sprite"></div>
+                    
+                    <h3>Görsel Galeri</h3>
+                    <p>
+                        Birden fazla görseli yönetme ve gösterme:
+                    </p>
+                    <div id="editor-gallery"></div>
+                    
+                    <h3>Mozaik Efekti</h3>
+                    <p>
+                        Piksel manipülasyonu ile mozaik efekti:
+                    </p>
+                    <div id="editor-mosaic"></div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-nav">
+                    <a href="13-ileri-konular.html" class="btn">← Önceki Ders</a>
+                    <a href="15-ileri-responsive.html" class="btn btn-primary">Sonraki Ders →</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+    <script src="../js/editor.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // createGraphics ile görsel oluşturma
+            new P5CodeEditor('editor-create-image', {
+                initialCode: `// createGraphics ile kendi görselimizi oluşturalım
+// Bu yöntem CORS sorununu önler!
+
+let emoji;  // Görselimizi tutacak değişken
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // 100x100 piksellik bir "görsel" oluştur
+  // createGraphics, loadImage gibi çalışır
+  emoji = createGraphics(100, 100);
+  
+  // Bu görsel üzerine çizim yapalım
+  emoji.background(255, 220, 100);
+  emoji.stroke(0);
+  emoji.strokeWeight(3);
+  
+  // Yüz
+  emoji.fill(255, 220, 100);
+  emoji.circle(50, 50, 90);
+  
+  // Gözler
+  emoji.fill(0);
+  emoji.circle(35, 40, 12);
+  emoji.circle(65, 40, 12);
+  
+  // Gülümseyen ağız
+  emoji.noFill();
+  emoji.arc(50, 55, 40, 30, 0, PI);
+}
+
+function draw() {
+  background(30);
+  
+  // Oluşturduğumuz görseli çizelim
+  // image(görsel, x, y) şeklinde kullanılır
+  
+  // Sol üst - orijinal boyut
+  image(emoji, 20, 20);
+  
+  // Sağ üst - küçültülmüş
+  image(emoji, 200, 20, 50, 50);
+  
+  // Alt - büyütülmüş ve fareyi takip eden
+  let x = mouseX - 75;
+  let y = mouseY - 75;
+  image(emoji, x, y, 150, 150);
+  
+  // Bilgi
+  fill(255);
+  textSize(14);
+  text("createGraphics ile oluşturulan görsel", 20, 380);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // image() çizim örneği
+            new P5CodeEditor('editor-image-draw', {
+                initialCode: `// image() fonksiyonu kullanımı
+
+let karakter;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // Karakter görseli oluştur
+  karakter = createGraphics(60, 80);
+  karakter.background(0, 0);  // Saydam arka plan
+  
+  // Basit bir karakter çizelim
+  karakter.noStroke();
+  
+  // Gövde
+  karakter.fill(100, 150, 255);
+  karakter.rect(15, 30, 30, 40, 5);
+  
+  // Kafa
+  karakter.fill(255, 220, 180);
+  karakter.circle(30, 20, 35);
+  
+  // Gözler
+  karakter.fill(0);
+  karakter.circle(23, 18, 6);
+  karakter.circle(37, 18, 6);
+  
+  // Ağız
+  karakter.fill(255, 100, 100);
+  karakter.arc(30, 26, 15, 10, 0, PI);
+  
+  // Bacaklar
+  karakter.fill(80, 80, 80);
+  karakter.rect(18, 70, 10, 15);
+  karakter.rect(32, 70, 10, 15);
+}
+
+function draw() {
+  background(30);
+  
+  // Izgara şeklinde karakteri çiz
+  for (let row = 0; row < 4; row++) {
+    for (let col = 0; col < 5; col++) {
+      let x = 30 + col * 75;
+      let y = 30 + row * 95;
+      
+      // Fare yakınındakileri büyük çiz
+      let mesafe = dist(mouseX, mouseY, x + 30, y + 40);
+      let boyut = map(mesafe, 0, 200, 1.5, 0.8);
+      boyut = constrain(boyut, 0.8, 1.5);
+      
+      // image(görsel, x, y, genişlik, yükseklik)
+      image(karakter, x, y, 60 * boyut, 80 * boyut);
+    }
+  }
+  
+  fill(255);
+  textSize(12);
+  text("Fareyi karakterlere yaklaştırın", 10, height - 10);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // imageMode örneği
+            new P5CodeEditor('editor-image-mode', {
+                initialCode: `// imageMode() kullanımı
+
+let yildiz;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // Yıldız görseli oluştur
+  yildiz = createGraphics(80, 80);
+  yildiz.background(0, 0);  // Saydam
+  yildiz.fill(255, 220, 50);
+  yildiz.noStroke();
+  
+  // 5 köşeli yıldız çiz
+  yildiz.push();
+  yildiz.translate(40, 40);
+  yildiz.beginShape();
+  for (let i = 0; i < 10; i++) {
+    let angle = TWO_PI / 10 * i - HALF_PI;
+    let r = (i % 2 === 0) ? 35 : 15;
+    let x = cos(angle) * r;
+    let y = sin(angle) * r;
+    yildiz.vertex(x, y);
+  }
+  yildiz.endShape(CLOSE);
+  yildiz.pop();
+}
+
+function draw() {
+  background(30);
+  
+  // Referans çizgileri
+  stroke(100);
+  line(100, 0, 100, height);
+  line(300, 0, 300, height);
+  line(0, 200, width, 200);
+  
+  noStroke();
+  
+  // CORNER modu (varsayılan)
+  // x,y sol üst köşeyi belirtir
+  imageMode(CORNER);
+  fill(255, 0, 0);
+  circle(100, 200, 10);  // Referans noktası
+  image(yildiz, 100, 200, 60, 60);
+  
+  fill(255);
+  textSize(12);
+  textAlign(CENTER);
+  text("CORNER", 130, 280);
+  text("(sol üst köşe)", 130, 295);
+  
+  // CENTER modu
+  // x,y merkezi belirtir
+  imageMode(CENTER);
+  fill(0, 255, 0);
+  circle(300, 200, 10);  // Referans noktası
+  image(yildiz, 300, 200, 60, 60);
+  
+  text("CENTER", 300, 280);
+  text("(merkez)", 300, 295);
+  
+  // Fareyle interaktif gösterim
+  imageMode(CENTER);
+  image(yildiz, mouseX, mouseY, 80, 80);
+  
+  fill(255);
+  textAlign(LEFT);
+  text("imageMode() görselin referans noktasını belirler", 20, 30);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // tint örneği
+            new P5CodeEditor('editor-tint', {
+                initialCode: `// tint() ile renklendirme
+
+let cicek;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // Çiçek görseli oluştur
+  cicek = createGraphics(60, 60);
+  cicek.background(0, 0);  // Saydam
+  
+  // Yapraklar (beyaz - tint ile renklenecek)
+  cicek.fill(255);
+  cicek.noStroke();
+  for (let i = 0; i < 6; i++) {
+    cicek.push();
+    cicek.translate(30, 30);
+    cicek.rotate(TWO_PI / 6 * i);
+    cicek.ellipse(0, -18, 15, 25);
+    cicek.pop();
+  }
+  
+  // Ortadaki daire
+  cicek.fill(255, 200, 50);
+  cicek.circle(30, 30, 15);
+}
+
+function draw() {
+  background(30);
+  
+  // Farklı tint değerleri ile çiçekler
+  
+  // Satır 1: Renkli tintler
+  tint(255, 100, 100);  // Kırmızı
+  image(cicek, 30, 50);
+  
+  tint(100, 255, 100);  // Yeşil
+  image(cicek, 120, 50);
+  
+  tint(100, 100, 255);  // Mavi
+  image(cicek, 210, 50);
+  
+  tint(255, 255, 100);  // Sarı
+  image(cicek, 300, 50);
+  
+  // Satır 2: Saydamlık
+  noTint();  // Önce sıfırla
+  
+  tint(255, 255);  // %100 opak
+  image(cicek, 30, 150);
+  
+  tint(255, 180);  // %70 opak
+  image(cicek, 120, 150);
+  
+  tint(255, 100);  // %40 opak
+  image(cicek, 210, 150);
+  
+  tint(255, 50);   // %20 opak
+  image(cicek, 300, 150);
+  
+  // Satır 3: Fareye göre dinamik tint
+  let r = map(mouseX, 0, width, 0, 255);
+  let g = map(mouseY, 0, height, 0, 255);
+  let b = 200;
+  
+  tint(r, g, b);
+  image(cicek, width/2 - 60, 280, 120, 120);
+  
+  // Bilgi
+  noTint();
+  fill(255);
+  textSize(12);
+  text("Satır 1: Renk tintleri", 20, 30);
+  text("Satır 2: Saydamlık (alpha)", 20, 140);
+  text("Alt: Fare pozisyonuna göre tint", 20, 270);
+  
+  fill(r, g, b);
+  text("tint(" + int(r) + ", " + int(g) + ", " + int(b) + ")", 250, 390);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Piksel işlemleri
+            new P5CodeEditor('editor-pixels', {
+                initialCode: `// Piksel İşlemleri
+
+let img;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // Gradient görsel oluştur
+  img = createGraphics(200, 200);
+  
+  // Gökkuşağı gradient
+  img.loadPixels();
+  for (let y = 0; y < img.height; y++) {
+    for (let x = 0; x < img.width; x++) {
+      // Piksel indeksi hesapla
+      // Her piksel 4 değer: R, G, B, A
+      let index = (x + y * img.width) * 4;
+      
+      // Renk değerleri (pozisyona göre)
+      let r = map(x, 0, img.width, 0, 255);
+      let g = map(y, 0, img.height, 0, 255);
+      let b = 150;
+      
+      // Pikseli ayarla
+      img.pixels[index] = r;      // Red
+      img.pixels[index + 1] = g;  // Green
+      img.pixels[index + 2] = b;  // Blue
+      img.pixels[index + 3] = 255; // Alpha (opak)
+    }
+  }
+  img.updatePixels();  // Değişiklikleri uygula
+}
+
+function draw() {
+  background(30);
+  
+  // Orijinal görsel
+  image(img, 20, 100);
+  
+  // Değiştirilmiş versiyon (fare konumuna göre efekt)
+  let modified = createGraphics(200, 200);
+  modified.image(img, 0, 0);
+  modified.loadPixels();
+  
+  // Fare Y pozisyonuna göre efekt seç
+  let efekt = floor(map(mouseY, 0, height, 0, 4));
+  
+  for (let y = 0; y < modified.height; y++) {
+    for (let x = 0; x < modified.width; x++) {
+      let index = (x + y * modified.width) * 4;
+      
+      let r = modified.pixels[index];
+      let g = modified.pixels[index + 1];
+      let b = modified.pixels[index + 2];
+      
+      if (efekt === 0) {
+        // Grayscale
+        let gray = (r + g + b) / 3;
+        modified.pixels[index] = gray;
+        modified.pixels[index + 1] = gray;
+        modified.pixels[index + 2] = gray;
+      } else if (efekt === 1) {
+        // Invert
+        modified.pixels[index] = 255 - r;
+        modified.pixels[index + 1] = 255 - g;
+        modified.pixels[index + 2] = 255 - b;
+      } else if (efekt === 2) {
+        // Red channel only
+        modified.pixels[index + 1] = 0;
+        modified.pixels[index + 2] = 0;
+      } else {
+        // Threshold
+        let avg = (r + g + b) / 3;
+        let val = avg > 128 ? 255 : 0;
+        modified.pixels[index] = val;
+        modified.pixels[index + 1] = val;
+        modified.pixels[index + 2] = val;
+      }
+    }
+  }
+  modified.updatePixels();
+  
+  image(modified, 180, 100);
+  
+  // Etiketler
+  fill(255);
+  textSize(14);
+  textAlign(CENTER);
+  text("Orijinal", 120, 320);
+  text("Efektli", 280, 320);
+  
+  let efektler = ["Grayscale", "Invert", "Red Only", "Threshold"];
+  text("Efekt: " + efektler[efekt], width/2, 350);
+  text("Fareyi yukarı/aşağı hareket ettirin", width/2, 380);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Sprite animasyonu
+            new P5CodeEditor('editor-sprite', {
+                initialCode: `// Sprite Sheet Animasyonu
+// Birden fazla kareyi tek görselde saklama tekniği
+
+let spriteSheet;
+let karesayisi = 4;
+let mevcutKare = 0;
+let karakterX = 200;
+let karakterY = 200;
+let yon = 1;  // 1: sağ, -1: sol
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // 4 kareli sprite sheet oluştur (yürüme animasyonu)
+  spriteSheet = createGraphics(240, 60);
+  
+  for (let i = 0; i < 4; i++) {
+    let x = i * 60 + 30;
+    let y = 30;
+    
+    // Her kare için farklı bacak pozisyonu
+    spriteSheet.push();
+    spriteSheet.translate(x, y);
+    
+    // Gövde
+    spriteSheet.fill(100, 150, 255);
+    spriteSheet.noStroke();
+    spriteSheet.ellipse(0, -5, 25, 30);
+    
+    // Kafa
+    spriteSheet.fill(255, 220, 180);
+    spriteSheet.circle(0, -25, 20);
+    
+    // Gözler
+    spriteSheet.fill(0);
+    spriteSheet.circle(-4, -27, 4);
+    spriteSheet.circle(4, -27, 4);
+    
+    // Bacaklar (yürüme animasyonu)
+    spriteSheet.stroke(80);
+    spriteSheet.strokeWeight(4);
+    let bacakAci = sin(i * PI / 2) * 0.5;
+    // Sol bacak
+    spriteSheet.line(-5, 10, -5 + sin(bacakAci) * 10, 25);
+    // Sağ bacak  
+    spriteSheet.line(5, 10, 5 + sin(bacakAci + PI) * 10, 25);
+    
+    spriteSheet.pop();
+  }
+}
+
+function draw() {
+  background(30);
+  
+  // Zemin
+  fill(50, 100, 50);
+  noStroke();
+  rect(0, 300, width, 100);
+  
+  // Sprite sheet'i göster (üstte)
+  image(spriteSheet, 80, 20);
+  
+  // Mevcut kareyi işaretle
+  noFill();
+  stroke(255, 255, 0);
+  strokeWeight(2);
+  rect(80 + mevcutKare * 60, 20, 60, 60);
+  
+  // Karakteri çiz (sadece mevcut kare)
+  push();
+  translate(karakterX, karakterY);
+  scale(yon, 1);  // Yöne göre aynala
+  
+  // Sprite sheet'ten sadece bir kare al
+  // image(img, dx, dy, dw, dh, sx, sy, sw, sh)
+  // dx,dy,dw,dh: hedef konum ve boyut
+  // sx,sy,sw,sh: kaynak konum ve boyut
+  image(spriteSheet, -30, -30, 60, 60, 
+        mevcutKare * 60, 0, 60, 60);
+  pop();
+  
+  // Hareket
+  if (keyIsDown(RIGHT_ARROW)) {
+    karakterX += 3;
+    yon = 1;
+    // Her 8 karede animasyon karesi değiştir
+    if (frameCount % 8 === 0) {
+      mevcutKare = (mevcutKare + 1) % karesayisi;
+    }
+  }
+  if (keyIsDown(LEFT_ARROW)) {
+    karakterX -= 3;
+    yon = -1;
+    if (frameCount % 8 === 0) {
+      mevcutKare = (mevcutKare + 1) % karesayisi;
+    }
+  }
+  
+  // Sınırlar
+  karakterX = constrain(karakterX, 30, width - 30);
+  
+  // Bilgi
+  fill(255);
+  noStroke();
+  textSize(12);
+  text("← → ok tuşları ile hareket", 20, 380);
+  text("Kare: " + mevcutKare, 300, 380);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Görsel galeri
+            new P5CodeEditor('editor-gallery', {
+                initialCode: `// Görsel Galeri
+
+let gorseller = [];
+let secili = 0;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // 5 farklı görsel oluştur
+  let renkler = [
+    [255, 100, 100],  // Kırmızı
+    [100, 255, 100],  // Yeşil
+    [100, 100, 255],  // Mavi
+    [255, 255, 100],  // Sarı
+    [255, 100, 255]   // Mor
+  ];
+  
+  for (let i = 0; i < 5; i++) {
+    let g = createGraphics(150, 150);
+    let c = renkler[i];
+    
+    // Her görsel farklı desen
+    g.background(30);
+    g.noStroke();
+    g.fill(c[0], c[1], c[2]);
+    
+    if (i === 0) {
+      // Daireler
+      for (let j = 0; j < 5; j++) {
+        g.circle(75, 75, 140 - j * 25);
+        g.fill(30);
+        g.circle(75, 75, 130 - j * 25);
+        g.fill(c[0], c[1], c[2]);
+      }
+    } else if (i === 1) {
+      // Kareler
+      g.rectMode(CENTER);
+      for (let j = 0; j < 6; j++) {
+        g.push();
+        g.translate(75, 75);
+        g.rotate(j * 0.2);
+        g.rect(0, 0, 120 - j * 15, 120 - j * 15);
+        g.pop();
+      }
+    } else if (i === 2) {
+      // Çizgiler
+      g.stroke(c[0], c[1], c[2]);
+      g.strokeWeight(3);
+      for (let j = 0; j < 15; j++) {
+        g.line(j * 10, 0, 150 - j * 10, 150);
+      }
+    } else if (i === 3) {
+      // Noktalar
+      for (let j = 0; j < 50; j++) {
+        let x = random(150);
+        let y = random(150);
+        let r = random(5, 20);
+        g.circle(x, y, r);
+      }
+    } else {
+      // Üçgenler
+      for (let j = 0; j < 8; j++) {
+        g.push();
+        g.translate(75, 75);
+        g.rotate(TWO_PI / 8 * j);
+        g.triangle(0, -60, -20, -30, 20, -30);
+        g.pop();
+      }
+    }
+    
+    gorseller.push(g);
+  }
+}
+
+function draw() {
+  background(30);
+  
+  // Büyük önizleme (seçili görsel)
+  image(gorseller[secili], 125, 20, 150, 150);
+  
+  // Seçili çerçeve
+  noFill();
+  stroke(255, 255, 0);
+  strokeWeight(3);
+  rect(125, 20, 150, 150);
+  
+  // Küçük resimler (thumbnail)
+  for (let i = 0; i < gorseller.length; i++) {
+    let x = 30 + i * 72;
+    let y = 220;
+    
+    // Hover efekti
+    let uzerinde = mouseX > x && mouseX < x + 60 &&
+                   mouseY > y && mouseY < y + 60;
+    
+    if (uzerinde || i === secili) {
+      // Seçili veya hover - büyük göster
+      image(gorseller[i], x - 5, y - 5, 70, 70);
+      stroke(255, 255, 0);
+    } else {
+      image(gorseller[i], x, y, 60, 60);
+      stroke(100);
+    }
+    
+    noFill();
+    strokeWeight(2);
+    rect(x - (uzerinde || i === secili ? 5 : 0), 
+         y - (uzerinde || i === secili ? 5 : 0),
+         uzerinde || i === secili ? 70 : 60,
+         uzerinde || i === secili ? 70 : 60);
+  }
+  
+  // Bilgi
+  fill(255);
+  noStroke();
+  textSize(14);
+  textAlign(CENTER);
+  text("Görsel " + (secili + 1) + " / " + gorseller.length, width/2, 190);
+  text("Küçük resimlere tıklayın", width/2, 320);
+  text("← → ok tuşları ile gezinin", width/2, 340);
+}
+
+function mousePressed() {
+  // Thumbnail'lara tıklama kontrolü
+  for (let i = 0; i < gorseller.length; i++) {
+    let x = 30 + i * 72;
+    let y = 220;
+    
+    if (mouseX > x && mouseX < x + 60 &&
+        mouseY > y && mouseY < y + 60) {
+      secili = i;
+    }
+  }
+}
+
+function keyPressed() {
+  if (keyCode === RIGHT_ARROW) {
+    secili = (secili + 1) % gorseller.length;
+  }
+  if (keyCode === LEFT_ARROW) {
+    secili = (secili - 1 + gorseller.length) % gorseller.length;
+  }
+  return false;
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Mozaik efekti
+            new P5CodeEditor('editor-mosaic', {
+                initialCode: `// Mozaik Efekti
+
+let kaynak;
+let mozaikBoyutu = 10;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // Kaynak görsel oluştur (renkli gradient)
+  kaynak = createGraphics(400, 400);
+  
+  // Renkli daireler
+  kaynak.background(30);
+  for (let i = 0; i < 20; i++) {
+    kaynak.fill(random(255), random(255), random(255), 200);
+    kaynak.noStroke();
+    kaynak.circle(random(width), random(height), random(50, 150));
+  }
+}
+
+function draw() {
+  // Fare X pozisyonuna göre mozaik boyutu
+  mozaikBoyutu = floor(map(mouseX, 0, width, 2, 40));
+  mozaikBoyutu = constrain(mozaikBoyutu, 2, 40);
+  
+  // Kaynak görselin piksellerini yükle
+  kaynak.loadPixels();
+  
+  // Mozaik efekti uygula
+  noStroke();
+  for (let y = 0; y < height; y += mozaikBoyutu) {
+    for (let x = 0; x < width; x += mozaikBoyutu) {
+      
+      // Bu bölgenin ortalama rengini al
+      // (basitleştirmek için merkez pikseli alıyoruz)
+      let merkezX = x + mozaikBoyutu / 2;
+      let merkezY = y + mozaikBoyutu / 2;
+      
+      // Sınırları kontrol et
+      merkezX = constrain(merkezX, 0, width - 1);
+      merkezY = constrain(merkezY, 0, height - 1);
+      
+      // Piksel indeksi
+      let index = (floor(merkezX) + floor(merkezY) * kaynak.width) * 4;
+      
+      // Renk değerlerini al
+      let r = kaynak.pixels[index];
+      let g = kaynak.pixels[index + 1];
+      let b = kaynak.pixels[index + 2];
+      
+      // Mozaik karesi çiz
+      fill(r, g, b);
+      rect(x, y, mozaikBoyutu, mozaikBoyutu);
+    }
+  }
+  
+  // Bilgi paneli
+  fill(0, 150);
+  rect(10, 10, 180, 50);
+  fill(255);
+  textSize(14);
+  text("Mozaik Boyutu: " + mozaikBoyutu + "px", 20, 35);
+  text("Fareyi sola/sağa hareket ettirin", 20, 52);
+}
+
+function mousePressed() {
+  // Tıklayınca yeni görsel oluştur
+  kaynak.background(30);
+  for (let i = 0; i < 20; i++) {
+    kaynak.fill(random(255), random(255), random(255), 200);
+    kaynak.noStroke();
+    kaynak.circle(random(width), random(height), random(50, 150));
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="text-align: center; padding: 1.5rem 0;">
+                <p style="margin: 0;">İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="../js/theme.js"></script>
+</body>
+</html>

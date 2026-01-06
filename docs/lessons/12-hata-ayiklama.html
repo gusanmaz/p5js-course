@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    
+    
+    <title>Ders 12: Hata Ayıklama - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                    <li><a href="12-hata-ayiklama.html" class="active">12. Hata Ayıklama</a></li>
+                    <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                    <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                    <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                    <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                    <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#hata-turleri">Hata Türleri</a></li>
+                    <li><a href="#console-log">console.log()</a></li>
+                    <li><a href="#devtools">DevTools</a></li>
+                    <li><a href="#hata-mesajlari">Hata Mesajları</a></li>
+                    <li><a href="#breakpoint">Breakpoint</a></li>
+                    <li><a href="#stratejiler">Stratejiler</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 12: Hata Ayıklama (Debugging)</h1>
+                <div class="lesson-meta">
+                    <span>📚 Orta Seviye</span>
+                    <span>⏱️ 45 dakika</span>
+                    <span>🎯 Hata Bulma ve Düzeltme</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+
+            <!-- Giriş: Debugging Neden Önemli -->
+            <section class="lesson-section">
+                <h2>🎓 Debugging Sadece Hata Bulmak İçin Değil!</h2>
+                
+                <p>
+                    Çoğu kişi debugging'i (hata ayıklama) sadece "kod çalışmıyor, hatayı bulmalıyım" 
+                    durumunda kullanır. Ama aslında debugging, <strong>kodu anlamak için de mükemmel bir araçtır</strong>!
+                </p>
+                
+                <div class="info-box success">
+                    <div class="info-box-title">📚 Öğrenme Aracı Olarak Debugging</div>
+                    <p>
+                        Karmaşık bir kodu anlamakta zorlanıyorsan, <code>console.log()</code> veya 
+                        breakpoint kullanarak kodu <strong>adım adım çalıştır</strong>. 
+                        Her adımda değişkenlerin nasıl değiştiğini gözlemle. Özellikle şu konuları 
+                        anlamak için çok faydalı:
+                    </p>
+                    <ul>
+                        <li><strong>İç içe döngüler:</strong> Hangi döngü kaç kez çalışıyor? i ve j değerleri nasıl değişiyor?</li>
+                        <li><strong>Çok boyutlu diziler:</strong> <code>dizi[i][j]</code> tam olarak neye erişiyor?</li>
+                        <li><strong>Fonksiyon çağrıları:</strong> Parametre değerleri neler? return ile ne dönüyor?</li>
+                        <li><strong>Recursion (özyineleme):</strong> Fonksiyon kendini çağırırken değerler nasıl değişiyor?</li>
+                        <li><strong>Nesne ve sınıflar:</strong> <code>this</code> hangi nesneyi gösteriyor?</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">💡 Pratik Öneri</div>
+                    <p>
+                        Başkasının yazdığı karmaşık bir kodu anlamak istiyorsan:
+                    </p>
+                    <ol>
+                        <li>Kritik noktalara <code>console.log()</code> ekle</li>
+                        <li>Değişkenlerin değerlerini ve fonksiyonların ne zaman çağrıldığını izle</li>
+                        <li>Kağıt üzerinde veya zihninde değerleri takip et</li>
+                        <li>Kodu küçük parçalar halinde çalıştır ve gözlemle</li>
+                    </ol>
+                    <p style="margin-top: 10px;">
+                        Bu yöntem, sadece dokümantasyon okumaktan çok daha etkilidir! 
+                        <strong>Görerek öğrenmek</strong> her zaman daha kalıcıdır.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Bölüm 1: Hata Türleri -->
+            <section class="lesson-section">
+                <h2>🐛 Hata Türleri</h2>
+                
+                <p>Programlamada üç ana hata türü vardır:</p>
+                
+                <div class="info-box">
+                    <h4>1. Sözdizimi Hataları (Syntax Errors)</h4>
+                    <p>Yazım kurallarına uymayan kodlar. Program hiç çalışmaz.</p>
+                    <pre><code>// Yanlış: Parantez eksik
+function setup() {
+  createCanvas(400, 400   // ) eksik!
+}
+
+// Doğru:
+function setup() {
+  createCanvas(400, 400);
+}</code></pre>
+                </div>
+                
+                <div class="info-box warning">
+                    <h4>2. Çalışma Zamanı Hataları (Runtime Errors)</h4>
+                    <p>Kod çalışırken ortaya çıkan hatalar. Program çöker.</p>
+                    <pre><code>// Tanımsız değişken kullanımı
+function draw() {
+  circle(x, y, 50);  // x ve y tanımlı değil!
+}</code></pre>
+                </div>
+                
+                <div class="info-box success">
+                    <h4>3. Mantık Hataları (Logic Errors)</h4>
+                    <p>Kod çalışır ama beklediğimiz gibi davranmaz. En zor bulunan hatalar!</p>
+                    <pre><code>// Topun sınırda dönmesi gerekiyor ama dönmüyor
+if (x > width) {  // Yanlış: büyük yerine küçük olmalıydı
+  hiz = -hiz;
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- Bölüm 2: console.log() Kullanımı -->
+            <section class="lesson-section">
+                <h2>📝 console.log() ile Hata Ayıklama</h2>
+                
+                <p>
+                    <code>console.log()</code> değişkenlerin değerlerini konsola yazdırır.
+                    Bu, kodun hangi aşamada ne değer aldığını görmek için çok kullanışlıdır.
+                </p>
+                
+                <div class="editor-container">
+                    <div id="editor1"></div>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>💡 İpucu: Template Literal Kullanımı</h4>
+                    <p>Backtick (<code>`</code>) karakteri ile değişkenleri metin içine gömebilirsiniz:</p>
+                    <pre><code>let x = 100;
+let y = 200;
+
+// Eski yol:
+console.log("X: " + x + ", Y: " + y);
+
+// Yeni yol (daha temiz):
+console.log(`X: ${x}, Y: ${y}`);</code></pre>
+                </div>
+            </section>
+
+            <!-- Bölüm 3: Tarayıcı DevTools -->
+            <section class="lesson-section">
+                <h2>🔧 Tarayıcı Geliştirici Araçları (DevTools)</h2>
+                
+                <p>
+                    Tüm modern tarayıcılar güçlü geliştirici araçları içerir.
+                    Bu araçlar hata ayıklamanın en önemli yardımcısıdır.
+                </p>
+                
+                <div class="info-box">
+                    <h4>DevTools'u Açmak İçin:</h4>
+                    <ul>
+                        <li><strong>F12</strong> tuşuna basın</li>
+                        <li>veya <strong>Ctrl + Shift + I</strong> (Windows/Linux)</li>
+                        <li>veya <strong>Cmd + Option + I</strong> (Mac)</li>
+                        <li>veya Sayfaya sağ tıklayın → "İncele" (Inspect)</li>
+                    </ul>
+                </div>
+                
+                <h3>Console Paneli</h3>
+                <p>
+                    DevTools'ta "Console" sekmesi tüm <code>console.log()</code> çıktılarını 
+                    ve hata mesajlarını gösterir.
+                </p>
+                
+                <div class="visual-example">
+                    <div style="background: #1e1e1e; padding: 20px; border-radius: 8px; font-family: monospace;">
+                        <div style="color: #888; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 10px;">
+                            Elements | Console | Sources | Network
+                        </div>
+                        <div style="color: #9cdcfe;">🔵 X pozisyonu: 150</div>
+                        <div style="color: #9cdcfe;">🔵 Y pozisyonu: 200</div>
+                        <div style="color: #f44747;">❌ Uncaught ReferenceError: hiz is not defined</div>
+                        <div style="color: #f44747; margin-left: 20px;">at draw (sketch.js:15)</div>
+                        <div style="color: #dcdcaa;">⚠️ Warning: p5.js says: createCanvas() was called multiple times</div>
+                    </div>
+                    <p style="text-align: center; margin-top: 10px; color: #888;">Console paneli örneği</p>
+                </div>
+                
+                <div class="editor-container">
+                    <div id="editor2"></div>
+                </div>
+            </section>
+
+            <!-- Bölüm 4: Hata Mesajlarını Okuma -->
+            <section class="lesson-section">
+                <h2>📖 Hata Mesajlarını Anlamak</h2>
+                
+                <p>
+                    Hata mesajları korkunç görünebilir ama aslında size yardım etmeye çalışır!
+                    Her hata mesajının önemli bileşenleri vardır:
+                </p>
+                
+                <div class="info-box">
+                    <h4>Hata Mesajı Anatomisi</h4>
+                    <pre style="background: #1e1e1e; padding: 15px; border-radius: 5px;"><code style="color: #f44747;">Uncaught ReferenceError: topX is not defined
+    at draw (sketch.js:12:10)</code></pre>
+                    
+                    <ul style="margin-top: 15px;">
+                        <li><strong>Hata Türü:</strong> ReferenceError (tanımsız değişken)</li>
+                        <li><strong>Açıklama:</strong> topX is not defined (topX tanımlı değil)</li>
+                        <li><strong>Dosya:</strong> sketch.js</li>
+                        <li><strong>Satır:</strong> 12</li>
+                        <li><strong>Sütun:</strong> 10</li>
+                    </ul>
+                </div>
+                
+                <h3>Sık Karşılaşılan Hatalar</h3>
+                
+                <table class="info-table">
+                    <thead>
+                        <tr>
+                            <th>Hata</th>
+                            <th>Anlamı</th>
+                            <th>Çözüm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>ReferenceError: X is not defined</code></td>
+                            <td>X değişkeni tanımlı değil</td>
+                            <td>Değişkeni tanımlayın veya yazım hatası kontrol edin</td>
+                        </tr>
+                        <tr>
+                            <td><code>TypeError: X is not a function</code></td>
+                            <td>X bir fonksiyon değil</td>
+                            <td>Fonksiyon adını kontrol edin (büyük/küçük harf)</td>
+                        </tr>
+                        <tr>
+                            <td><code>SyntaxError: Unexpected token</code></td>
+                            <td>Beklenmeyen karakter</td>
+                            <td>Parantez, virgül, noktalı virgül kontrol edin</td>
+                        </tr>
+                        <tr>
+                            <td><code>TypeError: Cannot read property of undefined</code></td>
+                            <td>Undefined bir değerin özelliğine erişim</td>
+                            <td>Değişkenin tanımlı olduğundan emin olun</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="editor-container">
+                    <div id="editor3"></div>
+                </div>
+            </section>
+
+            <!-- Bölüm 5: Breakpoint Kullanımı -->
+            <section class="lesson-section">
+                <h2>⏸️ Breakpoint ile Adım Adım İnceleme</h2>
+                
+                <p>
+                    Breakpoint (kesme noktası) kodu belirli bir satırda durdurup 
+                    değişkenleri incelemenizi sağlar.
+                </p>
+                
+                <div class="info-box">
+                    <h4>Breakpoint Nasıl Kullanılır?</h4>
+                    <ol>
+                        <li>DevTools'u açın (F12)</li>
+                        <li><strong>Sources</strong> sekmesine gidin</li>
+                        <li>Sol panelden dosyanızı bulun</li>
+                        <li>Durdurmak istediğiniz <strong>satır numarasına tıklayın</strong> (mavi nokta belirir)</li>
+                        <li>Sayfayı yenileyin - kod o satırda durur</li>
+                        <li>Sağ panelde değişken değerlerini görün</li>
+                    </ol>
+                </div>
+                
+                <div class="visual-example">
+                    <div style="background: #1e1e1e; padding: 20px; border-radius: 8px; font-family: monospace; font-size: 14px;">
+                        <div style="display: flex; gap: 30px;">
+                            <div style="flex: 1;">
+                                <div style="color: #888; margin-bottom: 10px;">📁 Sources</div>
+                                <div style="display: flex;">
+                                    <div style="color: #888; width: 30px; text-align: right; padding-right: 10px;">
+                                        10<br>11<br>12<br>13<br>14
+                                    </div>
+                                    <div>
+                                        <div style="color: #9cdcfe;">function draw() {</div>
+                                        <div style="color: #9cdcfe;">  background(220);</div>
+                                        <div style="background: #264f78; color: #9cdcfe;">🔵  x = x + hiz;</div>
+                                        <div style="color: #9cdcfe;">  circle(x, 200, 50);</div>
+                                        <div style="color: #9cdcfe;">}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="flex: 1; border-left: 1px solid #333; padding-left: 20px;">
+                                <div style="color: #888; margin-bottom: 10px;">📊 Scope</div>
+                                <div style="color: #4ec9b0;">Local:</div>
+                                <div style="color: #9cdcfe; margin-left: 15px;">this: Window</div>
+                                <div style="color: #4ec9b0;">Script:</div>
+                                <div style="color: #9cdcfe; margin-left: 15px;">x: <span style="color: #b5cea8;">150</span></div>
+                                <div style="color: #9cdcfe; margin-left: 15px;">hiz: <span style="color: #b5cea8;">3</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 10px; color: #888;">Breakpoint ile kod satır 12'de durmuş, değişkenler sağda görünüyor</p>
+                </div>
+                
+                <h3>Kontrol Butonları</h3>
+                <div class="info-box">
+                    <ul>
+                        <li><strong>▶️ Resume (F8):</strong> Sonraki breakpoint'e kadar devam et</li>
+                        <li><strong>⏭️ Step Over (F10):</strong> Bir sonraki satıra geç</li>
+                        <li><strong>⬇️ Step Into (F11):</strong> Fonksiyonun içine gir</li>
+                        <li><strong>⬆️ Step Out (Shift+F11):</strong> Fonksiyondan çık</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Bölüm 6: debugger Komutu -->
+            <section class="lesson-section">
+                <h2>🛑 debugger Komutu</h2>
+                
+                <p>
+                    Kod içine <code>debugger;</code> yazarak programlı olarak breakpoint koyabilirsiniz.
+                </p>
+                
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Önemli: debugger İçin Gerekli Adımlar</div>
+                    <ol>
+                        <li><strong>DevTools'u açın:</strong> F12 veya sağ tık → "Incele" (Inspect)</li>
+                        <li><strong>"Debugger" sekmesine gidin:</strong> Firefox'ta "Debugger", Chrome'da "Sources" sekmesi</li>
+                        <li><strong>Kodu çalıştırın:</strong> <code>debugger;</code> satırına gelince kod otomatik durur</li>
+                    </ol>
+                    <p style="margin-top: 10px;">
+                        <strong>Not:</strong> DevTools kapalıyken <code>debugger;</code> hiçbir şey yapmaz. 
+                        Ayrıca bazı tarayıcılarda "Console" sekmesinde değil, "Debugger/Sources" sekmesinde olmanız gerekir.
+                    </p>
+                </div>
+                
+                <div class="editor-container">
+                    <div id="editor4"></div>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>💡 İpucu</h4>
+                    <p>
+                        <code>debugger;</code> komutunu kullandıktan sonra silmeyi unutmayın!
+                        Aksi halde her ziyaretçide kod durur.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Bölüm 7: Hata Ayıklama Stratejileri -->
+            <section class="lesson-section">
+                <h2>🎯 Hata Ayıklama Stratejileri</h2>
+                
+                <div class="info-box">
+                    <h4>1. Son Çalışan Versiyona Dön</h4>
+                    <p>
+                        Kod çalışıyordu ve bir değişiklik yaptıktan sonra bozuldu mu? 
+                        Son yaptığınız değişiklikleri geri alın (Ctrl+Z) veya 
+                        yeni eklediğiniz kodları yorum satırına alın. Hata kaybolursa, 
+                        sorun yeni eklenen kodda demektir.
+                    </p>
+                </div>
+                
+                <div class="info-box success">
+                    <h4>2. Rubber Duck Debugging (Lastik Ördek)</h4>
+                    <p>
+                        Kodu birilerine (veya hayali bir ördeğe) satır satır açıklayın.
+                        Açıklarken genellikle hatayı kendiniz fark edersiniz!
+                    </p>
+                </div>
+                
+                <div class="info-box warning">
+                    <h4>3. Print Debugging</h4>
+                    <p>
+                        Şüphelendiğiniz her yere <code>console.log()</code> ekleyin.
+                        Değişkenlerin hangi noktada yanlış gittiğini bulun.
+                    </p>
+                </div>
+                
+                <div class="info-box">
+                    <h4>4. Minimal Örnek</h4>
+                    <p>
+                        Hatayı yeniden üretecek en küçük kodu yazın.
+                        Ne kadar az kod varsa, hata o kadar kolay bulunur.
+                    </p>
+                </div>
+                
+                <div class="editor-container">
+                    <div id="editor5"></div>
+                </div>
+            </section>
+
+            <!-- Bölüm 8: Yaygın p5.js Hataları -->
+            <section class="lesson-section">
+                <h2>⚠️ Yaygın p5.js Hataları</h2>
+                
+                <h3>1. setup() içinde p5.js fonksiyonu kullanmak</h3>
+                <div class="editor-container">
+                    <div id="editor6"></div>
+                </div>
+                
+                <h3>2. Değişken kapsamı (scope) sorunu</h3>
+                <div class="editor-container">
+                    <div id="editor7"></div>
+                </div>
+                
+                <h3>3. frameCount ve millis() karıştırma</h3>
+                <div class="editor-container">
+                    <div id="editor8"></div>
+                </div>
+            </section>
+
+            <!-- Bölüm 9: console Metodları -->
+            <section class="lesson-section">
+                <h2>🎨 Diğer console Metodları</h2>
+                
+                <p><code>console.log()</code> dışında başka yararlı metodlar da var:</p>
+                
+                <div class="editor-container">
+                    <div id="editor9"></div>
+                </div>
+                
+                <table class="info-table">
+                    <thead>
+                        <tr>
+                            <th>Metod</th>
+                            <th>Kullanım</th>
+                            <th>Görünüm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>console.log()</code></td>
+                            <td>Genel bilgi yazdırma</td>
+                            <td>Normal metin</td>
+                        </tr>
+                        <tr>
+                            <td><code>console.warn()</code></td>
+                            <td>Uyarı mesajları</td>
+                            <td>⚠️ Sarı arka plan</td>
+                        </tr>
+                        <tr>
+                            <td><code>console.error()</code></td>
+                            <td>Hata mesajları</td>
+                            <td>❌ Kırmızı arka plan</td>
+                        </tr>
+                        <tr>
+                            <td><code>console.table()</code></td>
+                            <td>Dizi/nesne tablo olarak</td>
+                            <td>📊 Tablo görünümü</td>
+                        </tr>
+                        <tr>
+                            <td><code>console.time()</code></td>
+                            <td>Süre ölçümü başlat</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td><code>console.timeEnd()</code></td>
+                            <td>Süre ölçümü bitir</td>
+                            <td>⏱️ Geçen süre (ms)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Özet -->
+            <section class="lesson-section">
+                <h2>📋 Özet</h2>
+                
+                <div class="summary-box">
+                    <h4>Bu Derste Öğrendiklerimiz:</h4>
+                    <ul>
+                        <li>Üç hata türü: Sözdizimi, Çalışma Zamanı, Mantık</li>
+                        <li><code>console.log()</code> ile değişkenleri yazdırma</li>
+                        <li>Tarayıcı DevTools (F12) kullanımı</li>
+                        <li>Hata mesajlarını okuma ve anlama</li>
+                        <li>Breakpoint ile adım adım inceleme</li>
+                        <li><code>debugger;</code> komutu</li>
+                        <li>Hata ayıklama stratejileri</li>
+                        <li>Yaygın p5.js hataları ve çözümleri</li>
+                    </ul>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>🏆 Altın Kural</h4>
+                    <p>
+                        <strong>"Hata mesajını oku!"</strong> - Çoğu zaman hata mesajı 
+                        size sorunu ve çözümü söyler. Panik yapmayın, mesajı dikkatlice okuyun.
+                    </p>
+                </div>
+            </section>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="../js/editor.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Örnek 1: console.log temel kullanım
+            new P5CodeEditor('editor1', {
+                initialCode: `let x = 100;
+let y = 200;
+let hiz = 3;
+
+function setup() {
+  createCanvas(400, 300);
+  
+  // Başlangıç değerlerini konsola yaz
+  console.log("Program başladı!");
+  console.log("x değeri:", x);
+  console.log("y değeri:", y);
+  console.log(\`Hız: \${hiz}\`);  // Template literal
+}
+
+function draw() {
+  background(30);
+  
+  // Her karede x değerini güncelle
+  x = x + hiz;
+  
+  // Her 60 karede bir konsola yaz (1 saniye)
+  if (frameCount % 60 === 0) {
+    console.log(\`Saniye: \${frameCount/60}, X: \${x}\`);
+  }
+  
+  // Sınırda döndür
+  if (x > width || x < 0) {
+    hiz = -hiz;
+    console.log("Sınıra ulaştı! Yön değişti.");
+  }
+  
+  // Top çiz
+  fill(0, 200, 255);
+  noStroke();
+  circle(x, y, 50);
+  
+  // Bilgi
+  fill(255);
+  textSize(14);
+  text(\`X: \${floor(x)}\`, 10, 25);
+  text("Konsolu kontrol et!", 10, height - 20);
+}`
+            });
+
+            // Örnek 2: Hata yakalama
+            new P5CodeEditor('editor2', {
+                initialCode: `// Bu kodda BİLİNÇLİ bir hata var!
+// Konsoldaki hatayı oku ve düzelt
+
+let topX = 200;
+let topY = 150;
+
+function setup() {
+  createCanvas(400, 300);
+}
+
+function draw() {
+  background(50);
+  
+  // HATA: "topx" küçük harfle yazılmış
+  // Doğrusu: topX (büyük X)
+  circle(topx, topY, 60);  // ReferenceError: topx is not defined
+  
+  fill(255);
+  textSize(14);
+  text("Konsoldaki hatayı incele!", 100, 30);
+}
+
+// DÜZELTME:
+// Satır 16'daki "topx" kelimesini "topX" yapın`
+            });
+
+            // Örnek 3: Hata türleri
+            new P5CodeEditor('editor3', {
+                initialCode: `// HATA TÜRLERİ ÖRNEKLERİ
+// Her hatayı tek tek aç ve konsolu incele
+
+function setup() {
+  createCanvas(400, 300);
+  textSize(14);
+}
+
+function draw() {
+  background(40);
+  fill(255);
+  
+  // === SÖZDIZIMI HATASI ===
+  // Aşağıdaki satırın yorumunu kaldırın:
+  // let x = 10 +   // SyntaxError: Unexpected token
+  
+  // === ÇALIŞMA ZAMANI HATASI ===
+  // Aşağıdaki satırın yorumunu kaldırın:
+  // circle(tanimsizDegisken, 100, 50);  // ReferenceError
+  
+  // === MANTIK HATASI ===
+  // Hata yok ama top görünmüyor (neden?)
+  let topX = -100;  // Ekran dışında!
+  circle(topX, 150, 50);
+  
+  text("Her hata türünü dene", 100, 30);
+  text("Yorumları kaldırarak test et", 100, 50);
+  text("topX değeri: " + topX + " (ekran dışı!)", 100, 250);
+}`
+            });
+
+            // Örnek 4: debugger komutu
+            new P5CodeEditor('editor4', {
+                initialCode: `// debugger; KULLANIMI
+// 
+// Adımlar:
+// 1. F12 ile DevTools'u aç
+// 2. "Debugger" (Firefox) veya "Sources" (Chrome) sekmesine git
+// 3. Aşağıdaki kodu çalıştır
+// 4. 100. karede kod duracak ve değişkenleri inceleyebileceksin
+
+let sayac = 0;
+
+function setup() {
+  createCanvas(400, 300);
+  console.log("🛠️ DevTools'u aç ve Debugger sekmesine git!");
+}
+
+function draw() {
+  background(30);
+  
+  sayac++;
+  
+  // Her 100 karede bir dur
+  // DevTools DEBUGGER sekmesi açıkken bu satırda kod durur
+  if (sayac === 100) {
+    debugger;  // <- DevTools açıksa burada durur!
+    console.log("100. kareye ulaştık!");
+  }
+  
+  fill(255);
+  textSize(16);
+  text(\`Kare: \${sayac}\`, 20, 30);
+  text("100. karede kod duracak", 20, 60);
+  text("(DevTools Debugger sekmesi açıksa)", 20, 80);
+  
+  // Görsel
+  let x = map(sayac % 200, 0, 200, 50, 350);
+  fill(0, 200, 255);
+  circle(x, 200, 40);
+}`
+            });
+
+            // Örnek 5: Print debugging örneği
+            new P5CodeEditor('editor5', {
+                initialCode: `// PRINT DEBUGGING ÖRNEĞİ
+// Sorun: Top sınırda düzgün dönmüyor
+
+let x = 200;
+let y = 150;
+let hizX = 4;
+let hizY = 3;
+
+function setup() {
+  createCanvas(400, 300);
+  console.log("=== DEBUG BAŞLADI ===");
+}
+
+function draw() {
+  background(30);
+  
+  // Hareketi uygula
+  x = x + hizX;
+  y = y + hizY;
+  
+  // DEBUG: Değerleri sürekli izle
+  if (frameCount % 30 === 0) {
+    console.log(\`[Kare \${frameCount}] x=\${floor(x)}, y=\${floor(y)}, hızX=\${hizX}, hızY=\${hizY}\`);
+  }
+  
+  // X sınır kontrolü
+  if (x > width - 25 || x < 25) {
+    console.log(\`🔴 X sınırı! x=\${floor(x)}, hızX \${hizX} -> \${-hizX}\`);
+    hizX = -hizX;
+  }
+  
+  // Y sınır kontrolü  
+  if (y > height - 25 || y < 25) {
+    console.log(\`🟢 Y sınırı! y=\${floor(y)}, hızY \${hizY} -> \${-hizY}\`);
+    hizY = -hizY;
+  }
+  
+  // Top çiz
+  fill(255, 100, 100);
+  noStroke();
+  circle(x, y, 50);
+  
+  // Bilgi
+  fill(255);
+  textSize(12);
+  text("Konsoldaki DEBUG mesajlarını incele", 10, height - 10);
+}`
+            });
+
+            // Örnek 6: Scope hatası
+            new P5CodeEditor('editor6', {
+                initialCode: `// HATA: setup() DIŞINDA p5.js FONKSİYONU
+
+// Bu ÇALIŞMAZ:
+// let renk = color(255, 0, 0);  // color() henüz hazır değil!
+
+// ÇÖZÜM: Global değişken tanımla, değeri setup'ta ata
+let renk;
+
+function setup() {
+  createCanvas(400, 300);
+  
+  // color() şimdi kullanılabilir
+  renk = color(255, 100, 50);
+  
+  console.log("renk değişkeni:", renk);
+}
+
+function draw() {
+  background(30);
+  
+  fill(renk);
+  noStroke();
+  circle(200, 150, 100);
+  
+  fill(255);
+  textSize(14);
+  text("color() sadece setup/draw içinde çalışır!", 70, 30);
+}`
+            });
+
+            // Örnek 7: Değişken kapsamı
+            new P5CodeEditor('editor7', {
+                initialCode: `// DEĞİŞKEN KAPSAMI (SCOPE) SORUNU
+
+function setup() {
+  createCanvas(400, 300);
+}
+
+function draw() {
+  background(30);
+  
+  // YANLIŞ: let ile tanımlanan değişken
+  // her draw() çağrısında sıfırlanır!
+  let x = 100;  // Her karede 100 olur
+  x = x + 1;    // 101 olur ama...
+  
+  // DOĞRU: Global değişken kullan (en üstte)
+  // veya frameCount kullan
+  let dogrusux = 100 + frameCount;
+  
+  fill(255, 100, 100);
+  circle(x, 100, 30);  // Hareket etmez!
+  
+  fill(100, 255, 100);
+  circle(dogrusux % width, 200, 30);  // Hareket eder!
+  
+  fill(255);
+  textSize(12);
+  text("Kırmızı: let ile (hareket etmez)", 10, 30);
+  text("Yeşil: frameCount ile (hareket eder)", 10, 50);
+  text(\`x değeri: \${x} (hep 101!)\`, 10, 280);
+}`
+            });
+
+            // Örnek 8: frameCount vs millis
+            new P5CodeEditor('editor8', {
+                initialCode: `// frameCount vs millis()
+// frameCount: Toplam kare sayısı (60 FPS'de saniyede 60 artar)
+// millis(): Başlangıçtan beri geçen milisaniye
+
+function setup() {
+  createCanvas(400, 300);
+  textSize(14);
+}
+
+function draw() {
+  background(30);
+  
+  // frameCount: FPS'e bağlı (değişebilir)
+  let frameBasedX = (frameCount * 2) % width;
+  
+  // millis: Gerçek zamana bağlı (daha tutarlı)
+  let timeBasedX = (millis() / 10) % width;
+  
+  // Görsel karşılaştırma
+  fill(255, 100, 100);
+  circle(frameBasedX, 100, 30);
+  text(\`frameCount: \${frameCount}\`, 10, 100);
+  
+  fill(100, 255, 100);
+  circle(timeBasedX, 200, 30);
+  text(\`millis: \${floor(millis())}\`, 10, 200);
+  
+  fill(255);
+  text("frameCount: Kare bazlı (FPS değişirse hız değişir)", 10, 30);
+  text("millis: Zaman bazlı (her zaman aynı hızda)", 10, 50);
+  text(\`Güncel FPS: \${floor(frameRate())}\`, 10, 280);
+}`
+            });
+
+            // Örnek 9: console metodları
+            new P5CodeEditor('editor9', {
+                initialCode: `// CONSOLE METODLARI
+// DevTools konsolunu aç ve farklı metodları gör
+
+function setup() {
+  createCanvas(400, 300);
+  
+  // Farklı console metodları
+  console.log("📝 Normal log mesajı");
+  console.warn("⚠️ Bu bir uyarı!");
+  console.error("❌ Bu bir hata mesajı!");
+  
+  // Tablo olarak göster
+  let ogrenciler = [
+    {isim: "Ali", puan: 85},
+    {isim: "Ayşe", puan: 92},
+    {isim: "Mehmet", puan: 78}
+  ];
+  console.log("Öğrenci tablosu:");
+  console.table(ogrenciler);
+  
+  // Süre ölçümü
+  console.time("döngü süresi");
+  for (let i = 0; i < 1000000; i++) {
+    // Ağır işlem simülasyonu
+  }
+  console.timeEnd("döngü süresi");
+  
+  // Grup halinde
+  console.group("Oyun Bilgileri");
+  console.log("Seviye: 5");
+  console.log("Can: 3");
+  console.log("Puan: 1500");
+  console.groupEnd();
+}
+
+function draw() {
+  background(40);
+  fill(255);
+  textSize(16);
+  text("DevTools konsolunu kontrol et!", 80, 150);
+  text("F12 ile aç", 150, 180);
+  noLoop();
+}`
+            });
+        });
+    </script>
+
+                <!-- Navigation -->
+                <div class="lesson-nav">
+                    <a href="11-stringler.html" class="btn">← Önceki Ders</a>
+                    <a href="13-ileri-konular.html" class="btn btn-primary">Sonraki Ders →</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="text-align: center; padding: 1.5rem 0;">
+                <p style="margin: 0;">İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/theme.js"></script>
+</body>
+</html>

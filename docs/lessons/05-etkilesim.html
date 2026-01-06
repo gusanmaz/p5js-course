@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <title>Ders 5: Etkileşim - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html" class="active">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#etkilesim-giris">Etkileşim Nedir?</a></li>
+                    <li><a href="#fare-etkilesimi">Fare Etkileşimi</a></li>
+                    <li><a href="#fare-olaylari">Fare Olayları</a></li>
+                    <li><a href="#klavye">Klavye Etkileşimi</a></li>
+                    <li><a href="#klavye-olaylari">Klavye Olayları</a></li>
+                    <li><a href="#ornekler">Uygulama Örnekleri</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 5: Etkileşim</h1>
+                <div class="lesson-meta">
+                    <span>📚 Orta Seviye</span>
+                    <span>⏱️ 50 dakika</span>
+                    <span>🎯 Kullanıcı Girdileri</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: Introduction -->
+                <section id="etkilesim-giris">
+                    <h2>Etkileşim Nedir ve Neden Önemli?</h2>
+                    
+                    <div class="info-box note">
+                        <div class="info-box-title">🎮 Oyun Programcısı İçin Neden Kritik?</div>
+                        <p>
+                            Oyunları oyunlardan ayıran şey <strong>etkileşim</strong>dir! Fare ile nişan al, 
+                            klavye ile zıpla, tıklama ile ateş et... Etkileşim olmadan sadece bir animasyon 
+                            izlersin, oyun oynamazsın. Bu ders, oyuncuyu oyunun içine sokar!
+                        </p>
+                    </div>
+
+                    <h3>🎯 Etkileşim Türleri</h3>
+                    <ul>
+                        <li><strong>🖱️ Fare:</strong> Konum takibi, tıklama, sürükleme</li>
+                        <li><strong>⌨️ Klavye:</strong> Tuş basma, hareket kontrolü</li>
+                        <li><strong>📱 Dokunmatik:</strong> Touch events (mobil)</li>
+                        <li><strong>🎮 Gamepad:</strong> Joystick ve butonlar</li>
+                    </ul>
+                    <p>Bu derste fare ve klavye etkileşimini öğreneceksiniz.</p>
+                </section>
+
+                <!-- Section: Mouse Interaction -->
+                <section id="fare-etkilesimi" class="mt-4">
+                    <h2>Fare Etkileşimi</h2>
+                    
+                    <p>
+                        p5.js, fare konumunu ve durumunu takip eden hazır değişkenler sunar. 
+                        Bunları kullanarak etkileşimli projeler oluşturabilirsiniz.
+                    </p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Değişken</th>
+                                <th>Açıklama</th>
+                                <th>Kullanım</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>mouseX</code></td>
+                                <td>Farenin yatay konumu (X)</td>
+                                <td><code>circle(mouseX, 200, 50)</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>mouseY</code></td>
+                                <td>Farenin dikey konumu (Y)</td>
+                                <td><code>circle(200, mouseY, 50)</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>pmouseX</code>, <code>pmouseY</code></td>
+                                <td>Önceki karedeki fare konumu</td>
+                                <td><code>line(pmouseX, pmouseY, mouseX, mouseY)</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>mouseIsPressed</code></td>
+                                <td>Fare tuşu basılı mı? (true/false)</td>
+                                <td><code>if (mouseIsPressed) { ... }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>mouseButton</code></td>
+                                <td>Hangi tuş basılı?</td>
+                                <td><code>if (mouseButton == LEFT) { ... }</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="editor1"></div>
+
+                    <div class="challenge-box">
+                        <h4>🧪 Deneyin</h4>
+                        <ul>
+                            <li>Daire boyutunu fareye göre değiştirin: <code>circle(mouseX, mouseY, mouseX/2)</code></li>
+                            <li>pmouseX/pmouseY kullanarak çizgi çizin</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Section: Mouse Events -->
+                <section id="fare-olaylari" class="mt-4">
+                    <h2>Fare Olay Fonksiyonları</h2>
+
+                    <p>
+                        Belirli fare eylemlerinde otomatik çağrılan özel fonksiyonlar vardır:
+                    </p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Fonksiyon</th>
+                                <th>Ne Zaman Çalışır?</th>
+                                <th>Örnek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>mousePressed()</code></td>
+                                <td>Fare tuşuna basıldığında (1 kez)</td>
+                                <td><pre><code>function mousePressed() {
+  renk = random(255);
+}</code></pre></td>
+                            </tr>
+                            <tr>
+                                <td><code>mouseReleased()</code></td>
+                                <td>Fare tuşu bırakıldığında</td>
+                                <td><pre><code>function mouseReleased() {
+  surukleniyor = false;
+}</code></pre></td>
+                            </tr>
+                            <tr>
+                                <td><code>mouseClicked()</code></td>
+                                <td>Tıklama tamamlandığında (bas + bırak)</td>
+                                <td><pre><code>function mouseClicked() {
+  skor++;
+}</code></pre></td>
+                            </tr>
+                            <tr>
+                                <td><code>mouseMoved()</code></td>
+                                <td>Fare hareket ettiğinde (tuş basılı değilken)</td>
+                                <td><pre><code>function mouseMoved() {
+  mesaj = "Fare hareket etti!";
+}</code></pre></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="editor2"></div>
+                </section>
+
+                <!-- Section: Keyboard -->
+                <section id="klavye" class="mt-4">
+                    <h2>Klavye Etkileşimi</h2>
+
+                    <p>
+                        Klavye girişlerini algılamak için de hazır değişkenler vardır:
+                    </p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Değişken</th>
+                                <th>Açıklama</th>
+                                <th>Örnek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>keyIsPressed</code></td>
+                                <td>Herhangi bir tuş basılı mı? (true/false)</td>
+                                <td><code>if (keyIsPressed) { hiz = 10; }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>key</code></td>
+                                <td>Son basılan tuşun karakteri ('a', 'B', '5', ' ')</td>
+                                <td><code>if (key == 'a') { sola(); }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>keyCode</code></td>
+                                <td>Özel tuşlar için (ok tuşları, Enter, vb.)</td>
+                                <td><code>if (keyCode == LEFT_ARROW) { x -= 5; }</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Özel Tuş Kodları</h3>
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Tuş Kodu</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>UP_ARROW</code>, <code>DOWN_ARROW</code></td><td>Yukarı / Aşağı ok tuşları</td></tr>
+                            <tr><td><code>LEFT_ARROW</code>, <code>RIGHT_ARROW</code></td><td>Sol / Sağ ok tuşları</td></tr>
+                            <tr><td><code>ENTER</code>, <code>RETURN</code></td><td>Enter tuşu</td></tr>
+                            <tr><td><code>BACKSPACE</code>, <code>DELETE</code></td><td>Silme tuşları</td></tr>
+                            <tr><td><code>SHIFT</code>, <code>CONTROL</code>, <code>ALT</code></td><td>Modifier tuşları</td></tr>
+                            <tr><td><code>ESCAPE</code></td><td>Esc tuşu</td></tr>
+                        </tbody>
+                    </table>
+
+                    <div id="editor3"></div>
+                </section>
+
+                <!-- Section: Keyboard Events -->
+                <section id="klavye-olaylari" class="mt-4">
+                    <h2>Klavye Olay Fonksiyonları</h2>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Fonksiyon</th>
+                                <th>Ne Zaman Çalışır?</th>
+                                <th>Örnek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>keyPressed()</code></td>
+                                <td>Tuşa basıldığında (1 kez)</td>
+                                <td><pre><code>function keyPressed() {
+  if (key == ' ') atla();
+}</code></pre></td>
+                            </tr>
+                            <tr>
+                                <td><code>keyReleased()</code></td>
+                                <td>Tuş bırakıldığında</td>
+                                <td><pre><code>function keyReleased() {
+  hiz = 0;
+}</code></pre></td>
+                            </tr>
+                            <tr>
+                                <td><code>keyTyped()</code></td>
+                                <td>Karakter tuşu yazıldığında (özel tuşlar hariç)</td>
+                                <td><pre><code>function keyTyped() {
+  metin += key;
+}</code></pre></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="editor4"></div>
+                </section>
+
+                <!-- Section: Practice Examples -->
+                <section id="ornekler" class="mt-4">
+                    <h2>Uygulama Örnekleri</h2>
+
+                    <h3>Örnek 1: Çizim Programı</h3>
+                    <p>Fare ile çizim yapın, tuşlarla renk değiştirin:</p>
+                    <div id="editor5"></div>
+
+                    <h3>Örnek 2: Basit Oyun Karakteri</h3>
+                    <p>Ok tuşlarıyla hareket eden karakter:</p>
+                    <div id="editor6"></div>
+
+                    <h3>Örnek 3: Buton Yapımı</h3>
+                    <p>Tıklanabilir buton:</p>
+                    <div id="editor7"></div>
+
+                    <h3>Örnek 4: Sürükle-Bırak</h3>
+                    <p>Nesneyi fare ile sürükleme:</p>
+                    <div id="editor8"></div>
+                </section>
+
+                <!-- Key Concepts Summary -->
+                <section class="mt-4">
+                    <h2>Temel Kavramlar Özeti</h2>
+
+                    <div class="card" style="background: rgba(0, 217, 255, 0.05);">
+                        <h4>Bu Derste Öğrendikleriniz</h4>
+                        <ul>
+                            <li><strong>mouseX, mouseY:</strong> Fare konumu</li>
+                            <li><strong>mouseIsPressed:</strong> Fare tuşu basılı mı</li>
+                            <li><strong>mousePressed():</strong> Tıklama olay fonksiyonu</li>
+                            <li><strong>keyIsPressed:</strong> Klavye tuşu basılı mı</li>
+                            <li><strong>key, keyCode:</strong> Basılan tuş bilgisi</li>
+                            <li><strong>keyPressed():</strong> Tuş basma olay fonksiyonu</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <section class="mt-4" style="display: flex; justify-content: space-between; padding: 2rem 0; border-top: 1px solid var(--border-color);">
+                    <a href="04-kosullar.html" class="btn btn-secondary">
+                        ← Önceki: Koşullar
+                    </a>
+                    <a href="06-donguler.html" class="btn btn-primary">
+                        Sonraki Ders: Döngüler →
+                    </a>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="../js/editor.js"></script>
+    <script src="../js/theme.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Örnek 1: Fare Değişkenleri
+            new P5CodeEditor('editor1', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Fareyi takip eden daire
+  fill(0, 200, 255);
+  noStroke();
+  circle(mouseX, mouseY, 50);
+  
+  // Önceki konumdan şimdiki konuma çizgi
+  stroke(255, 100, 100);
+  strokeWeight(3);
+  line(pmouseX, pmouseY, mouseX, mouseY);
+  
+  // Fare basılıyken farklı renk
+  if (mouseIsPressed) {
+    fill(255, 255, 0);
+    circle(mouseX, mouseY, 30);
+  }
+  
+  // Bilgi göster
+  fill(255);
+  noStroke();
+  textSize(14);
+  text("mouseX: " + mouseX, 20, 30);
+  text("mouseY: " + mouseY, 20, 50);
+  text("mouseIsPressed: " + mouseIsPressed, 20, 70);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 2: Fare Olayları (dizisiz basit versiyon)
+            new P5CodeEditor('editor2', {
+                initialCode: `// Fare olaylarını gösterme
+let mesaj = "Fareyi hareket ettirin!";
+let sonTikX = 200;
+let sonTikY = 200;
+let tikSayisi = 0;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Son tıklanan yerde bir daire göster
+  fill(100, 200, 255, 150);
+  noStroke();
+  circle(sonTikX, sonTikY, 60);
+  
+  // Fare konumunda küçük daire
+  fill(255, 100, 100);
+  circle(mouseX, mouseY, 20);
+  
+  // Mesaj
+  fill(255);
+  textSize(16);
+  textAlign(CENTER);
+  text(mesaj, width/2, 30);
+  text("Tıklama sayısı: " + tikSayisi, width/2, height - 20);
+  
+  // Fare koordinatları
+  textSize(12);
+  text("Fare: (" + mouseX + ", " + mouseY + ")", width/2, height - 40);
+}
+
+function mousePressed() {
+  // Tıklandığında
+  sonTikX = mouseX;
+  sonTikY = mouseY;
+  tikSayisi++;
+  mesaj = "Tıkladınız! (" + mouseX + ", " + mouseY + ")";
+}
+
+function mouseReleased() {
+  mesaj = "Bıraktınız!";
+}
+
+function mouseMoved() {
+  mesaj = "Fare hareket ediyor...";
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 3: Klavye
+            new P5CodeEditor('editor3', {
+                initialCode: `let x = 200;
+let y = 200;
+let hiz = 5;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Ok tuşlarıyla hareket
+  if (keyIsPressed) {
+    if (keyCode == LEFT_ARROW) x -= hiz;
+    if (keyCode == RIGHT_ARROW) x += hiz;
+    if (keyCode == UP_ARROW) y -= hiz;
+    if (keyCode == DOWN_ARROW) y += hiz;
+  }
+  
+  // Sınır kontrolü
+  x = constrain(x, 25, width - 25);
+  y = constrain(y, 25, height - 25);
+  
+  // Karakteri çiz
+  fill(0, 200, 255);
+  noStroke();
+  circle(x, y, 50);
+  
+  // Yüz
+  fill(255);
+  circle(x - 10, y - 5, 10);
+  circle(x + 10, y - 5, 10);
+  fill(0);
+  circle(x - 10, y - 5, 5);
+  circle(x + 10, y - 5, 5);
+  
+  // Talimatlar
+  fill(255);
+  textSize(14);
+  textAlign(CENTER);
+  text("Ok tuşlarıyla hareket edin", width/2, 30);
+  text("keyIsPressed: " + keyIsPressed, width/2, height - 20);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 4: Klavye Olayları
+            new P5CodeEditor('editor4', {
+                initialCode: `let yazilar = "";
+let arkaplanRenk = 30;
+
+function setup() {
+  createCanvas(400, 400);
+  textAlign(CENTER, CENTER);
+}
+
+function draw() {
+  background(arkaplanRenk);
+  
+  fill(255);
+  textSize(24);
+  text(yazilar, width/2, height/2);
+  
+  textSize(14);
+  text("Yazı yazmaya başlayın!", width/2, 30);
+  text("SPACE: Temizle | ENTER: Yeni satır", width/2, height - 30);
+}
+
+function keyPressed() {
+  if (keyCode == BACKSPACE) {
+    // Son karakteri sil
+    yazilar = yazilar.slice(0, -1);
+    return false;  // Tarayıcı davranışını engelle
+  }
+  
+  if (keyCode == ENTER || keyCode == RETURN) {
+    yazilar += "\\n";
+    return false;
+  }
+  
+  if (key == ' ') {
+    yazilar = "";
+    arkaplanRenk = random(20, 50);
+  }
+}
+
+function keyTyped() {
+  // Normal karakterler
+  if (key != ' ') {
+    yazilar += key;
+  }
+  return false;
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 5: Çizim Programı
+            new P5CodeEditor('editor5', {
+                initialCode: `// Renk değişkenleri (dizi yerine ayrı değişkenler)
+let renkR = 255;
+let renkG = 255;
+let renkB = 255;
+let kalinlik = 5;
+
+function setup() {
+  createCanvas(400, 400);
+  background(30);
+}
+
+function draw() {
+  // Fare basılıyken çiz
+  if (mouseIsPressed) {
+    stroke(renkR, renkG, renkB);
+    strokeWeight(kalinlik);
+    line(pmouseX, pmouseY, mouseX, mouseY);
+  }
+  
+  // Renk göstergesi
+  noStroke();
+  fill(renkR, renkG, renkB);
+  rect(10, 10, 30, 30);
+  
+  // Talimatlar
+  fill(255);
+  textSize(12);
+  text("R: Kırmızı | G: Yeşil | B: Mavi | W: Beyaz", 50, 25);
+  text("+ / - : Kalınlık (" + kalinlik + ") | C: Temizle", 50, 40);
+}
+
+function keyPressed() {
+  if (key == 'r' || key == 'R') { renkR = 255; renkG = 50; renkB = 50; }
+  if (key == 'g' || key == 'G') { renkR = 50; renkG = 255; renkB = 50; }
+  if (key == 'b' || key == 'B') { renkR = 50; renkG = 50; renkB = 255; }
+  if (key == 'w' || key == 'W') { renkR = 255; renkG = 255; renkB = 255; }
+  if (key == 'c' || key == 'C') background(30);
+  if (key == '+' || key == '=') kalinlik = min(kalinlik + 2, 30);
+  if (key == '-' || key == '_') kalinlik = max(kalinlik - 2, 1);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 6: Oyun Karakteri
+            new P5CodeEditor('editor6', {
+                initialCode: `let x = 200, y = 350;
+let hiz = 5;
+let zipla = 0;
+let yerCekimi = 0.5;
+let zemin = 350;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(135, 206, 235);
+  
+  // Zemin
+  fill(100, 180, 100);
+  noStroke();
+  rect(0, zemin + 25, width, height - zemin);
+  
+  // Hareket
+  if (keyIsPressed) {
+    if (keyCode == LEFT_ARROW) x -= hiz;
+    if (keyCode == RIGHT_ARROW) x += hiz;
+  }
+  
+  // Zıplama fiziği
+  y += zipla;
+  zipla += yerCekimi;
+  
+  if (y >= zemin) {
+    y = zemin;
+    zipla = 0;
+  }
+  
+  // Sınır
+  x = constrain(x, 25, width - 25);
+  
+  // Karakter (basit robot)
+  fill(100, 100, 200);
+  rect(x - 20, y - 50, 40, 50, 5);  // Gövde
+  
+  fill(150, 150, 220);
+  rect(x - 15, y - 70, 30, 25, 10);  // Kafa
+  
+  // Gözler
+  fill(255);
+  circle(x - 7, y - 62, 10);
+  circle(x + 7, y - 62, 10);
+  fill(0);
+  circle(x - 7, y - 62, 5);
+  circle(x + 7, y - 62, 5);
+  
+  // Bacaklar
+  fill(80, 80, 180);
+  rect(x - 15, y, 12, 15);
+  rect(x + 3, y, 12, 15);
+  
+  // Talimatlar
+  fill(50);
+  textSize(14);
+  textAlign(CENTER);
+  text("← → Ok tuşları | SPACE zıpla", width/2, 30);
+}
+
+function keyPressed() {
+  if (key == ' ' && y >= zemin) {
+    zipla = -12;  // Zıpla
+  }
+  // Ok tuşları ve space'in sayfa kaydırmasını engelle
+  if ([32, 37, 38, 39, 40].includes(keyCode)) {
+    return false;
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 7: Buton
+            new P5CodeEditor('editor7', {
+                initialCode: `let butonX = 150, butonY = 175;
+let butonW = 100, butonH = 50;
+let sayac = 0;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Fare butonun üzerinde mi?
+  let uzerinde = mouseX > butonX && mouseX < butonX + butonW &&
+                 mouseY > butonY && mouseY < butonY + butonH;
+  
+  // Buton
+  if (uzerinde) {
+    fill(80, 200, 80);  // Hover rengi
+    cursor(HAND);
+  } else {
+    fill(50, 150, 50);
+    cursor(ARROW);
+  }
+  
+  if (uzerinde && mouseIsPressed) {
+    fill(100, 255, 100);  // Tıklama rengi
+  }
+  
+  stroke(255);
+  strokeWeight(2);
+  rect(butonX, butonY, butonW, butonH, 10);
+  
+  // Buton metni
+  fill(255);
+  noStroke();
+  textSize(16);
+  textAlign(CENTER, CENTER);
+  text("Tıkla!", butonX + butonW/2, butonY + butonH/2);
+  
+  // Sayaç
+  textSize(48);
+  text(sayac, width/2, 100);
+  
+  textSize(14);
+  text("Butona tıklayarak sayacı artırın", width/2, height - 30);
+}
+
+function mousePressed() {
+  let uzerinde = mouseX > butonX && mouseX < butonX + butonW &&
+                 mouseY > butonY && mouseY < butonY + butonH;
+  
+  if (uzerinde) {
+    sayac++;
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 8: Sürükle Bırak (Basit - tek kutu)
+            new P5CodeEditor('editor8', {
+                initialCode: `// Tek kutu sürükle-bırak örneği
+// Dizi ve for kullanmadan
+
+let kutuX = 170;
+let kutuY = 170;
+let kutuW = 60;
+let kutuH = 60;
+
+let surukleniyor = false;
+let offsetX = 0;
+let offsetY = 0;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Kutuyu çiz
+  if (surukleniyor) {
+    fill(255, 200, 100);
+    stroke(255, 255, 0);
+    strokeWeight(3);
+  } else {
+    fill(100, 150, 255);
+    stroke(255);
+    strokeWeight(1);
+  }
+  rect(kutuX, kutuY, kutuW, kutuH, 8);
+  
+  // Talimat
+  fill(255);
+  noStroke();
+  textSize(14);
+  textAlign(CENTER);
+  text("Kutuyu sürükleyip bırakın!", width/2, 30);
+  
+  textSize(12);
+  text("Sürükleniyor: " + surukleniyor, width/2, height - 20);
+}
+
+function mousePressed() {
+  // Fare kutunun üzerinde mi?
+  if (mouseX > kutuX && mouseX < kutuX + kutuW &&
+      mouseY > kutuY && mouseY < kutuY + kutuH) {
+    surukleniyor = true;
+    // Offset: fare ile kutu köşesi arası mesafe
+    offsetX = mouseX - kutuX;
+    offsetY = mouseY - kutuY;
+  }
+}
+
+function mouseDragged() {
+  // Sürükleniyorsa kutuyu fareyle birlikte hareket ettir
+  if (surukleniyor) {
+    kutuX = mouseX - offsetX;
+    kutuY = mouseY - offsetY;
+  }
+}
+
+function mouseReleased() {
+  // Fare bırakıldığında sürüklemeyi durdur
+  surukleniyor = false;
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+        });
+    </script>
+</body>
+</html>

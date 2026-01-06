@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    
+    
+    <title>Ders 16: İleri - Vektörler - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                    <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                    <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                    <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                    <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                    <li><a href="16-ileri-vektorler.html" class="active">16. İleri: Vektörler</a></li>
+                    <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#vektor-nedir">Vektör Nedir?</a></li>
+                    <li><a href="#p5vector">p5.Vector Oluşturma</a></li>
+                    <li><a href="#islemler">Vektör İşlemleri</a></li>
+                    <li><a href="#hareket">Hareket ve Hız</a></li>
+                    <li><a href="#kuvvetler">Kuvvetler ve Fizik</a></li>
+                    <li><a href="#ornekler">Uygulama Örnekleri</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 16: İleri - Vektörler</h1>
+                <div class="lesson-meta">
+                    <span>📚 İleri Seviye</span>
+                    <span>⏱️ 60 dakika</span>
+                    <span>🎯 p5.Vector ile fizik simülasyonları</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: Vektör Nedir -->
+                <section id="vektor-nedir" class="lesson-section">
+                    <h2>📐 Vektör Nedir?</h2>
+                    
+                    <p>
+                        Vektör, hem <strong>büyüklük</strong> (magnitude) hem de <strong>yön</strong> (direction) 
+                        içeren matematiksel bir kavramdır. Programlamada vektörler genellikle iki veya üç boyutlu 
+                        koordinatları temsil eder.
+                    </p>
+                    
+                    <div class="info-box tip">
+                        <h4>💡 Neden Vektör Kullanmalıyız?</h4>
+                        <p>Şimdiye kadar pozisyon ve hız için ayrı x ve y değişkenleri kullandık:</p>
+                        <pre><code>let x = 100, y = 200;
+let hizX = 2, hizY = 3;</code></pre>
+                        <p>Vektörlerle bu daha temiz ve güçlü olur:</p>
+                        <pre><code>let pozisyon = createVector(100, 200);
+let hiz = createVector(2, 3);</code></pre>
+                    </div>
+                    
+                    <h3>Vektör vs Skaler</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Skaler (Sayı)</th>
+                                <th>Vektör</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sadece büyüklük</td>
+                                <td>Büyüklük + Yön</td>
+                            </tr>
+                            <tr>
+                                <td>Örnek: 5, 10.5, -3</td>
+                                <td>Örnek: (3, 4), (1, -2, 5)</td>
+                            </tr>
+                            <tr>
+                                <td>Sıcaklık, kütle, zaman</td>
+                                <td>Konum, hız, kuvvet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div id="editor-vektor-intro"></div>
+                </section>
+
+                <!-- Section: p5.Vector -->
+                <section id="p5vector" class="lesson-section">
+                    <h2>🎯 p5.Vector Oluşturma</h2>
+                    
+                    <p>p5.js'de vektör oluşturmanın farklı yolları:</p>
+                    
+                    <div class="code-box">
+                        <pre><code>// 1. createVector() ile (en yaygın)
+let v1 = createVector(100, 200);      // 2D vektör
+let v2 = createVector(10, 20, 30);    // 3D vektör
+
+// 2. p5.Vector.fromAngle() ile (açıdan)
+let v3 = p5.Vector.fromAngle(HALF_PI);  // 90° yönünde birim vektör
+
+// 3. p5.Vector.random2D() ile (rastgele yön)
+let v4 = p5.Vector.random2D();  // Rastgele yönde birim vektör
+
+// Vektör bileşenlerine erişim
+console.log(v1.x);  // 100
+console.log(v1.y);  // 200
+console.log(v1.z);  // 0 (varsayılan)</code></pre>
+                    </div>
+                    
+                    <h3>Önemli Vektör Özellikleri</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Özellik/Metod</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>v.x, v.y, v.z</code></td>
+                                <td>Vektör bileşenleri</td>
+                            </tr>
+                            <tr>
+                                <td><code>v.mag()</code></td>
+                                <td>Vektörün büyüklüğü (uzunluğu)</td>
+                            </tr>
+                            <tr>
+                                <td><code>v.heading()</code></td>
+                                <td>Vektörün açısı (radyan)</td>
+                            </tr>
+                            <tr>
+                                <td><code>v.copy()</code></td>
+                                <td>Vektörün kopyasını oluştur</td>
+                            </tr>
+                            <tr>
+                                <td><code>v.set(x, y)</code></td>
+                                <td>Vektör değerlerini ayarla</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div id="editor-vektor-create"></div>
+                </section>
+
+                <!-- Section: İşlemler -->
+                <section id="islemler" class="lesson-section">
+                    <h2>➕ Vektör İşlemleri</h2>
+                    
+                    <p>
+                        p5.Vector, matematiksel işlemleri kolaylaştıran birçok metod sunar:
+                    </p>
+                    
+                    <h3>Temel İşlemler</h3>
+                    <div class="code-box">
+                        <pre><code>let a = createVector(3, 4);
+let b = createVector(1, 2);
+
+// Toplama: a = a + b
+a.add(b);           // a şimdi (4, 6)
+
+// Çıkarma: a = a - b
+a.sub(b);           // a şimdi (3, 4) geri döndü
+
+// Skaler çarpma: a = a * 2
+a.mult(2);          // a şimdi (6, 8)
+
+// Skaler bölme: a = a / 2
+a.div(2);           // a şimdi (3, 4) geri döndü</code></pre>
+                    </div>
+                    
+                    <div class="info-box warning">
+                        <h4>⚠️ Önemli: Orijinali Değiştirme</h4>
+                        <p>
+                            <code>add()</code>, <code>sub()</code>, <code>mult()</code>, <code>div()</code> 
+                            metodları orijinal vektörü değiştirir! Orijinali korumak için önce kopyalayın:
+                        </p>
+                        <pre><code>let sonuc = a.copy().add(b);  // a değişmez</code></pre>
+                    </div>
+                    
+                    <h3>Normalize ve Limit</h3>
+                    <div class="code-box">
+                        <pre><code>let v = createVector(3, 4);
+
+// Normalize: Yönü koru, büyüklüğü 1 yap
+v.normalize();      // Şimdi büyüklük 1
+
+// setMag: Belirli büyüklüğe ayarla
+v.setMag(10);       // Şimdi büyüklük 10
+
+// limit: Maksimum büyüklük sınırla
+v.limit(5);         // Büyüklük en fazla 5 olur</code></pre>
+                    </div>
+                    
+                    <h3>Statik Metodlar</h3>
+                    <div class="code-box">
+                        <pre><code>let a = createVector(3, 4);
+let b = createVector(1, 2);
+
+// Orijinalleri değiştirmeden işlem yap
+let toplam = p5.Vector.add(a, b);     // Yeni vektör (4, 6)
+let fark = p5.Vector.sub(a, b);       // Yeni vektör (2, 2)
+
+// Mesafe hesapla
+let mesafe = p5.Vector.dist(a, b);
+
+// İki vektör arasındaki açı
+let aci = a.angleBetween(b);</code></pre>
+                    </div>
+                    
+                    <div id="editor-vektor-ops"></div>
+                </section>
+
+                <!-- Section: Hareket -->
+                <section id="hareket" class="lesson-section">
+                    <h2>🏃 Hareket ve Hız</h2>
+                    
+                    <p>
+                        Vektörler hareket simülasyonu için idealdir. Temel formül:
+                    </p>
+                    
+                    <div class="code-box">
+                        <pre><code>// Her frame'de:
+pozisyon.add(hiz);          // Pozisyon = Pozisyon + Hız
+hiz.add(ivme);              // Hız = Hız + İvme</code></pre>
+                    </div>
+                    
+                    <h3>Basit Hareket Modeli</h3>
+                    <div class="code-box">
+                        <pre><code>let pozisyon;
+let hiz;
+let ivme;
+
+function setup() {
+  pozisyon = createVector(width/2, height/2);
+  hiz = createVector(0, 0);
+  ivme = createVector(0, 0);
+}
+
+function draw() {
+  // Fareye doğru ivme (çekim)
+  let fare = createVector(mouseX, mouseY);
+  ivme = p5.Vector.sub(fare, pozisyon);
+  ivme.setMag(0.5);  // İvme büyüklüğü
+  
+  // Fiziği uygula
+  hiz.add(ivme);
+  hiz.limit(10);     // Maksimum hız
+  pozisyon.add(hiz);
+  
+  // Çiz
+  circle(pozisyon.x, pozisyon.y, 20);
+}</code></pre>
+                    </div>
+                    
+                    <div id="editor-hareket"></div>
+                </section>
+
+                <!-- Section: Kuvvetler -->
+                <section id="kuvvetler" class="lesson-section">
+                    <h2>⚡ Kuvvetler ve Fizik</h2>
+                    
+                    <p>
+                        Newton'un ikinci yasası: <strong>F = m × a</strong> (Kuvvet = Kütle × İvme)
+                    </p>
+                    <p>
+                        Bunu tersine çevirirsek: <strong>a = F / m</strong> (İvme = Kuvvet / Kütle)
+                    </p>
+                    
+                    <h3>Kuvvet Uygulama</h3>
+                    <div class="code-box">
+                        <pre><code>class Parcacik {
+  constructor(x, y, kutle) {
+    this.pozisyon = createVector(x, y);
+    this.hiz = createVector(0, 0);
+    this.ivme = createVector(0, 0);
+    this.kutle = kutle;
+  }
+  
+  // Newton: a = F / m
+  kuvvetUygula(kuvvet) {
+    let ivmeKatkisi = p5.Vector.div(kuvvet, this.kutle);
+    this.ivme.add(ivmeKatkisi);
+  }
+  
+  guncelle() {
+    this.hiz.add(this.ivme);
+    this.pozisyon.add(this.hiz);
+    this.ivme.mult(0);  // İvmeyi sıfırla (her frame yeniden hesaplanır)
+  }
+}</code></pre>
+                    </div>
+                    
+                    <h3>Yaygın Kuvvetler</h3>
+                    <div class="code-box">
+                        <pre><code>// Yerçekimi (sabit, aşağı doğru)
+let yercekimi = createVector(0, 0.5);
+
+// Rüzgar (yatay)
+let ruzgar = createVector(0.1, 0);
+
+// Sürtünme (harekete zıt yönde)
+let surrtunme = hiz.copy();
+surrtunme.mult(-1);
+surrtunme.normalize();
+surrtunme.mult(c);  // c: sürtünme katsayısı
+
+// Çekim kuvveti (iki nesne arasında)
+let yon = p5.Vector.sub(hedef.pozisyon, kaynak.pozisyon);
+let mesafe = yon.mag();
+let kuvvetBuyuklugu = (G * m1 * m2) / (mesafe * mesafe);
+yon.setMag(kuvvetBuyuklugu);</code></pre>
+                    </div>
+                    
+                    <div id="editor-kuvvetler"></div>
+                </section>
+
+                <!-- Section: Örnekler -->
+                <section id="ornekler" class="lesson-section">
+                    <h2>🎯 Uygulama Örnekleri</h2>
+                    
+                    <h3>Zıplayan Toplar</h3>
+                    <p>Yerçekimi ve duvar çarpışması:</p>
+                    <div id="editor-toplar"></div>
+                    
+                    <h3>Fareyi Takip Eden Sürü</h3>
+                    <p>Boids benzeri davranış:</p>
+                    <div id="editor-suru"></div>
+                    
+                    <h3>Yörünge Simülasyonu</h3>
+                    <p>Kütle çekimi ile gezegen hareketi:</p>
+                    <div id="editor-yorunge"></div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-nav">
+                    <a href="15-ileri-responsive.html" class="btn">← Önceki Ders</a>
+                    <a href="17-ileri-trigonometri.html" class="btn btn-primary">Sonraki Ders →</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+    <script src="../js/editor.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Vektör intro
+            new P5CodeEditor('editor-vektor-intro', {
+                initialCode: `// Vektör Görselleştirme
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  translate(width/2, height/2);
+  
+  // Fare pozisyonu vektörü
+  let fare = createVector(mouseX - width/2, mouseY - height/2);
+  
+  // Vektörü çiz (ok olarak)
+  stroke(100, 200, 255);
+  strokeWeight(3);
+  line(0, 0, fare.x, fare.y);
+  
+  // Ok ucu
+  push();
+  translate(fare.x, fare.y);
+  rotate(fare.heading());
+  fill(100, 200, 255);
+  noStroke();
+  triangle(0, 0, -15, -7, -15, 7);
+  pop();
+  
+  // Bileşenleri göster (x ve y)
+  stroke(255, 100, 100);
+  strokeWeight(2);
+  line(0, 0, fare.x, 0);  // X bileşeni
+  
+  stroke(100, 255, 100);
+  line(fare.x, 0, fare.x, fare.y);  // Y bileşeni
+  
+  // Merkez noktası
+  fill(255);
+  noStroke();
+  circle(0, 0, 10);
+  
+  // Bilgi
+  resetMatrix();
+  fill(255);
+  textSize(14);
+  textAlign(LEFT);
+  text("Vektör: (" + int(fare.x) + ", " + int(fare.y) + ")", 20, 30);
+  text("Büyüklük: " + fare.mag().toFixed(1), 20, 50);
+  text("Açı: " + degrees(fare.heading()).toFixed(1) + "°", 20, 70);
+  
+  fill(255, 100, 100);
+  text("X bileşeni: " + int(fare.x), 20, 100);
+  fill(100, 255, 100);
+  text("Y bileşeni: " + int(fare.y), 20, 120);
+  
+  fill(200);
+  textSize(12);
+  text("Fareyi hareket ettirin", 20, height - 20);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Vektör oluşturma
+            new P5CodeEditor('editor-vektor-create', {
+                initialCode: `// Farklı Vektör Oluşturma Yöntemleri
+
+let v1, v2, v3, v4;
+
+function setup() {
+  createCanvas(400, 400);
+  angleMode(DEGREES);
+  
+  // 1. Direkt koordinatlar
+  v1 = createVector(100, 0);
+  
+  // 2. Açıdan oluştur (0° = sağ)
+  v2 = p5.Vector.fromAngle(radians(45));
+  v2.mult(100);  // Büyüklüğü ayarla
+  
+  // 3. Rastgele yön
+  v3 = p5.Vector.random2D();
+  v3.mult(100);
+}
+
+function draw() {
+  background(30);
+  translate(width/2, height/2);
+  
+  // Yardımcı daireler
+  noFill();
+  stroke(50);
+  circle(0, 0, 200);
+  circle(0, 0, 100);
+  
+  // Merkez
+  fill(255);
+  noStroke();
+  circle(0, 0, 8);
+  
+  // v1: Sabit vektör (kırmızı)
+  vektorCiz(v1, color(255, 100, 100), "v1 (sabit)");
+  
+  // v2: Açıdan oluşturulan (yeşil)
+  vektorCiz(v2, color(100, 255, 100), "v2 (45°)");
+  
+  // v3: Rastgele (mavi) - fareyle yenile
+  vektorCiz(v3, color(100, 100, 255), "v3 (rastgele)");
+  
+  // v4: Fareye doğru (sarı)
+  v4 = createVector(mouseX - width/2, mouseY - height/2);
+  v4.limit(100);  // Maksimum 100 piksel
+  vektorCiz(v4, color(255, 255, 100), "v4 (fare)");
+  
+  // Bilgi
+  resetMatrix();
+  fill(255);
+  textSize(12);
+  textAlign(LEFT);
+  text("Tıklayınca v3 (rastgele) yenilenir", 20, height - 20);
+}
+
+function vektorCiz(v, renk, etiket) {
+  // Ok gövdesi
+  stroke(renk);
+  strokeWeight(3);
+  line(0, 0, v.x, v.y);
+  
+  // Ok ucu
+  push();
+  translate(v.x, v.y);
+  rotate(v.heading());
+  fill(renk);
+  noStroke();
+  triangle(0, 0, -12, -5, -12, 5);
+  pop();
+  
+  // Etiket
+  fill(renk);
+  noStroke();
+  textSize(10);
+  textAlign(CENTER);
+  text(etiket, v.x * 0.6, v.y * 0.6 - 10);
+}
+
+function mousePressed() {
+  // Rastgele vektörü yenile
+  v3 = p5.Vector.random2D();
+  v3.mult(100);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Vektör işlemleri
+            new P5CodeEditor('editor-vektor-ops', {
+                initialCode: `// Vektör İşlemleri Görselleştirmesi
+
+let a, b;
+let islem = "add";
+
+function setup() {
+  createCanvas(400, 400);
+  a = createVector(80, -40);
+  b = createVector(40, 60);
+}
+
+function draw() {
+  background(30);
+  translate(width/2, height/2);
+  
+  // Izgara
+  stroke(40);
+  for (let i = -200; i <= 200; i += 50) {
+    line(i, -200, i, 200);
+    line(-200, i, 200, i);
+  }
+  
+  // Eksenler
+  stroke(80);
+  strokeWeight(1);
+  line(-200, 0, 200, 0);
+  line(0, -200, 0, 200);
+  
+  // Vektör A (kırmızı)
+  vektorCiz(a, color(255, 100, 100), "A");
+  
+  // Vektör B (mavi)
+  vektorCiz(b, color(100, 100, 255), "B");
+  
+  // Sonuç vektörü (yeşil)
+  let sonuc;
+  let aciklama = "";
+  
+  if (islem === "add") {
+    sonuc = p5.Vector.add(a, b);
+    aciklama = "A + B = Toplama";
+    // B'yi A'nın ucundan başlat (görsel)
+    stroke(100, 100, 255, 150);
+    strokeWeight(2);
+    line(a.x, a.y, a.x + b.x, a.y + b.y);
+  } else if (islem === "sub") {
+    sonuc = p5.Vector.sub(a, b);
+    aciklama = "A - B = Çıkarma";
+  } else if (islem === "mult") {
+    sonuc = a.copy().mult(2);
+    aciklama = "A × 2 = Skaler Çarpma";
+  } else if (islem === "norm") {
+    sonuc = a.copy().normalize().mult(100);
+    aciklama = "normalize(A) = Birim Vektör (×100)";
+  }
+  
+  vektorCiz(sonuc, color(100, 255, 100), "Sonuç");
+  
+  // Butonlar
+  resetMatrix();
+  
+  let butonlar = [
+    {islem: "add", metin: "A + B"},
+    {islem: "sub", metin: "A - B"},
+    {islem: "mult", metin: "A × 2"},
+    {islem: "norm", metin: "Normalize"}
+  ];
+  
+  for (let i = 0; i < butonlar.length; i++) {
+    let x = 20 + i * 95;
+    fill(butonlar[i].islem === islem ? color(100, 200, 100) : color(80));
+    noStroke();
+    rect(x, 10, 85, 30, 5);
+    
+    fill(255);
+    textSize(12);
+    textAlign(CENTER, CENTER);
+    text(butonlar[i].metin, x + 42, 25);
+  }
+  
+  // Bilgiler
+  fill(255);
+  textAlign(LEFT);
+  textSize(12);
+  text(aciklama, 20, 60);
+  
+  fill(255, 100, 100);
+  text("A = (" + int(a.x) + ", " + int(a.y) + ")", 20, height - 50);
+  fill(100, 100, 255);
+  text("B = (" + int(b.x) + ", " + int(b.y) + ")", 20, height - 35);
+  fill(100, 255, 100);
+  text("Sonuç = (" + int(sonuc.x) + ", " + int(sonuc.y) + ")", 20, height - 20);
+}
+
+function vektorCiz(v, renk, etiket) {
+  stroke(renk);
+  strokeWeight(3);
+  line(0, 0, v.x, v.y);
+  
+  push();
+  translate(v.x, v.y);
+  rotate(v.heading());
+  fill(renk);
+  noStroke();
+  triangle(0, 0, -12, -5, -12, 5);
+  pop();
+}
+
+function mousePressed() {
+  if (mouseY < 50) {
+    if (mouseX < 115) islem = "add";
+    else if (mouseX < 210) islem = "sub";
+    else if (mouseX < 305) islem = "mult";
+    else if (mouseX < 400) islem = "norm";
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Hareket örneği
+            new P5CodeEditor('editor-hareket', {
+                initialCode: `// Vektörlerle Hareket
+
+let pozisyon;
+let hiz;
+let ivme;
+
+function setup() {
+  createCanvas(400, 400);
+  pozisyon = createVector(width/2, height/2);
+  hiz = createVector(0, 0);
+  ivme = createVector(0, 0);
+}
+
+function draw() {
+  background(30, 30);
+  
+  // Fareye doğru ivme hesapla
+  let fare = createVector(mouseX, mouseY);
+  
+  // Yön = Fare - Pozisyon
+  ivme = p5.Vector.sub(fare, pozisyon);
+  
+  // İvme büyüklüğünü ayarla
+  ivme.setMag(0.5);
+  
+  // Fizik güncellemesi
+  hiz.add(ivme);      // Hız = Hız + İvme
+  hiz.limit(8);       // Maksimum hız
+  pozisyon.add(hiz);  // Pozisyon = Pozisyon + Hız
+  
+  // Iz çiz
+  stroke(100, 200, 255, 100);
+  strokeWeight(2);
+  line(pozisyon.x, pozisyon.y, 
+       pozisyon.x - hiz.x * 5, pozisyon.y - hiz.y * 5);
+  
+  // Nesneyi çiz
+  fill(100, 200, 255);
+  noStroke();
+  
+  // Hareket yönüne göre döndür
+  push();
+  translate(pozisyon.x, pozisyon.y);
+  rotate(hiz.heading());
+  
+  // Üçgen (ok şekli)
+  triangle(15, 0, -10, -10, -10, 10);
+  pop();
+  
+  // Hedef (fare)
+  fill(255, 100, 100);
+  circle(mouseX, mouseY, 15);
+  
+  // Bilgiler
+  fill(255);
+  textSize(12);
+  textAlign(LEFT);
+  text("Pozisyon: (" + int(pozisyon.x) + ", " + int(pozisyon.y) + ")", 20, 30);
+  text("Hız: (" + hiz.x.toFixed(1) + ", " + hiz.y.toFixed(1) + ")", 20, 50);
+  text("Hız büyüklüğü: " + hiz.mag().toFixed(1), 20, 70);
+  
+  textAlign(CENTER);
+  text("Fareyi hareket ettirin", width/2, height - 20);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Kuvvetler örneği
+            new P5CodeEditor('editor-kuvvetler', {
+                initialCode: `// Kuvvetler ve Fizik Simülasyonu
+
+class Parcacik {
+  constructor(x, y, kutle) {
+    this.pozisyon = createVector(x, y);
+    this.hiz = createVector(0, 0);
+    this.ivme = createVector(0, 0);
+    this.kutle = kutle;
+    this.yaricap = kutle * 5;
+  }
+  
+  // Newton: a = F / m
+  kuvvetUygula(kuvvet) {
+    let f = p5.Vector.div(kuvvet, this.kutle);
+    this.ivme.add(f);
+  }
+  
+  guncelle() {
+    this.hiz.add(this.ivme);
+    this.pozisyon.add(this.hiz);
+    this.ivme.mult(0);  // Her frame sıfırla
+    
+    // Duvar çarpışması
+    if (this.pozisyon.x < this.yaricap) {
+      this.pozisyon.x = this.yaricap;
+      this.hiz.x *= -0.8;
+    }
+    if (this.pozisyon.x > width - this.yaricap) {
+      this.pozisyon.x = width - this.yaricap;
+      this.hiz.x *= -0.8;
+    }
+    if (this.pozisyon.y > height - this.yaricap) {
+      this.pozisyon.y = height - this.yaricap;
+      this.hiz.y *= -0.8;
+    }
+  }
+  
+  goster() {
+    fill(100, 200, 255);
+    noStroke();
+    circle(this.pozisyon.x, this.pozisyon.y, this.yaricap * 2);
+    
+    // Kütle etiketi
+    fill(0);
+    textAlign(CENTER, CENTER);
+    textSize(10);
+    text(this.kutle, this.pozisyon.x, this.pozisyon.y);
+  }
+}
+
+let parcaciklar = [];
+let yercekimi;
+let ruzgar;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // Farklı kütlelerde parçacıklar
+  parcaciklar.push(new Parcacik(100, 50, 2));
+  parcaciklar.push(new Parcacik(200, 50, 4));
+  parcaciklar.push(new Parcacik(300, 50, 6));
+  
+  yercekimi = createVector(0, 0.3);
+  ruzgar = createVector(0, 0);
+}
+
+function draw() {
+  background(30);
+  
+  // Fare basılıysa rüzgar
+  if (mouseIsPressed) {
+    ruzgar = createVector(0.2, 0);
+  } else {
+    ruzgar.mult(0);
+  }
+  
+  for (let p of parcaciklar) {
+    // Yerçekimi (kütle ile orantılı - gerçekçi)
+    let yercekimiKuvveti = p5.Vector.mult(yercekimi, p.kutle);
+    p.kuvvetUygula(yercekimiKuvveti);
+    
+    // Rüzgar (tüm nesnelere eşit)
+    p.kuvvetUygula(ruzgar);
+    
+    p.guncelle();
+    p.goster();
+  }
+  
+  // Rüzgar göstergesi
+  if (ruzgar.mag() > 0) {
+    stroke(255, 200, 100);
+    strokeWeight(3);
+    for (let y = 100; y < height; y += 50) {
+      line(10, y, 30, y);
+      triangle(30, y, 25, y - 5, 25, y + 5);
+    }
+  }
+  
+  // Bilgi
+  fill(255);
+  textSize(12);
+  textAlign(LEFT);
+  text("Yerçekimi: " + yercekimi.y, 20, 30);
+  text("Fare basılı = Rüzgar", 20, 50);
+  text("Daha ağır nesneler daha hızlı düşer", 20, height - 20);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Zıplayan toplar
+            new P5CodeEditor('editor-toplar', {
+                initialCode: `// Zıplayan Toplar
+
+class Top {
+  constructor(x, y) {
+    this.pozisyon = createVector(x, y);
+    this.hiz = createVector(random(-3, 3), random(-2, 2));
+    this.yaricap = random(15, 30);
+    this.renk = color(random(150, 255), random(150, 255), random(150, 255));
+  }
+  
+  kuvvetUygula(kuvvet) {
+    this.hiz.add(kuvvet);
+  }
+  
+  guncelle() {
+    // Yerçekimi
+    let yercekimi = createVector(0, 0.4);
+    this.kuvvetUygula(yercekimi);
+    
+    // Hareket
+    this.pozisyon.add(this.hiz);
+    
+    // Duvar çarpışması
+    if (this.pozisyon.x - this.yaricap < 0) {
+      this.pozisyon.x = this.yaricap;
+      this.hiz.x *= -0.9;
+    }
+    if (this.pozisyon.x + this.yaricap > width) {
+      this.pozisyon.x = width - this.yaricap;
+      this.hiz.x *= -0.9;
+    }
+    if (this.pozisyon.y + this.yaricap > height) {
+      this.pozisyon.y = height - this.yaricap;
+      this.hiz.y *= -0.9;  // Enerji kaybı
+      
+      // Sürtünme
+      this.hiz.x *= 0.99;
+    }
+    if (this.pozisyon.y - this.yaricap < 0) {
+      this.pozisyon.y = this.yaricap;
+      this.hiz.y *= -0.9;
+    }
+  }
+  
+  goster() {
+    fill(this.renk);
+    noStroke();
+    circle(this.pozisyon.x, this.pozisyon.y, this.yaricap * 2);
+  }
+}
+
+let toplar = [];
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  for (let top of toplar) {
+    top.guncelle();
+    top.goster();
+  }
+  
+  // Bilgi
+  fill(255);
+  textSize(12);
+  text("Top sayısı: " + toplar.length, 20, 30);
+  text("Tıklayarak top ekleyin", 20, height - 20);
+}
+
+function mousePressed() {
+  toplar.push(new Top(mouseX, mouseY));
+  
+  // Çok fazla top varsa eski olanları sil
+  if (toplar.length > 20) {
+    toplar.shift();
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Sürü davranışı
+            new P5CodeEditor('editor-suru', {
+                initialCode: `// Fareyi Takip Eden Sürü
+
+class Boid {
+  constructor(x, y) {
+    this.pozisyon = createVector(x, y);
+    this.hiz = p5.Vector.random2D();
+    this.hiz.mult(random(2, 4));
+    this.maxHiz = 4;
+    this.maxKuvvet = 0.1;
+  }
+  
+  takipEt(hedef) {
+    // İstenen yön
+    let istenen = p5.Vector.sub(hedef, this.pozisyon);
+    istenen.setMag(this.maxHiz);
+    
+    // Yönlendirme = İstenen - Mevcut
+    let yonlendirme = p5.Vector.sub(istenen, this.hiz);
+    yonlendirme.limit(this.maxKuvvet);
+    
+    return yonlendirme;
+  }
+  
+  guncelle(hedef) {
+    let kuvvet = this.takipEt(hedef);
+    this.hiz.add(kuvvet);
+    this.hiz.limit(this.maxHiz);
+    this.pozisyon.add(this.hiz);
+    
+    // Kenarlardan geçiş
+    if (this.pozisyon.x < 0) this.pozisyon.x = width;
+    if (this.pozisyon.x > width) this.pozisyon.x = 0;
+    if (this.pozisyon.y < 0) this.pozisyon.y = height;
+    if (this.pozisyon.y > height) this.pozisyon.y = 0;
+  }
+  
+  goster() {
+    push();
+    translate(this.pozisyon.x, this.pozisyon.y);
+    rotate(this.hiz.heading());
+    
+    // Üçgen şeklinde kuş
+    fill(100, 200, 255);
+    noStroke();
+    triangle(10, 0, -8, -5, -8, 5);
+    pop();
+  }
+}
+
+let suru = [];
+
+function setup() {
+  createCanvas(400, 400);
+  
+  for (let i = 0; i < 30; i++) {
+    suru.push(new Boid(random(width), random(height)));
+  }
+}
+
+function draw() {
+  background(30);
+  
+  let hedef = createVector(mouseX, mouseY);
+  
+  // Hedefi göster
+  fill(255, 100, 100);
+  noStroke();
+  circle(hedef.x, hedef.y, 20);
+  
+  for (let boid of suru) {
+    boid.guncelle(hedef);
+    boid.goster();
+  }
+  
+  fill(255);
+  textSize(12);
+  text("Sürü boyutu: " + suru.length, 20, 30);
+  text("Fareyi hareket ettirin", 20, height - 20);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Yörünge simülasyonu
+            new P5CodeEditor('editor-yorunge', {
+                initialCode: `// Yörünge Simülasyonu (Kütle Çekimi)
+
+let gunes;
+let gezegenler = [];
+let G = 0.5;  // Yerçekimi sabiti
+
+class GokcCismi {
+  constructor(x, y, kutle, hizX, hizY, renk) {
+    this.pozisyon = createVector(x, y);
+    this.hiz = createVector(hizX, hizY);
+    this.kutle = kutle;
+    this.yaricap = sqrt(kutle) * 2;
+    this.renk = renk;
+    this.iz = [];
+  }
+  
+  cekimKuvveti(diger) {
+    // Yön vektörü
+    let kuvvet = p5.Vector.sub(diger.pozisyon, this.pozisyon);
+    let mesafe = constrain(kuvvet.mag(), 20, 200);
+    
+    // Newton kütle çekimi: F = G * m1 * m2 / r²
+    let buyukluk = (G * this.kutle * diger.kutle) / (mesafe * mesafe);
+    
+    kuvvet.setMag(buyukluk);
+    return kuvvet;
+  }
+  
+  guncelle(cekici) {
+    // Güneşe doğru çekim
+    let kuvvet = this.cekimKuvveti(cekici);
+    let ivme = p5.Vector.div(kuvvet, this.kutle);
+    this.hiz.add(ivme);
+    this.pozisyon.add(this.hiz);
+    
+    // İz kaydet
+    this.iz.push(this.pozisyon.copy());
+    if (this.iz.length > 100) this.iz.shift();
+  }
+  
+  goster() {
+    // İz çiz
+    noFill();
+    stroke(red(this.renk), green(this.renk), blue(this.renk), 100);
+    strokeWeight(1);
+    beginShape();
+    for (let p of this.iz) {
+      vertex(p.x, p.y);
+    }
+    endShape();
+    
+    // Gezegen
+    fill(this.renk);
+    noStroke();
+    circle(this.pozisyon.x, this.pozisyon.y, this.yaricap * 2);
+  }
+}
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // Güneş (merkez, sabit)
+  gunes = new GokcCismi(width/2, height/2, 500, 0, 0, color(255, 200, 50));
+  
+  // Gezegenler
+  gezegenler.push(new GokcCismi(width/2 + 80, height/2, 5, 0, 3, color(100, 150, 255)));
+  gezegenler.push(new GokcCismi(width/2 + 130, height/2, 8, 0, 2.3, color(255, 150, 100)));
+  gezegenler.push(new GokcCismi(width/2 + 180, height/2, 3, 0, 1.8, color(150, 255, 150)));
+}
+
+function draw() {
+  background(10, 10, 30);
+  
+  // Güneş
+  fill(gunes.renk);
+  noStroke();
+  circle(gunes.pozisyon.x, gunes.pozisyon.y, gunes.yaricap * 2);
+  
+  // Işık efekti
+  for (let i = 0; i < 3; i++) {
+    fill(255, 200, 50, 30 - i * 10);
+    circle(gunes.pozisyon.x, gunes.pozisyon.y, gunes.yaricap * 2 + i * 20);
+  }
+  
+  // Gezegenler
+  for (let gezegen of gezegenler) {
+    gezegen.guncelle(gunes);
+    gezegen.goster();
+  }
+  
+  // Bilgi
+  fill(255);
+  textSize(12);
+  text("Kütle Çekimi Simülasyonu", 20, 30);
+  text("Tıklayınca yeni gezegen ekle", 20, height - 20);
+}
+
+function mousePressed() {
+  // Güneşe göre başlangıç hızı hesapla
+  let mesafe = dist(mouseX, mouseY, width/2, height/2);
+  let hiz = sqrt(G * gunes.kutle / mesafe) * 0.8;
+  
+  // Teğetsel yön
+  let yon = createVector(mouseX - width/2, mouseY - height/2);
+  yon.rotate(HALF_PI);
+  yon.setMag(hiz);
+  
+  let renk = color(random(150, 255), random(150, 255), random(150, 255));
+  gezegenler.push(new GokcCismi(mouseX, mouseY, random(2, 10), yon.x, yon.y, renk));
+  
+  if (gezegenler.length > 10) gezegenler.shift();
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="text-align: center; padding: 1.5rem 0;">
+                <p style="margin: 0;">İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="../js/theme.js"></script>
+</body>
+</html>

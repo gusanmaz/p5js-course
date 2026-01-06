@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    
+    <title>Ders 11: Stringler (Metinler) - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html" class="active">11. Stringler</a></li>
+                    <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                    <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                    <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                    <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                    <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                    <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#nedir">String Nedir?</a></li>
+                    <li><a href="#erisim">Karakterlere Erişim</a></li>
+                    <li><a href="#metodlar">String Metodları</a></li>
+                    <li><a href="#karsilastirma">Karşılaştırma</a></li>
+                    <li><a href="#dongu">Döngü ile Harfler</a></li>
+                    <li><a href="#p5js">p5.js ile Kullanım</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 11: Stringler (Metinler)</h1>
+                <div class="lesson-meta">
+                    <span>📚 Orta Seviye</span>
+                    <span>⏱️ 45 dakika</span>
+                    <span>🎯 Metin işleme ve karakter dizileri</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: String Nedir? -->
+                <section id="nedir" class="lesson-section">
+                    <h2>📝 String Nedir?</h2>
+                    
+                    <p>
+                        <strong>String</strong>, programlamada metinleri temsil eden veri tipidir. 
+                        Türkçe'de "karakter dizisi" veya "metin" olarak da adlandırılır.
+                    </p>
+                    
+                    <div class="info-box">
+                        <h4>🔤 String = Karakter Dizisi</h4>
+                        <p>
+                            String aslında <strong>karakterlerin sıralı bir dizisidir</strong>. 
+                            "Merhaba" stringi 7 karakterden oluşur: 'M', 'e', 'r', 'h', 'a', 'b', 'a'.
+                            Her karakterin bir <strong>indeks</strong> (sıra numarası) vardır ve indeksler <strong>0'dan başlar</strong>.
+                        </p>
+                    </div>
+                    
+                    <h3>String Oluşturma Yolları</h3>
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>📝</span>
+                            <h4>Üç Farklı Tırnak Türü</h4>
+                        </div>
+                        <pre><code>// 1. Tek tırnak (')
+let isim = 'Ahmet';
+
+// 2. Çift tırnak (")
+let soyisim = "Yılmaz";
+
+// 3. Backtick (`) - Template Literal
+let mesaj = `Merhaba ${isim}!`;  // Değişken gömebilirsin!
+
+// Hepsi aynı sonucu verir:
+let s1 = 'Merhaba';
+let s2 = "Merhaba";
+let s3 = `Merhaba`;
+console.log(s1 === s2);  // true
+console.log(s2 === s3);  // true</code></pre>
+                    </div>
+                    
+                    <div class="info-box tip">
+                        <h4>💡 Hangisini Kullanmalı?</h4>
+                        <ul>
+                            <li><strong>Tek tırnak:</strong> Basit metinler için (en yaygın)</li>
+                            <li><strong>Çift tırnak:</strong> İçinde tek tırnak varsa: <code>"It's working!"</code></li>
+                            <li><strong>Backtick:</strong> Değişken gömmek veya çok satırlı metin için</li>
+                        </ul>
+                    </div>
+                    
+                    <h3>String Uzunluğu: .length</h3>
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>📏</span>
+                            <h4>Kaç Karakter Var?</h4>
+                        </div>
+                        <pre><code>let metin = "Merhaba";
+console.log(metin.length);  // 7
+
+let bosluklu = "Merhaba Dünya";
+console.log(bosluklu.length);  // 13 (boşluk da sayılır!)
+
+let bos = "";
+console.log(bos.length);  // 0</code></pre>
+                    </div>
+                    
+                    <div id="editor-string-temel"></div>
+                </section>
+
+                <!-- Section: Karakterlere Erişim -->
+                <section id="erisim" class="lesson-section">
+                    <h2>🔍 Karakterlere Erişim</h2>
+                    
+                    <p>
+                        String içindeki her karaktere <strong>indeks numarası</strong> ile erişebilirsin.
+                        İndeksler <strong>0'dan başlar</strong>!
+                    </p>
+                    
+                    <h3>📊 String İndeks Tablosu</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Karakter</th>
+                                <th>M</th>
+                                <th>e</th>
+                                <th>r</th>
+                                <th>h</th>
+                                <th>a</th>
+                                <th>b</th>
+                                <th>a</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>İndeks</strong></td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>3</td>
+                                <td>4</td>
+                                <td>5</td>
+                                <td>6</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sondan</strong></td>
+                                <td>-7</td>
+                                <td>-6</td>
+                                <td>-5</td>
+                                <td>-4</td>
+                                <td>-3</td>
+                                <td>-2</td>
+                                <td>-1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>🎯</span>
+                            <h4>Karaktere Erişim Yöntemleri</h4>
+                        </div>
+                        <pre><code>let metin = "Merhaba";
+
+// Yöntem 1: Köşeli parantez (en yaygın)
+console.log(metin[0]);     // "M" (ilk karakter)
+console.log(metin[1]);     // "e"
+console.log(metin[6]);     // "a" (son karakter)
+console.log(metin[7]);     // undefined (yok!)
+
+// Yöntem 2: charAt() metodu
+console.log(metin.charAt(0));   // "M"
+console.log(metin.charAt(3));   // "h"
+
+// Son karaktere erişim
+let son = metin[metin.length - 1];  // "a"
+console.log(son);
+
+// at() metodu ile negatif indeks (modern JS)
+console.log(metin.at(-1));   // "a" (son)
+console.log(metin.at(-2));   // "b" (sondan ikinci)</code></pre>
+                    </div>
+                    
+                    <div class="info-box warning">
+                        <h4>⚠️ Stringler Değiştirilemez (Immutable)</h4>
+                        <p>
+                            JavaScript'te stringler <strong>değiştirilemez</strong> (immutable). 
+                            Tek bir karakteri değiştiremezsin:
+                        </p>
+                        <pre><code>let metin = "Merhaba";
+metin[0] = "S";        // ÇALIŞMAZ!
+console.log(metin);    // Hâlâ "Merhaba"
+
+// Bunun yerine yeni string oluştur:
+metin = "S" + metin.slice(1);  // "Serhaba"</code></pre>
+                    </div>
+                    
+                    <div id="editor-string-erisim"></div>
+                </section>
+
+                <!-- Section: String Metodları -->
+                <section id="metodlar" class="lesson-section">
+                    <h2>🛠️ String Metodları</h2>
+                    
+                    <p>
+                        JavaScript stringleri çok sayıda kullanışlı metod sunar. 
+                        İşte en önemlileri:
+                    </p>
+                    
+                    <h3>🔄 Dönüştürme Metodları</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Metod</th>
+                                <th>Açıklama</th>
+                                <th>Örnek</th>
+                                <th>Sonuç</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>toUpperCase()</code></td>
+                                <td>Tüm harfleri büyük yapar</td>
+                                <td><code>"merhaba".toUpperCase()</code></td>
+                                <td>"MERHABA"</td>
+                            </tr>
+                            <tr>
+                                <td><code>toLowerCase()</code></td>
+                                <td>Tüm harfleri küçük yapar</td>
+                                <td><code>"MERHABA".toLowerCase()</code></td>
+                                <td>"merhaba"</td>
+                            </tr>
+                            <tr>
+                                <td><code>trim()</code></td>
+                                <td>Baş/son boşlukları siler</td>
+                                <td><code>"  merhaba  ".trim()</code></td>
+                                <td>"merhaba"</td>
+                            </tr>
+                            <tr>
+                                <td><code>repeat(n)</code></td>
+                                <td>n kez tekrarlar</td>
+                                <td><code>"ha".repeat(3)</code></td>
+                                <td>"hahaha"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3>🔍 Arama Metodları</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Metod</th>
+                                <th>Açıklama</th>
+                                <th>Örnek</th>
+                                <th>Sonuç</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>includes(str)</code></td>
+                                <td>İçeriyor mu? (true/false)</td>
+                                <td><code>"merhaba".includes("hab")</code></td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td><code>startsWith(str)</code></td>
+                                <td>Bununla başlıyor mu?</td>
+                                <td><code>"merhaba".startsWith("mer")</code></td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td><code>endsWith(str)</code></td>
+                                <td>Bununla bitiyor mu?</td>
+                                <td><code>"merhaba".endsWith("ba")</code></td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td><code>indexOf(str)</code></td>
+                                <td>Nerede? (indeks, yoksa -1)</td>
+                                <td><code>"merhaba".indexOf("hab")</code></td>
+                                <td>3</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3>✂️ Kesme ve Birleştirme</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Metod</th>
+                                <th>Açıklama</th>
+                                <th>Örnek</th>
+                                <th>Sonuç</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>slice(start, end)</code></td>
+                                <td>Parça kes (end dahil değil)</td>
+                                <td><code>"merhaba".slice(0, 3)</code></td>
+                                <td>"mer"</td>
+                            </tr>
+                            <tr>
+                                <td><code>substring(start, end)</code></td>
+                                <td>slice gibi (negatif yok)</td>
+                                <td><code>"merhaba".substring(3, 6)</code></td>
+                                <td>"hab"</td>
+                            </tr>
+                            <tr>
+                                <td><code>split(ayraç)</code></td>
+                                <td>Diziye böler</td>
+                                <td><code>"a,b,c".split(",")</code></td>
+                                <td>["a", "b", "c"]</td>
+                            </tr>
+                            <tr>
+                                <td><code>replace(eski, yeni)</code></td>
+                                <td>İlk eşleşmeyi değiştirir</td>
+                                <td><code>"merhaba".replace("a", "X")</code></td>
+                                <td>"merhXba"</td>
+                            </tr>
+                            <tr>
+                                <td><code>replaceAll(eski, yeni)</code></td>
+                                <td>Tümünü değiştirir</td>
+                                <td><code>"merhaba".replaceAll("a", "X")</code></td>
+                                <td>"merhXbX"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>💡</span>
+                            <h4>Metodları Zincirleme (Chaining)</h4>
+                        </div>
+                        <pre><code>// Metodları art arda kullanabilirsin
+let metin = "   MERHABA DÜNYA   ";
+
+let sonuc = metin
+  .trim()           // "MERHABA DÜNYA"
+  .toLowerCase()    // "merhaba dünya"
+  .replace(" ", "-");  // "merhaba-dünya"
+
+console.log(sonuc);  // "merhaba-dünya"</code></pre>
+                    </div>
+                    
+                    <div id="editor-string-metodlar"></div>
+                </section>
+
+                <!-- Section: String Karşılaştırma -->
+                <section id="karsilastirma" class="lesson-section">
+                    <h2>⚖️ String Karşılaştırma</h2>
+                    
+                    <h3>Eşitlik Kontrolü</h3>
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>🔍</span>
+                            <h4>== vs === ile Karşılaştırma</h4>
+                        </div>
+                        <pre><code>let s1 = "merhaba";
+let s2 = "merhaba";
+let s3 = "Merhaba";
+let s4 = "MERHABA";
+
+// Eşitlik kontrolü (büyük/küçük harf duyarlı!)
+console.log(s1 === s2);  // true (aynı)
+console.log(s1 === s3);  // false (M ≠ m)
+console.log(s1 === s4);  // false (farklı)
+
+// Büyük/küçük harf duyarsız karşılaştırma
+console.log(s1.toLowerCase() === s3.toLowerCase());  // true
+console.log(s1.toLowerCase() === s4.toLowerCase());  // true</code></pre>
+                    </div>
+                    
+                    <h3>📖 Alfabetik Sıralama</h3>
+                    <p>
+                        JavaScript'te stringler <strong>Unicode değerlerine</strong> göre karşılaştırılır. 
+                        <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code> operatörleri kullanılabilir.
+                    </p>
+                    
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Karşılaştırma</th>
+                                <th>Sonuç</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>"a" &lt; "b"</code></td>
+                                <td style="color: #51cf66;"><strong>true</strong></td>
+                                <td>'a' alfabede 'b'den önce</td>
+                            </tr>
+                            <tr>
+                                <td><code>"a" &lt; "A"</code></td>
+                                <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                <td>Küçük harfler büyük harflerden sonra (Unicode)</td>
+                            </tr>
+                            <tr>
+                                <td><code>"elma" &lt; "armut"</code></td>
+                                <td style="color: #ff6b6b;"><strong>false</strong></td>
+                                <td>'e' > 'a'</td>
+                            </tr>
+                            <tr>
+                                <td><code>"abc" &lt; "abd"</code></td>
+                                <td style="color: #51cf66;"><strong>true</strong></td>
+                                <td>İlk farklı karakter: 'c' < 'd'</td>
+                            </tr>
+                            <tr>
+                                <td><code>"ab" &lt; "abc"</code></td>
+                                <td style="color: #51cf66;"><strong>true</strong></td>
+                                <td>Kısa olan önce gelir</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3>🌍 localeCompare() - Dile Göre Sıralama</h3>
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>🇹🇷</span>
+                            <h4>Türkçe Alfabetik Sıralama</h4>
+                        </div>
+                        <pre><code>// Normal karşılaştırma (Unicode - Türkçe için sorunlu)
+console.log("ç" > "d");  // true (yanlış! ç, d'den önce gelmeli)
+
+// localeCompare ile doğru Türkçe sıralama
+// Döndürdüğü değerler: -1 (önce), 0 (eşit), 1 (sonra)
+console.log("ç".localeCompare("d", "tr"));  // -1 (ç önce)
+console.log("ş".localeCompare("t", "tr"));  // -1 (ş önce)
+console.log("ı".localeCompare("i", "tr"));  // -1 (ı önce)
+
+// Dizi sıralama örneği
+let meyveler = ["elma", "çilek", "armut", "şeftali", "üzüm"];
+meyveler.sort((a, b) => a.localeCompare(b, "tr"));
+console.log(meyveler);
+// ["armut", "çilek", "elma", "şeftali", "üzüm"]</code></pre>
+                    </div>
+                    
+                    <div class="info-box tip">
+                        <h4>💡 Türkçe Karakterler</h4>
+                        <p>
+                            Türkçe sıralama için <code>localeCompare("tr")</code> kullan. 
+                            Bu şekilde ç, ğ, ı, ö, ş, ü karakterleri doğru sıralanır.
+                        </p>
+                    </div>
+                    
+                    <div id="editor-string-karsilastirma"></div>
+                </section>
+
+                <!-- Section: Döngü ile Harfler -->
+                <section id="dongu" class="lesson-section">
+                    <h2>🔁 Döngü ile Harfleri Gezme</h2>
+                    
+                    <p>
+                        String bir karakter dizisi olduğu için, döngü ile tüm harfleri gezebilirsin.
+                    </p>
+                    
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>🔄</span>
+                            <h4>3 Farklı Yöntem</h4>
+                        </div>
+                        <pre><code>let metin = "Merhaba";
+
+// Yöntem 1: Klasik for döngüsü
+for (let i = 0; i < metin.length; i++) {
+  console.log(i + ": " + metin[i]);
+}
+// 0: M, 1: e, 2: r, 3: h, 4: a, 5: b, 6: a
+
+// Yöntem 2: for...of döngüsü (daha modern)
+for (let harf of metin) {
+  console.log(harf);
+}
+// M, e, r, h, a, b, a
+
+// Yöntem 3: split + forEach
+metin.split("").forEach((harf, index) => {
+  console.log(`${index}. harf: ${harf}`);
+});</code></pre>
+                    </div>
+                    
+                    <h3>📊 Karakter Sayma Örneği</h3>
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>🔢</span>
+                            <h4>Belirli Karakteri Sayma</h4>
+                        </div>
+                        <pre><code>function karakterSay(metin, aranan) {
+  let sayac = 0;
+  for (let harf of metin) {
+    if (harf === aranan) {
+      sayac++;
+    }
+  }
+  return sayac;
+}
+
+console.log(karakterSay("merhaba", "a"));  // 2
+console.log(karakterSay("mississippi", "s"));  // 4
+console.log(karakterSay("hello world", "l"));  // 3
+
+// Alternatif: split ile
+function karakterSay2(metin, aranan) {
+  return metin.split(aranan).length - 1;
+}
+console.log(karakterSay2("merhaba", "a"));  // 2</code></pre>
+                    </div>
+                    
+                    <h3>🔀 String Tersine Çevirme</h3>
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>↔️</span>
+                            <h4>Palindrom Kontrolü</h4>
+                        </div>
+                        <pre><code>// String'i tersine çevir
+function tersCevir(metin) {
+  let sonuc = "";
+  for (let i = metin.length - 1; i >= 0; i--) {
+    sonuc += metin[i];
+  }
+  return sonuc;
+}
+
+// Veya daha kısa yol:
+function tersCevir2(metin) {
+  return metin.split("").reverse().join("");
+}
+
+console.log(tersCevir("merhaba"));  // "abahrem"
+console.log(tersCevir2("merhaba")); // "abahrem"
+
+// Palindrom kontrolü (tersten de aynı okunan)
+function palindromMu(metin) {
+  metin = metin.toLowerCase().replace(/ /g, "");
+  return metin === tersCevir2(metin);
+}
+
+console.log(palindromMu("kayak"));     // true
+console.log(palindromMu("Ana"));       // true
+console.log(palindromMu("merhaba"));   // false</code></pre>
+                    </div>
+                    
+                    <div id="editor-string-dongu"></div>
+                </section>
+
+                <!-- Section: p5.js ile Kullanım -->
+                <section id="p5js" class="lesson-section">
+                    <h2>🎨 p5.js ile String Kullanımı</h2>
+                    
+                    <p>
+                        p5.js'te stringler özellikle <code>text()</code> fonksiyonu ile ekrana metin yazdırmak için kullanılır.
+                    </p>
+                    
+                    <div class="code-block-wide">
+                        <div class="code-header">
+                            <span>📝</span>
+                            <h4>text() Fonksiyonu</h4>
+                        </div>
+                        <pre><code>// Temel kullanım
+text("Merhaba", x, y);
+
+// Metin ayarları
+textSize(32);           // Yazı boyutu
+textAlign(CENTER);      // Hizalama: LEFT, CENTER, RIGHT
+textFont("Arial");      // Font
+fill(255);              // Yazı rengi
+
+// Metin genişliği ölçme
+let genislik = textWidth("Merhaba");
+
+// Çok satırlı metin (kutu içinde)
+text("Uzun bir metin...", x, y, genislik, yükseklik);</code></pre>
+                    </div>
+                    
+                    <div id="editor-string-p5js"></div>
+                    
+                    <h3>⌨️ Klavye ile Metin Girişi</h3>
+                    <div id="editor-string-input"></div>
+                    
+                    <h3>🎭 Animasyonlu Metin Efektleri</h3>
+                    <div id="editor-string-animasyon"></div>
+                </section>
+
+                <!-- Key Concepts Summary -->
+                <section class="lesson-section">
+                    <h2>📋 Özet</h2>
+
+                    <div class="card" style="background: rgba(0, 217, 255, 0.05);">
+                        <h4>Bu Derste Öğrendikleriniz</h4>
+                        <ul>
+                            <li><strong>String:</strong> Karakterlerin sıralı dizisi, tırnak içinde yazılır</li>
+                            <li><strong>İndeks:</strong> 0'dan başlar, <code>str[0]</code> ilk karakter</li>
+                            <li><strong>.length:</strong> String uzunluğu (karakter sayısı)</li>
+                            <li><strong>Immutable:</strong> Stringler değiştirilemez, yeni string oluşturulur</li>
+                            <li><strong>Metodlar:</strong> toUpperCase, toLowerCase, trim, includes, indexOf, slice, split</li>
+                            <li><strong>Karşılaştırma:</strong> === ile eşitlik, localeCompare ile Türkçe sıralama</li>
+                            <li><strong>Döngü:</strong> for veya for...of ile harfleri gezme</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-nav">
+                    <a href="10-nesneler.html" class="btn">← Önceki Ders</a>
+                    <a href="12-hata-ayiklama.html" class="btn btn-primary">Sonraki Ders →</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+    <script src="../js/editor.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // String Temel
+            new P5CodeEditor('editor-string-temel', {
+                initialCode: `// String Temelleri
+
+let isim = "Ahmet";
+let soyisim = 'Yılmaz';
+let yas = 25;
+
+function setup() {
+  createCanvas(400, 300);
+  textAlign(CENTER);
+}
+
+function draw() {
+  background(30);
+  
+  // Template literal ile birleştirme
+  let tanitim = \`Merhaba, ben \${isim} \${soyisim}!\`;
+  let bilgi = \`Yaşım: \${yas}\`;
+  
+  fill(255);
+  textSize(20);
+  text(tanitim, width/2, 100);
+  text(bilgi, width/2, 140);
+  
+  // String uzunlukları
+  fill(100, 200, 255);
+  textSize(14);
+  text(\`"isim" uzunluğu: \${isim.length} karakter\`, width/2, 200);
+  text(\`"tanitim" uzunluğu: \${tanitim.length} karakter\`, width/2, 225);
+  
+  // Boş string kontrolü
+  let bos = "";
+  fill(255, 200, 100);
+  text(\`Boş string uzunluğu: \${bos.length}\`, width/2, 260);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // String Erişim
+            new P5CodeEditor('editor-string-erisim', {
+                initialCode: `// Karakterlere Erişim
+
+let metin = "JAVASCRIPT";
+
+function setup() {
+  createCanvas(400, 350);
+}
+
+function draw() {
+  background(30);
+  
+  // Her harfi kutuda göster
+  let kutuBoyut = 35;
+  let baslangicX = 20;
+  
+  fill(255);
+  textSize(14);
+  textAlign(CENTER, CENTER);
+  text("String: \\"" + metin + "\\"", width/2, 30);
+  
+  for (let i = 0; i < metin.length; i++) {
+    let x = baslangicX + i * kutuBoyut;
+    
+    // Kutu
+    fill(50, 100, 150);
+    stroke(100, 200, 255);
+    strokeWeight(2);
+    rect(x, 60, kutuBoyut - 2, kutuBoyut);
+    
+    // Harf
+    fill(255);
+    noStroke();
+    textSize(18);
+    text(metin[i], x + kutuBoyut/2 - 1, 78);
+    
+    // İndeks
+    fill(100, 200, 255);
+    textSize(11);
+    text(i, x + kutuBoyut/2 - 1, 110);
+  }
+  
+  // Örnekler
+  fill(255);
+  textSize(14);
+  textAlign(LEFT);
+  
+  let y = 150;
+  text('metin[0] = "' + metin[0] + '"  (ilk)', 30, y);
+  text('metin[4] = "' + metin[4] + '"', 30, y + 25);
+  text('metin[metin.length-1] = "' + metin[metin.length-1] + '"  (son)', 30, y + 50);
+  
+  // Fare ile interaktif
+  let fareIndeks = floor(map(mouseX, baslangicX, baslangicX + metin.length * kutuBoyut, 0, metin.length));
+  fareIndeks = constrain(fareIndeks, 0, metin.length - 1);
+  
+  fill(255, 200, 100);
+  textSize(16);
+  text(\`Fare indeksi: \${fareIndeks} → "\${metin[fareIndeks]}"\`, 30, y + 100);
+  
+  // Seçili kutuyu vurgula
+  if (mouseX > baslangicX && mouseX < baslangicX + metin.length * kutuBoyut) {
+    noFill();
+    stroke(255, 200, 100);
+    strokeWeight(3);
+    rect(baslangicX + fareIndeks * kutuBoyut, 60, kutuBoyut - 2, kutuBoyut);
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // String Metodlar
+            new P5CodeEditor('editor-string-metodlar', {
+                initialCode: `// String Metodları Demo
+
+let orjinal = "  Merhaba Dünya  ";
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  fill(255);
+  textSize(14);
+  textAlign(LEFT);
+  
+  let y = 30;
+  let aralik = 28;
+  
+  text('Orijinal: "' + orjinal + '"', 20, y);
+  text('Uzunluk: ' + orjinal.length, 20, y += aralik);
+  
+  fill(100, 200, 255);
+  text('─── Dönüştürme ───', 20, y += aralik + 10);
+  
+  fill(255);
+  text('.trim(): "' + orjinal.trim() + '"', 20, y += aralik);
+  text('.toUpperCase(): "' + orjinal.toUpperCase() + '"', 20, y += aralik);
+  text('.toLowerCase(): "' + orjinal.toLowerCase() + '"', 20, y += aralik);
+  
+  let temiz = orjinal.trim();
+  
+  fill(100, 200, 255);
+  text('─── Arama ───', 20, y += aralik + 10);
+  
+  fill(255);
+  text('.includes("Dünya"): ' + temiz.includes("Dünya"), 20, y += aralik);
+  text('.startsWith("Mer"): ' + temiz.startsWith("Mer"), 20, y += aralik);
+  text('.indexOf("a"): ' + temiz.indexOf("a"), 20, y += aralik);
+  
+  fill(100, 200, 255);
+  text('─── Kesme ───', 20, y += aralik + 10);
+  
+  fill(255);
+  text('.slice(0, 7): "' + temiz.slice(0, 7) + '"', 20, y += aralik);
+  text('.slice(-5): "' + temiz.slice(-5) + '"', 20, y += aralik);
+  text('.split(" "): [' + temiz.split(" ").join(", ") + ']', 20, y += aralik);
+  
+  fill(100, 200, 255);
+  text('─── Değiştirme ───', 20, y += aralik + 10);
+  
+  fill(255);
+  text('.replace("a","X"): "' + temiz.replace("a","X") + '"', 20, y += aralik);
+  text('.replaceAll("a","X"): "' + temiz.replaceAll("a","X") + '"', 20, y += aralik);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // String Karşılaştırma
+            new P5CodeEditor('editor-string-karsilastirma', {
+                initialCode: `// String Karşılaştırma
+
+let kelimeler = ["elma", "Çilek", "armut", "Şeftali", "üzüm", "ıspanak"];
+
+function setup() {
+  createCanvas(400, 380);
+}
+
+function draw() {
+  background(30);
+  
+  fill(255);
+  textSize(14);
+  textAlign(LEFT);
+  
+  // Eşitlik kontrolü
+  text('─── Eşitlik Kontrolü ───', 20, 30);
+  text('"abc" === "abc": ' + ("abc" === "abc"), 20, 55);
+  text('"abc" === "ABC": ' + ("abc" === "ABC"), 20, 75);
+  text('"abc".toLowerCase() === "ABC".toLowerCase(): ' + ("abc".toLowerCase() === "ABC".toLowerCase()), 20, 95);
+  
+  // Alfabetik sıralama
+  fill(100, 200, 255);
+  text('─── Alfabetik Sıra ───', 20, 125);
+  
+  fill(255);
+  text('"a" < "b": ' + ("a" < "b"), 20, 150);
+  text('"elma" < "armut": ' + ("elma" < "armut") + ' (e > a)', 20, 170);
+  text('"ab" < "abc": ' + ("ab" < "abc"), 20, 190);
+  
+  // Türkçe sıralama
+  fill(255, 200, 100);
+  text('─── Türkçe Sıralama ───', 20, 220);
+  
+  fill(255);
+  text('Orijinal: ' + kelimeler.join(", "), 20, 245);
+  
+  // Normal sort (yanlış)
+  let normalSort = [...kelimeler].sort();
+  fill(255, 100, 100);
+  text('Normal sort: ' + normalSort.join(", "), 20, 270);
+  
+  // Türkçe sort (doğru)
+  let turkceSort = [...kelimeler].sort((a, b) => 
+    a.localeCompare(b, "tr", {sensitivity: "base"})
+  );
+  fill(100, 255, 100);
+  text('Türkçe sort: ' + turkceSort.join(", "), 20, 295);
+  
+  // localeCompare açıklama
+  fill(150);
+  textSize(12);
+  text('localeCompare("tr") Türk alfabesine göre sıralar', 20, 330);
+  text('ç < d, ş < t, ı < i, ö < p, ü < v', 20, 350);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // String Döngü
+            new P5CodeEditor('editor-string-dongu', {
+                initialCode: `// Döngü ile String İşleme
+
+let metin = "MERHABA";
+
+function setup() {
+  createCanvas(400, 350);
+}
+
+function draw() {
+  background(30);
+  
+  // Her harfi farklı renkte göster
+  textSize(40);
+  textAlign(CENTER, CENTER);
+  
+  let toplamGenislik = metin.length * 45;
+  let baslangicX = (width - toplamGenislik) / 2 + 20;
+  
+  for (let i = 0; i < metin.length; i++) {
+    // Her harf için farklı renk
+    let renk = map(i, 0, metin.length - 1, 0, 255);
+    fill(renk, 200, 255 - renk);
+    
+    // Harfi çiz
+    let x = baslangicX + i * 45;
+    let y = 80 + sin(frameCount * 0.1 + i * 0.5) * 15;
+    text(metin[i], x, y);
+  }
+  
+  // Karakter sayma örneği
+  fill(255);
+  textSize(14);
+  textAlign(LEFT);
+  
+  let aSayisi = 0;
+  for (let harf of metin) {
+    if (harf === 'A') aSayisi++;
+  }
+  text(\`"A" harfi sayısı: \${aSayisi}\`, 30, 160);
+  
+  // Ters çevir
+  let ters = "";
+  for (let i = metin.length - 1; i >= 0; i--) {
+    ters += metin[i];
+  }
+  text(\`Ters: "\${ters}"\`, 30, 185);
+  
+  // Sesli harf kontrolü
+  let sesliler = "AEIİOÖUÜ";
+  let sesliSayisi = 0;
+  for (let harf of metin) {
+    if (sesliler.includes(harf)) sesliSayisi++;
+  }
+  text(\`Sesli harf sayısı: \${sesliSayisi}\`, 30, 210);
+  
+  // Animasyonlu yazı efekti
+  fill(100, 200, 255);
+  textSize(16);
+  textAlign(CENTER);
+  
+  let gorunenHarf = floor(frameCount / 10) % (metin.length + 5);
+  let animasyonluMetin = metin.slice(0, min(gorunenHarf, metin.length));
+  text(animasyonluMetin + (gorunenHarf < metin.length ? "_" : ""), width/2, 280);
+  
+  fill(150);
+  textSize(11);
+  text("Yazı makinesi efekti", width/2, 310);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // p5.js ile String
+            new P5CodeEditor('editor-string-p5js', {
+                initialCode: `// p5.js ile Metin Gösterimi
+
+function setup() {
+  createCanvas(400, 350);
+}
+
+function draw() {
+  background(30);
+  
+  // Farklı hizalamalar
+  textSize(16);
+  
+  // Sol hizalı
+  fill(255, 100, 100);
+  textAlign(LEFT);
+  text("Sol hizalı metin", 20, 40);
+  
+  // Ortalı
+  fill(100, 255, 100);
+  textAlign(CENTER);
+  text("Ortalanmış metin", width/2, 80);
+  
+  // Sağ hizalı
+  fill(100, 100, 255);
+  textAlign(RIGHT);
+  text("Sağ hizalı metin", width - 20, 120);
+  
+  // Farklı boyutlar
+  textAlign(CENTER);
+  for (let i = 0; i < 5; i++) {
+    let boyut = 12 + i * 6;
+    textSize(boyut);
+    fill(255, 255 - i * 40, 100);
+    text("Boyut: " + boyut, width/2, 160 + i * 30);
+  }
+  
+  // Metin genişliği ölçümü
+  textSize(20);
+  let ornek = "Merhaba Dünya!";
+  let genislik = textWidth(ornek);
+  
+  // Arka plan kutusu
+  fill(50);
+  rectMode(CENTER);
+  rect(width/2, 320, genislik + 20, 35);
+  
+  // Metin
+  fill(255);
+  textAlign(CENTER, CENTER);
+  text(ornek, width/2, 320);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Klavye girişi
+            new P5CodeEditor('editor-string-input', {
+                initialCode: `// Klavye ile Metin Girişi
+
+let yazilanMetin = "";
+let imleçGoster = true;
+
+function setup() {
+  createCanvas(400, 200);
+  // Her yarım saniyede imleç yanıp sönsün
+  setInterval(() => imleçGoster = !imleçGoster, 500);
+}
+
+function draw() {
+  background(30);
+  
+  // Giriş kutusu
+  fill(50);
+  stroke(100, 200, 255);
+  strokeWeight(2);
+  rect(30, 60, 340, 50, 8);
+  
+  // Yazılan metin + imleç
+  fill(255);
+  noStroke();
+  textSize(20);
+  textAlign(LEFT, CENTER);
+  
+  let gosterilen = yazilanMetin;
+  if (imleçGoster) gosterilen += "|";
+  
+  text(gosterilen, 45, 85);
+  
+  // Bilgi
+  fill(150);
+  textSize(12);
+  text("Yazmaya başla! (Backspace ile sil)", 30, 40);
+  text(\`Karakter sayısı: \${yazilanMetin.length}\`, 30, 140);
+  
+  // Büyük/küçük harf gösterimi
+  if (yazilanMetin.length > 0) {
+    fill(100, 200, 255);
+    text(\`Büyük harf: "\${yazilanMetin.toUpperCase()}"\`, 30, 165);
+    text(\`Küçük harf: "\${yazilanMetin.toLowerCase()}"\`, 30, 185);
+  }
+}
+
+function keyPressed() {
+  if (keyCode === BACKSPACE) {
+    // Son karakteri sil
+    yazilanMetin = yazilanMetin.slice(0, -1);
+  } else if (keyCode === ENTER) {
+    // Enter ile temizle
+    yazilanMetin = "";
+  }
+  return false; // Tarayıcı davranışını engelle
+}
+
+function keyTyped() {
+  // Yazdırılabilir karakterleri ekle
+  if (key.length === 1 && yazilanMetin.length < 25) {
+    yazilanMetin += key;
+  }
+  return false;
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Animasyonlu metin
+            new P5CodeEditor('editor-string-animasyon', {
+                initialCode: `// Animasyonlu Metin Efektleri
+
+let mesaj = "P5.JS HAKİKAYETEN";
+let mesaj2 = "MUHTEŞEM!";
+
+function setup() {
+  createCanvas(400, 300);
+}
+
+function draw() {
+  background(30);
+  
+  // 1. Dalgalı metin
+  textSize(28);
+  textAlign(CENTER);
+  
+  for (let i = 0; i < mesaj.length; i++) {
+    let x = 50 + i * 20;
+    let y = 60 + sin(frameCount * 0.1 + i * 0.4) * 15;
+    
+    // Gökkuşağı renkleri
+    let renk = map(i, 0, mesaj.length, 0, 360);
+    colorMode(HSB);
+    fill(renk, 80, 100);
+    colorMode(RGB);
+    
+    text(mesaj[i], x, y);
+  }
+  
+  // 2. Büyüyüp küçülen metin
+  let olcek = 1 + sin(frameCount * 0.05) * 0.3;
+  
+  push();
+  translate(width/2, 140);
+  scale(olcek);
+  fill(255, 200, 100);
+  textSize(24);
+  text(mesaj2, 0, 0);
+  pop();
+  
+  // 3. Dönen harfler
+  textSize(30);
+  let mesaj3 = "DÖNGÜ";
+  
+  for (let i = 0; i < mesaj3.length; i++) {
+    let aci = frameCount * 0.02 + i * TWO_PI / mesaj3.length;
+    let x = width/2 + cos(aci) * 80;
+    let y = 230 + sin(aci) * 30;
+    
+    fill(100, 200, 255);
+    text(mesaj3[i], x, y);
+  }
+  
+  // 4. Yanıp sönen imleç
+  if (frameCount % 30 < 15) {
+    fill(255);
+    textSize(20);
+    textAlign(LEFT);
+    text("Yaz..._", 30, 280);
+  } else {
+    fill(255);
+    textSize(20);
+    textAlign(LEFT);
+    text("Yaz... ", 30, 280);
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+        });
+    </script>
+    
+    <script src="../js/theme.js"></script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="text-align: center; padding: 1.5rem 0;">
+                <p style="margin: 0;">İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

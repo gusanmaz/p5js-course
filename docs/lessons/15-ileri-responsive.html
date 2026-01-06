@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    
+    
+    <title>Ders 15: İleri - Responsive Tasarım - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                    <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                    <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                    <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                    <li><a href="15-ileri-responsive.html" class="active">15. İleri: Responsive</a></li>
+                    <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                    <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#window-vars">windowWidth & windowHeight</a></li>
+                    <li><a href="#windowResized">windowResized()</a></li>
+                    <li><a href="#relative">Göreceli Konumlandırma</a></li>
+                    <li><a href="#fullscreen">Tam Ekran Modu</a></li>
+                    <li><a href="#responsive-ui">Responsive UI</a></li>
+                    <li><a href="#ornekler">Uygulama Örnekleri</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 15: İleri - Responsive Tasarım</h1>
+                <div class="lesson-meta">
+                    <span>📚 İleri Seviye</span>
+                    <span>⏱️ 40 dakika</span>
+                    <span>🎯 Ekran boyutuna uyum sağlayan tasarımlar</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: window vars -->
+                <section id="window-vars" class="lesson-section">
+                    <h2>📐 windowWidth & windowHeight</h2>
+                    
+                    <p>
+                        p5.js, tarayıcı penceresinin boyutlarını otomatik olarak takip eden 
+                        iki önemli değişken sağlar:
+                    </p>
+                    
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Değişken</th>
+                                <th>Açıklama</th>
+                                <th>Benzer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>windowWidth</code></td>
+                                <td>Tarayıcı penceresinin genişliği (piksel)</td>
+                                <td>CSS: <code>100vw</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>windowHeight</code></td>
+                                <td>Tarayıcı penceresinin yüksekliği (piksel)</td>
+                                <td>CSS: <code>100vh</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>width</code></td>
+                                <td>Canvas genişliği</td>
+                                <td>createCanvas'ta belirlenir</td>
+                            </tr>
+                            <tr>
+                                <td><code>height</code></td>
+                                <td>Canvas yüksekliği</td>
+                                <td>createCanvas'ta belirlenir</td>
+                            </tr>
+                            <tr>
+                                <td><code>displayWidth</code></td>
+                                <td>Ekranın tam genişliği</td>
+                                <td>Monitör çözünürlüğü</td>
+                            </tr>
+                            <tr>
+                                <td><code>displayHeight</code></td>
+                                <td>Ekranın tam yüksekliği</td>
+                                <td>Monitör çözünürlüğü</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="info-box tip">
+                        <h4>💡 width vs windowWidth</h4>
+                        <p>
+                            <code>width</code> ve <code>height</code> canvas boyutlarıdır - siz belirlersiniz.<br>
+                            <code>windowWidth</code> ve <code>windowHeight</code> tarayıcı pencere boyutlarıdır - kullanıcıya bağlıdır.
+                        </p>
+                    </div>
+                    
+                    <div id="editor-window-size"></div>
+                </section>
+
+                <!-- Section: windowResized -->
+                <section id="windowResized" class="lesson-section">
+                    <h2>🔄 windowResized() Fonksiyonu</h2>
+                    
+                    <p>
+                        Kullanıcı tarayıcı penceresini yeniden boyutlandırdığında <code>windowResized()</code> 
+                        fonksiyonu otomatik olarak çağrılır. Bu fonksiyon içinde canvas'ı yeniden 
+                        boyutlandırabilirsiniz.
+                    </p>
+                    
+                    <div class="code-box">
+                        <pre><code>function setup() {
+  // Pencere boyutunda canvas oluştur
+  createCanvas(windowWidth, windowHeight);
+}
+
+function draw() {
+  background(30);
+  // Çizimler...
+}
+
+// Pencere boyutu değişince çağrılır
+function windowResized() {
+  // Canvas'ı yeni boyuta göre ayarla
+  resizeCanvas(windowWidth, windowHeight);
+  
+  // Gerekirse diğer değişkenleri de güncelle
+  console.log("Yeni boyut:", windowWidth, "x", windowHeight);
+}</code></pre>
+                    </div>
+                    
+                    <div class="info-box warning">
+                        <h4>⚠️ Önemli Notlar</h4>
+                        <ul>
+                            <li><code>resizeCanvas()</code> canvas içeriğini temizler</li>
+                            <li>Nesne pozisyonlarını oransal olarak güncellemeniz gerekebilir</li>
+                            <li>Çok sık resize işlemi performansı etkileyebilir</li>
+                        </ul>
+                    </div>
+                    
+                    <div id="editor-resize"></div>
+                </section>
+
+                <!-- Section: relative -->
+                <section id="relative" class="lesson-section">
+                    <h2>📏 Göreceli Konumlandırma</h2>
+                    
+                    <p>
+                        Responsive tasarımın anahtarı, sabit piksel değerleri yerine <strong>oransal değerler</strong> 
+                        kullanmaktır. Bu sayede tasarımınız her ekran boyutunda doğru görünür.
+                    </p>
+                    
+                    <h3>Kötü Örnek (Sabit Değerler):</h3>
+                    <div class="code-box">
+                        <pre><code>// ❌ Bu sadece 400x400 canvas'ta doğru görünür
+circle(200, 200, 100);  // Merkez ve boyut sabit</code></pre>
+                    </div>
+                    
+                    <h3>İyi Örnek (Oransal Değerler):</h3>
+                    <div class="code-box">
+                        <pre><code>// ✅ Her boyutta ortada görünür
+circle(width/2, height/2, width * 0.25);
+// width/2: Yatay merkez
+// height/2: Dikey merkez
+// width * 0.25: Canvas genişliğinin %25'i kadar çap</code></pre>
+                    </div>
+                    
+                    <h3>Sık Kullanılan Oranlar:</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>İfade</th>
+                                <th>Anlamı</th>
+                                <th>Kullanım</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>width/2</code></td>
+                                <td>Yatay merkez</td>
+                                <td>Ortada hizalama</td>
+                            </tr>
+                            <tr>
+                                <td><code>height/2</code></td>
+                                <td>Dikey merkez</td>
+                                <td>Ortada hizalama</td>
+                            </tr>
+                            <tr>
+                                <td><code>width * 0.1</code></td>
+                                <td>%10 genişlik</td>
+                                <td>Kenar boşlukları</td>
+                            </tr>
+                            <tr>
+                                <td><code>min(width, height)</code></td>
+                                <td>Küçük kenar</td>
+                                <td>Kare içeriği sığdırma</td>
+                            </tr>
+                            <tr>
+                                <td><code>width/cols</code></td>
+                                <td>Sütun genişliği</td>
+                                <td>Grid sistemleri</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div id="editor-relative"></div>
+                </section>
+
+                <!-- Section: fullscreen -->
+                <section id="fullscreen" class="lesson-section">
+                    <h2>🖥️ Tam Ekran Modu</h2>
+                    
+                    <p>
+                        p5.js'de <code>fullscreen()</code> fonksiyonu ile tam ekran modunu 
+                        açıp kapatabilirsiniz.
+                    </p>
+                    
+                    <div class="code-box">
+                        <pre><code>// Tam ekran modunu aç/kapat
+fullscreen(true);   // Tam ekran yap
+fullscreen(false);  // Normal moda dön
+
+// Mevcut durumu öğren
+let isFS = fullscreen();  // true veya false döner
+
+// Toggle (değiştir)
+fullscreen(!fullscreen());  // Mevcut durumun tersini yap</code></pre>
+                    </div>
+                    
+                    <div class="info-box warning">
+                        <h4>⚠️ Tarayıcı Kısıtlaması</h4>
+                        <p>
+                            Güvenlik nedeniyle tam ekran sadece kullanıcı etkileşimi (tıklama, tuş basma) 
+                            sonucunda etkinleştirilebilir. <code>setup()</code> içinde otomatik olarak 
+                            tam ekran yapamazsınız.
+                        </p>
+                    </div>
+                    
+                    <div id="editor-fullscreen"></div>
+                </section>
+
+                <!-- Section: responsive-ui -->
+                <section id="responsive-ui" class="lesson-section">
+                    <h2>🎨 Responsive UI Tasarımı</h2>
+                    
+                    <p>
+                        Oyun veya uygulama arayüzlerinin farklı ekran boyutlarında düzgün 
+                        görünmesi için bazı stratejiler:
+                    </p>
+                    
+                    <h3>1. Merkezi Referans Noktası</h3>
+                    <div class="code-box">
+                        <pre><code>// Tüm konumları merkezden hesapla
+let merkezX = width / 2;
+let merkezY = height / 2;
+
+// Butonlar merkeze göre konumlanır
+rect(merkezX - 100, merkezY - 25, 200, 50);</code></pre>
+                    </div>
+                    
+                    <h3>2. Ölçekleme Faktörü</h3>
+                    <div class="code-box">
+                        <pre><code>// Temel bir boyut belirle
+let temelBoyut = min(width, height);
+let olcek = temelBoyut / 400;  // 400px'lik tasarım için
+
+// Tüm değerleri ölçekle
+textSize(16 * olcek);
+rect(x, y, 100 * olcek, 50 * olcek);</code></pre>
+                    </div>
+                    
+                    <h3>3. Breakpoint'ler (Kırılma Noktaları)</h3>
+                    <div class="code-box">
+                        <pre><code>// Ekran boyutuna göre farklı düzen
+if (width < 600) {
+  // Mobil düzen: tek sütun
+  dikeySirayla();
+} else {
+  // Masaüstü düzen: çok sütun
+  yataySirayla();
+}</code></pre>
+                    </div>
+                    
+                    <div id="editor-responsive-ui"></div>
+                </section>
+
+                <!-- Section: ornekler -->
+                <section id="ornekler" class="lesson-section">
+                    <h2>🎯 Uygulama Örnekleri</h2>
+                    
+                    <h3>Responsive Grid</h3>
+                    <p>
+                        Ekran boyutuna göre otomatik olarak sütun sayısı ayarlayan grid sistemi:
+                    </p>
+                    <div id="editor-grid"></div>
+                    
+                    <h3>Uyumlu Oyun Alanı</h3>
+                    <p>
+                        Her ekran boyutunda oranları koruyan bir oyun alanı:
+                    </p>
+                    <div id="editor-game-area"></div>
+                    
+                    <h3>Aspect Ratio Koruma</h3>
+                    <p>
+                        İçeriğin en-boy oranını koruyarak sığdırma:
+                    </p>
+                    <div id="editor-aspect"></div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-nav">
+                    <a href="14-ileri-gorseller.html" class="btn">← Önceki Ders</a>
+                    <a href="16-ileri-vektorler.html" class="btn btn-primary">Sonraki Ders →</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+    <script src="../js/editor.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Window size değişkenleri
+            new P5CodeEditor('editor-window-size', {
+                initialCode: `// windowWidth ve windowHeight kullanımı
+
+function setup() {
+  // Canvas'ı pencere boyutunun bir kısmı olarak oluştur
+  // (Bu editörde 400x400 sınırlı, ama konsepti gösterir)
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Bilgileri göster
+  fill(255);
+  textSize(14);
+  textAlign(LEFT);
+  
+  // Pencere boyutları (bu editörde sınırlı)
+  text("Pencere Değişkenleri:", 20, 30);
+  text("windowWidth: " + windowWidth + " px", 20, 55);
+  text("windowHeight: " + windowHeight + " px", 20, 75);
+  
+  // Canvas boyutları
+  text("Canvas Değişkenleri:", 20, 110);
+  text("width: " + width + " px", 20, 135);
+  text("height: " + height + " px", 20, 155);
+  
+  // Ekran boyutları
+  text("Ekran Değişkenleri:", 20, 190);
+  text("displayWidth: " + displayWidth + " px", 20, 215);
+  text("displayHeight: " + displayHeight + " px", 20, 235);
+  
+  // Görsel karşılaştırma
+  let maxW = 250;
+  let startX = 120;
+  let startY = 280;
+  
+  // Canvas boyutu (kırmızı)
+  fill(255, 100, 100);
+  let canvasBar = map(width, 0, 2000, 0, maxW);
+  rect(startX, startY, canvasBar, 20);
+  
+  // Pencere boyutu (yeşil)
+  fill(100, 255, 100);
+  let windowBar = map(windowWidth, 0, 2000, 0, maxW);
+  rect(startX, startY + 30, windowBar, 20);
+  
+  // Ekran boyutu (mavi)
+  fill(100, 100, 255);
+  let displayBar = map(displayWidth, 0, 2000, 0, maxW);
+  rect(startX, startY + 60, displayBar, 20);
+  
+  // Etiketler
+  fill(255);
+  textAlign(RIGHT);
+  text("Canvas:", startX - 10, startY + 15);
+  text("Pencere:", startX - 10, startY + 45);
+  text("Ekran:", startX - 10, startY + 75);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // windowResized örneği
+            new P5CodeEditor('editor-resize', {
+                initialCode: `// windowResized() fonksiyonu
+// Not: Bu editörde pencere boyutu değişmez,
+// ama gerçek p5.js projelerinde çalışır
+
+let toplar = [];
+let resizeSayisi = 0;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // Başlangıçta birkaç top ekle
+  for (let i = 0; i < 5; i++) {
+    topEkle();
+  }
+}
+
+function topEkle() {
+  toplar.push({
+    // Pozisyonu ORANSAL olarak sakla (0-1 arası)
+    xOran: random(0.1, 0.9),
+    yOran: random(0.1, 0.9),
+    rOran: random(0.05, 0.1),  // Yarıçap da oransal
+    renk: color(random(255), random(255), random(255))
+  });
+}
+
+function draw() {
+  background(30);
+  
+  // Topları çiz
+  noStroke();
+  for (let top of toplar) {
+    fill(top.renk);
+    // Oranları gerçek piksele çevir
+    let x = top.xOran * width;
+    let y = top.yOran * height;
+    let r = top.rOran * min(width, height);
+    circle(x, y, r * 2);
+  }
+  
+  // Bilgi
+  fill(255);
+  textSize(14);
+  text("Canvas: " + width + " x " + height, 20, 30);
+  text("Top sayısı: " + toplar.length, 20, 50);
+  text("Resize sayısı: " + resizeSayisi, 20, 70);
+  
+  // Simüle edilmiş resize butonu
+  fill(100, 150, 255);
+  rect(width - 150, height - 40, 140, 30, 5);
+  fill(255);
+  textAlign(CENTER);
+  text("Resize Simüle Et", width - 80, height - 20);
+  textAlign(LEFT);
+  
+  fill(100, 200, 100);
+  rect(20, height - 40, 100, 30, 5);
+  fill(255);
+  textAlign(CENTER);
+  text("Top Ekle", 70, height - 20);
+}
+
+// Pencere boyutu değişince çağrılır
+function windowResized() {
+  // Normalde şöyle kullanılır:
+  // resizeCanvas(windowWidth, windowHeight);
+  
+  resizeSayisi++;
+  console.log("Pencere boyutu değişti!");
+  console.log("Yeni boyut:", windowWidth, "x", windowHeight);
+}
+
+function mousePressed() {
+  // Resize butonu
+  if (mouseX > width - 150 && mouseY > height - 40) {
+    // Rastgele yeni boyut
+    let yeniW = random(300, 400);
+    let yeniH = random(300, 400);
+    resizeCanvas(yeniW, yeniH);
+    resizeSayisi++;
+    console.log("Yeni boyut:", int(yeniW), "x", int(yeniH));
+  }
+  
+  // Top ekle butonu
+  if (mouseX < 120 && mouseY > height - 40) {
+    topEkle();
+  }
+}`,
+                autoRun: true,
+                showConsole: true
+            });
+
+            // Göreceli konumlandırma
+            new P5CodeEditor('editor-relative', {
+                initialCode: `// Göreceli (Oransal) Konumlandırma
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // === YANLIŞ: Sabit değerler ===
+  // Bu değerler sadece belirli boyutta doğru görünür
+  
+  fill(255, 100, 100, 150);
+  noStroke();
+  // Sabit 200,200 her zaman sol üst tarafta kalır
+  // canvas büyürse merkez olmaktan çıkar
+  
+  // === DOĞRU: Oransal değerler ===
+  
+  // 1. Merkez noktası
+  let merkezX = width / 2;
+  let merkezY = height / 2;
+  
+  // 2. Oransal boyutlar
+  let daireBoyut = width * 0.2;  // Genişliğin %20'si
+  
+  // Merkezdeki ana daire
+  fill(100, 200, 255);
+  circle(merkezX, merkezY, daireBoyut);
+  
+  // 3. Köşelere göre konumlar
+  let kenarBosluk = width * 0.1;  // %10 boşluk
+  
+  fill(255, 200, 100);
+  circle(kenarBosluk, kenarBosluk, daireBoyut * 0.5);  // Sol üst
+  circle(width - kenarBosluk, kenarBosluk, daireBoyut * 0.5);  // Sağ üst
+  circle(kenarBosluk, height - kenarBosluk, daireBoyut * 0.5);  // Sol alt
+  circle(width - kenarBosluk, height - kenarBosluk, daireBoyut * 0.5);  // Sağ alt
+  
+  // 4. Grid sistemi
+  let cols = 3;
+  let rows = 2;
+  let cellW = width / cols;
+  let cellH = (height * 0.4) / rows;  // Üst %40'ı kullan
+  let startY = height * 0.3;
+  
+  stroke(100);
+  strokeWeight(1);
+  noFill();
+  
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      let x = c * cellW;
+      let y = startY + r * cellH;
+      rect(x, y, cellW, cellH);
+    }
+  }
+  
+  // 5. Oransal metin boyutu
+  let textBoyut = width * 0.035;  // Genişliğin %3.5'i
+  fill(255);
+  noStroke();
+  textSize(textBoyut);
+  textAlign(CENTER);
+  text("Oransal Tasarım", merkezX, height * 0.15);
+  
+  textSize(textBoyut * 0.7);
+  text("Tüm konumlar width ve height'a göre", merkezX, height * 0.92);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Tam ekran örneği
+            new P5CodeEditor('editor-fullscreen', {
+                initialCode: `// Tam Ekran Modu
+// Not: Güvenlik nedeniyle tam ekran sadece
+// kullanıcı etkileşimi ile etkinleşebilir
+
+let tamEkran = false;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  // Arka plan rengi duruma göre
+  if (tamEkran) {
+    background(30, 60, 30);
+  } else {
+    background(30);
+  }
+  
+  // Merkez
+  let mx = width / 2;
+  let my = height / 2;
+  
+  // Buton
+  let btnW = width * 0.5;
+  let btnH = height * 0.12;
+  
+  // Buton arka planı
+  if (tamEkran) {
+    fill(200, 100, 100);
+  } else {
+    fill(100, 200, 100);
+  }
+  
+  // Hover efekti
+  let uzerinde = abs(mouseX - mx) < btnW/2 && 
+                 abs(mouseY - my) < btnH/2;
+  if (uzerinde) {
+    fill(tamEkran ? 255, 120, 120 : 120, 255, 120);
+  }
+  
+  noStroke();
+  rectMode(CENTER);
+  rect(mx, my, btnW, btnH, 10);
+  
+  // Buton metni
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(width * 0.04);
+  
+  if (tamEkran) {
+    text("🔲 Normal Moda Dön", mx, my);
+  } else {
+    text("⛶ Tam Ekran Yap", mx, my);
+  }
+  
+  // Bilgi metni
+  textSize(width * 0.03);
+  text("Mevcut durum: " + (tamEkran ? "Tam Ekran" : "Normal"), mx, my + height * 0.15);
+  
+  // Klavye ipucu
+  textSize(width * 0.025);
+  fill(200);
+  text("F tuşuna da basabilirsiniz", mx, height * 0.9);
+  
+  // Canvas boyutu
+  textAlign(LEFT);
+  text(width + " x " + height, 10, 20);
+}
+
+function mousePressed() {
+  let mx = width / 2;
+  let my = height / 2;
+  let btnW = width * 0.5;
+  let btnH = height * 0.12;
+  
+  // Buton tıklaması
+  if (abs(mouseX - mx) < btnW/2 && abs(mouseY - my) < btnH/2) {
+    tamEkranToggle();
+  }
+}
+
+function keyPressed() {
+  if (key === 'f' || key === 'F') {
+    tamEkranToggle();
+  }
+}
+
+function tamEkranToggle() {
+  tamEkran = !tamEkran;
+  
+  // Gerçek tam ekran (editörde çalışmaz)
+  // fullscreen(tamEkran);
+  
+  console.log("Tam ekran: " + tamEkran);
+  console.log("Gerçek projede fullscreen() kullanın");
+  
+  // Simülasyon için canvas boyutunu değiştir
+  if (tamEkran) {
+    resizeCanvas(400, 400);  // "Tam ekran" simülasyonu
+  } else {
+    resizeCanvas(400, 400);
+  }
+}
+
+function windowResized() {
+  // Gerçek projede:
+  // if (fullscreen()) {
+  //   resizeCanvas(windowWidth, windowHeight);
+  // }
+}`,
+                autoRun: true,
+                showConsole: true
+            });
+
+            // Responsive UI
+            new P5CodeEditor('editor-responsive-ui', {
+                initialCode: `// Responsive UI Tasarımı
+
+// Temel ölçek faktörü
+function getScale() {
+  // 400px'lik temel tasarım için ölçek
+  return min(width, height) / 400;
+}
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  let s = getScale();  // Ölçek faktörü
+  let mx = width / 2;
+  let my = height / 2;
+  
+  // Breakpoint kontrolü (ekran genişliğine göre)
+  let mobil = width < 300;
+  
+  // Başlık
+  fill(255);
+  textAlign(CENTER);
+  textSize(24 * s);
+  text("Responsive UI", mx, 40 * s);
+  
+  // Ana içerik kutusu
+  let kutuW = mobil ? width * 0.9 : width * 0.7;
+  let kutuH = height * 0.5;
+  
+  fill(50);
+  stroke(100);
+  strokeWeight(2 * s);
+  rectMode(CENTER);
+  rect(mx, my, kutuW, kutuH, 10 * s);
+  
+  // Butonlar
+  noStroke();
+  let btnW = mobil ? kutuW * 0.8 : kutuW * 0.35;
+  let btnH = 40 * s;
+  let btnY = my + kutuH/2 - btnH - 20 * s;
+  
+  if (mobil) {
+    // Mobil: Butonlar alt alta
+    // Buton 1
+    fill(100, 200, 100);
+    rect(mx, btnY - btnH - 10 * s, btnW, btnH, 5 * s);
+    
+    // Buton 2
+    fill(100, 150, 255);
+    rect(mx, btnY, btnW, btnH, 5 * s);
+  } else {
+    // Masaüstü: Butonlar yan yana
+    fill(100, 200, 100);
+    rect(mx - btnW/2 - 10 * s, btnY, btnW, btnH, 5 * s);
+    
+    fill(100, 150, 255);
+    rect(mx + btnW/2 + 10 * s, btnY, btnW, btnH, 5 * s);
+  }
+  
+  // Buton metinleri
+  fill(255);
+  textSize(14 * s);
+  if (mobil) {
+    text("Tamam", mx, btnY - btnH - 10 * s + 5);
+    text("İptal", mx, btnY + 5);
+  } else {
+    text("Tamam", mx - btnW/2 - 10 * s, btnY + 5);
+    text("İptal", mx + btnW/2 + 10 * s, btnY + 5);
+  }
+  
+  // İçerik metni
+  textSize(12 * s);
+  let icerikY = my - kutuH/4;
+  text("Bu bir responsive UI örneğidir.", mx, icerikY);
+  text("Ekran boyutuna göre düzen değişir.", mx, icerikY + 20 * s);
+  
+  // Durum göstergesi
+  fill(mobil ? color(255, 200, 100) : color(100, 255, 200));
+  textSize(10 * s);
+  text("Mod: " + (mobil ? "MOBİL" : "MASAÜSTÜ"), mx, height - 20 * s);
+  
+  // Ölçek bilgisi
+  fill(150);
+  textAlign(LEFT);
+  text("Ölçek: " + s.toFixed(2), 10, height - 10);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Responsive Grid
+            new P5CodeEditor('editor-grid', {
+                initialCode: `// Responsive Grid Sistemi
+
+let items = [];
+let itemSayisi = 12;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // Rastgele renkli öğeler oluştur
+  for (let i = 0; i < itemSayisi; i++) {
+    items.push({
+      renk: color(random(100, 255), random(100, 255), random(100, 255)),
+      label: i + 1
+    });
+  }
+}
+
+function draw() {
+  background(30);
+  
+  // Ekran genişliğine göre sütun sayısı
+  let sutunSayisi;
+  if (width < 250) {
+    sutunSayisi = 2;  // Çok dar
+  } else if (width < 350) {
+    sutunSayisi = 3;  // Dar
+  } else {
+    sutunSayisi = 4;  // Normal
+  }
+  
+  // Grid hesaplamaları
+  let padding = 10;
+  let gap = 8;
+  
+  let kullanilabilirW = width - padding * 2 - gap * (sutunSayisi - 1);
+  let cellW = kullanilabilirW / sutunSayisi;
+  let cellH = cellW;  // Kare hücreler
+  
+  // Öğeleri çiz
+  for (let i = 0; i < items.length; i++) {
+    let col = i % sutunSayisi;
+    let row = floor(i / sutunSayisi);
+    
+    let x = padding + col * (cellW + gap);
+    let y = 60 + row * (cellH + gap);
+    
+    // Hücre
+    fill(items[i].renk);
+    noStroke();
+    rect(x, y, cellW, cellH, 5);
+    
+    // Etiket
+    fill(0);
+    textAlign(CENTER, CENTER);
+    textSize(cellW * 0.3);
+    text(items[i].label, x + cellW/2, y + cellH/2);
+  }
+  
+  // Başlık ve bilgi
+  fill(255);
+  textSize(16);
+  textAlign(CENTER);
+  text("Responsive Grid", width/2, 30);
+  
+  textSize(11);
+  fill(200);
+  text(sutunSayisi + " sütun × " + ceil(items.length / sutunSayisi) + " satır", width/2, height - 15);
+  
+  // Resize butonu
+  fill(100, 150, 200);
+  noStroke();
+  rect(10, height - 40, 80, 25, 5);
+  rect(width - 90, height - 40, 80, 25, 5);
+  
+  fill(255);
+  textSize(10);
+  text("Küçült", 50, height - 24);
+  text("Büyüt", width - 50, height - 24);
+}
+
+function mousePressed() {
+  if (mouseY > height - 40) {
+    if (mouseX < 90) {
+      // Küçült
+      resizeCanvas(max(200, width - 50), height);
+    } else if (mouseX > width - 90) {
+      // Büyüt
+      resizeCanvas(min(500, width + 50), height);
+    }
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Uyumlu Oyun Alanı
+            new P5CodeEditor('editor-game-area', {
+                initialCode: `// Uyumlu Oyun Alanı
+// Tüm koordinatlar 0-100 arası normalize
+
+let oyuncu = { x: 50, y: 80, boyut: 5 };
+let hedefler = [];
+let skor = 0;
+
+function setup() {
+  createCanvas(400, 400);
+  hedefOlustur();
+}
+
+// Normalize (0-100) koordinatı piksele çevir
+function toPixelX(normX) {
+  return map(normX, 0, 100, 0, width);
+}
+
+function toPixelY(normY) {
+  return map(normY, 0, 100, 0, height);
+}
+
+function toPixelSize(normSize) {
+  return normSize * min(width, height) / 100;
+}
+
+// Piksel koordinatını normalize'e çevir
+function toNormX(pixelX) {
+  return map(pixelX, 0, width, 0, 100);
+}
+
+function toNormY(pixelY) {
+  return map(pixelY, 0, height, 0, 100);
+}
+
+function hedefOlustur() {
+  hedefler = [];
+  for (let i = 0; i < 5; i++) {
+    hedefler.push({
+      x: random(10, 90),
+      y: random(10, 60),
+      boyut: random(3, 6),
+      renk: color(random(200, 255), random(100, 200), 100)
+    });
+  }
+}
+
+function draw() {
+  background(30);
+  
+  // Oyun alanı çerçevesi
+  stroke(100);
+  strokeWeight(2);
+  noFill();
+  rect(0, 0, width, height);
+  
+  // Hedefleri çiz
+  noStroke();
+  for (let h of hedefler) {
+    fill(h.renk);
+    circle(toPixelX(h.x), toPixelY(h.y), toPixelSize(h.boyut * 2));
+  }
+  
+  // Oyuncu
+  fill(100, 200, 255);
+  circle(toPixelX(oyuncu.x), toPixelY(oyuncu.y), toPixelSize(oyuncu.boyut * 2));
+  
+  // Hareket (ok tuşları)
+  let hiz = 1.5;
+  if (keyIsDown(LEFT_ARROW)) oyuncu.x -= hiz;
+  if (keyIsDown(RIGHT_ARROW)) oyuncu.x += hiz;
+  if (keyIsDown(UP_ARROW)) oyuncu.y -= hiz;
+  if (keyIsDown(DOWN_ARROW)) oyuncu.y += hiz;
+  
+  // Sınırlar (0-100 normalize)
+  oyuncu.x = constrain(oyuncu.x, oyuncu.boyut, 100 - oyuncu.boyut);
+  oyuncu.y = constrain(oyuncu.y, oyuncu.boyut, 100 - oyuncu.boyut);
+  
+  // Çarpışma kontrolü
+  for (let i = hedefler.length - 1; i >= 0; i--) {
+    let h = hedefler[i];
+    let mesafe = dist(oyuncu.x, oyuncu.y, h.x, h.y);
+    if (mesafe < oyuncu.boyut + h.boyut) {
+      hedefler.splice(i, 1);
+      skor += 10;
+      if (hedefler.length === 0) hedefOlustur();
+    }
+  }
+  
+  // UI (normalize koordinatlarla)
+  fill(255);
+  textAlign(LEFT);
+  textSize(toPixelSize(4));
+  text("Skor: " + skor, toPixelX(3), toPixelY(8));
+  
+  textAlign(CENTER);
+  textSize(toPixelSize(3));
+  text("Ok tuşları ile hareket", toPixelX(50), toPixelY(97));
+  
+  // Resize butonları
+  let btnSize = toPixelSize(8);
+  fill(80);
+  rect(toPixelX(85), toPixelY(90), btnSize, btnSize/2, 3);
+  rect(toPixelX(85), toPixelY(95), btnSize, btnSize/2, 3);
+  
+  fill(255);
+  textSize(toPixelSize(2.5));
+  text("+", toPixelX(89), toPixelY(92.5));
+  text("-", toPixelX(89), toPixelY(97.5));
+}
+
+function mousePressed() {
+  // Resize butonları
+  if (toNormX(mouseX) > 85 && toNormX(mouseX) < 95) {
+    if (toNormY(mouseY) > 88 && toNormY(mouseY) < 93) {
+      resizeCanvas(min(500, width + 40), min(500, height + 40));
+    }
+    if (toNormY(mouseY) > 93 && toNormY(mouseY) < 98) {
+      resizeCanvas(max(200, width - 40), max(200, height - 40));
+    }
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Aspect Ratio koruma
+            new P5CodeEditor('editor-aspect', {
+                initialCode: `// Aspect Ratio (En-Boy Oranı) Koruma
+// İçeriği çarpıtmadan sığdırma
+
+// Hedef oran (örn: 16:9, 4:3, 1:1)
+let hedefOran = 16 / 9;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Canvas oranı
+  let canvasOran = width / height;
+  
+  // İçerik alanını hesapla (oranı koruyarak)
+  let icerikW, icerikH, icerikX, icerikY;
+  
+  if (canvasOran > hedefOran) {
+    // Canvas daha geniş - yüksekliği sığdır
+    icerikH = height * 0.8;
+    icerikW = icerikH * hedefOran;
+  } else {
+    // Canvas daha dar - genişliği sığdır
+    icerikW = width * 0.8;
+    icerikH = icerikW / hedefOran;
+  }
+  
+  // Ortala
+  icerikX = (width - icerikW) / 2;
+  icerikY = (height - icerikH) / 2;
+  
+  // Letterbox/Pillarbox alanları (koyu)
+  fill(15);
+  noStroke();
+  rect(0, 0, width, icerikY);  // Üst
+  rect(0, icerikY + icerikH, width, height - icerikY - icerikH);  // Alt
+  rect(0, 0, icerikX, height);  // Sol
+  rect(icerikX + icerikW, 0, width - icerikX - icerikW, height);  // Sağ
+  
+  // İçerik alanı
+  fill(40);
+  stroke(100, 200, 255);
+  strokeWeight(2);
+  rect(icerikX, icerikY, icerikW, icerikH);
+  
+  // İçerik (oranı korunan alan içinde)
+  push();
+  translate(icerikX, icerikY);
+  
+  // İçerik koordinatlarını 0-1 arası düşün
+  let olcek = min(icerikW, icerikH);
+  
+  // Örnek içerik: TV ekranı simülasyonu
+  fill(20, 20, 40);
+  noStroke();
+  rect(icerikW * 0.1, icerikH * 0.1, icerikW * 0.8, icerikH * 0.7, 5);
+  
+  // "Video" içeriği
+  fill(50, 80, 100);
+  rect(icerikW * 0.12, icerikH * 0.12, icerikW * 0.76, icerikH * 0.66);
+  
+  // Play butonu
+  fill(255, 100);
+  noStroke();
+  let btnX = icerikW * 0.5;
+  let btnY = icerikH * 0.45;
+  let btnR = olcek * 0.08;
+  circle(btnX, btnY, btnR * 2);
+  
+  fill(255);
+  triangle(
+    btnX - btnR * 0.3, btnY - btnR * 0.4,
+    btnX - btnR * 0.3, btnY + btnR * 0.4,
+    btnX + btnR * 0.5, btnY
+  );
+  
+  // Kontroller
+  fill(60);
+  rect(icerikW * 0.1, icerikH * 0.85, icerikW * 0.8, icerikH * 0.1, 3);
+  
+  pop();
+  
+  // Bilgi
+  fill(255);
+  textSize(12);
+  textAlign(CENTER);
+  text("Hedef Oran: " + hedefOran.toFixed(2) + " (16:9)", width/2, 25);
+  text("İçerik her zaman bu oranı korur", width/2, height - 10);
+  
+  // Oran değiştirme butonları
+  fill(100);
+  rect(10, 10, 50, 20, 3);
+  rect(65, 10, 50, 20, 3);
+  rect(120, 10, 50, 20, 3);
+  
+  fill(255);
+  textSize(10);
+  text("16:9", 35, 24);
+  text("4:3", 90, 24);
+  text("1:1", 145, 24);
+}
+
+function mousePressed() {
+  if (mouseY < 35) {
+    if (mouseX < 60) hedefOran = 16/9;
+    else if (mouseX < 115) hedefOran = 4/3;
+    else if (mouseX < 170) hedefOran = 1/1;
+  }
+  
+  // Resize için canvas'ın herhangi bir yerine çift tıklama
+}
+
+function doubleClicked() {
+  // Rastgele canvas boyutu
+  resizeCanvas(random(250, 450), random(250, 450));
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="text-align: center; padding: 1.5rem 0;">
+                <p style="margin: 0;">İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="../js/theme.js"></script>
+</body>
+</html>

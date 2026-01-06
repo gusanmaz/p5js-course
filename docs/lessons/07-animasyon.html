@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ders 7: Animasyon - p5.js Kursu</title>
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html" class="active">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#animasyon-temeli">Animasyon Temeli</a></li>
+                    <li><a href="#draw-dongusu">draw() Döngüsü</a></li>
+                    <li><a href="#frame-rate">Frame Rate</a></li>
+                    <li><a href="#hareket">Hareket</a></li>
+                    <li><a href="#sinirlama">Sınırlama</a></li>
+                    <li><a href="#ornekler">Uygulama Örnekleri</a></li>
+                    <li><a href="#bonus-ornekler">Bonus Örnekler</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 7: Animasyon</h1>
+                <div class="lesson-meta">
+                    <span>📚 Orta Seviye</span>
+                    <span>⏱️ 45 dakika</span>
+                    <span>🎯 Hareket ve Zamanlama</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: Animation Basics -->
+                <section id="animasyon-temeli">
+                    <h2>Animasyon Nedir?</h2>
+                    
+                    <p>
+                        Animasyon, bir dizi <strong>durağan görüntünün hızla art arda gösterilmesiyle</strong> 
+                        hareket yanılsaması yaratma tekniğidir. Film, televizyon ve video oyunları 
+                        bu prensibe dayanır.
+                    </p>
+
+                    <div class="info-box note">
+                        <div class="info-box-title">🎬 Flip Book Etkisi</div>
+                        <p>
+                            Çocukken yaptığınız flip book'ları (yaprak defterleri) hatırlayın: 
+                            Her sayfaya biraz farklı bir resim çizersiniz, sonra sayfaları hızlıca 
+                            çevirirseniz resim hareket eder gibi görünür!
+                        </p>
+                        <p>
+                            Bilgisayar animasyonu da aynı mantıkla çalışır. p5.js'te <code>draw()</code> 
+                            fonksiyonu saniyede ~60 kez çalışır ve her seferinde biraz farklı bir 
+                            görüntü çizer.
+                        </p>
+                    </div>
+
+                    <h3>Temel Kavramlar</h3>
+                    <ul>
+                        <li><strong>Frame (Kare):</strong> Tek bir durağan görüntü</li>
+                        <li><strong>FPS (Frame Per Second):</strong> Saniyede gösterilen kare sayısı</li>
+                        <li><strong>draw() döngüsü:</strong> Her karede çalışan fonksiyon</li>
+                        <li><strong>frameCount:</strong> Başlangıçtan beri geçen toplam kare sayısı</li>
+                    </ul>
+                </section>
+
+                <!-- Section: draw() Loop -->
+                <section id="draw-dongusu" class="mt-4">
+                    <h2>draw() Döngüsü</h2>
+
+                    <p>
+                        <code>draw()</code> fonksiyonu p5.js'in kalbidir. Program başladıktan sonra 
+                        sürekli tekrar tekrar çalışır (varsayılan olarak saniyede 60 kez).
+                    </p>
+
+                    <pre><code>function setup() {
+  // BİR KEZ çalışır (başlangıçta)
+  createCanvas(400, 400);
+}
+
+function draw() {
+  // SÜREKLI çalışır (saniyede ~60 kez)
+  background(220);
+  circle(mouseX, mouseY, 50);
+}</code></pre>
+
+                    <div class="info-box warning">
+                        <div class="info-box-title">⚠️ background() Neden Önemli?</div>
+                        <p>
+                            Her <code>draw()</code> çağrısında <code>background()</code> kullanmazsanız, 
+                            önceki karelerin üzerine yeni çizimler yapılır ve izler kalır. Bazen bu 
+                            istenen bir efekt olabilir, ama genellikle temiz bir animasyon için 
+                            her karede arkaplanı temizlemeniz gerekir.
+                        </p>
+                    </div>
+
+                    <div id="editor1"></div>
+
+                    <div class="challenge-box">
+                        <h4>🧪 Deney: background() Satırını Silin</h4>
+                        <p>
+                            Yukarıdaki kodda <code>background(220);</code> satırını silin veya yorum 
+                            satırına çevirin. Ne oluyor? Bu efekti bir çizim programı yapmak için 
+                            kullanabilirsiniz!
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Section: Frame Rate -->
+                <section id="frame-rate" class="mt-4">
+                    <h2>Frame Rate (Kare Hızı)</h2>
+
+                    <p>
+                        Varsayılan olarak p5.js saniyede 60 kare çizer, ama bunu değiştirebilirsiniz:
+                    </p>
+
+                    <pre><code>function setup() {
+  createCanvas(400, 400);
+  frameRate(30);  // Saniyede 30 kare
+  // frameRate(10);  // Daha yavaş
+  // frameRate(60);  // Varsayılan
+}</code></pre>
+
+                    <h3>İlgili Değişkenler ve Fonksiyonlar</h3>
+                    <ul>
+                        <li><code>frameRate(sayi)</code> - Kare hızını ayarlar</li>
+                        <li><code>frameCount</code> - Toplam çizilen kare sayısı</li>
+                        <li><code>noLoop()</code> - draw() döngüsünü durdurur</li>
+                        <li><code>loop()</code> - draw() döngüsünü başlatır</li>
+                        <li><code>redraw()</code> - noLoop() ile durdurulmuş draw()'u bir kez çalıştırır</li>
+                    </ul>
+
+                    <div id="editor2"></div>
+
+                    <div class="info-box tip mt-3">
+                        <h4>✋ Manuel Kontrol (noLoop ve redraw)</h4>
+                        <p>
+                            Performans tasarrufu yapmak veya sadece etkileşim olduğunda çizim yapmak için 
+                            <code>noLoop()</code> kullanabilirsiniz. Aşağıdaki örnekte çizim sadece fareye tıklandığında yenilenir.
+                        </p>
+                    </div>
+                    <div id="editor-redraw"></div>
+                </section>
+
+                <!-- Section: Movement -->
+                <section id="hareket" class="mt-4">
+                    <h2>Hareket Oluşturma</h2>
+
+                    <p>
+                        Animasyon yapmak için değişkenleri kullanarak nesnelerin konumunu 
+                        her karede biraz değiştirmeniz gerekir.
+                    </p>
+
+                    <h3>Temel Hareket Formülü</h3>
+                    <pre><code>let x = 0;  // Başlangıç konumu
+
+function draw() {
+  x = x + hiz;  // Her karede konum değişir
+  // veya kısa hali: x += hiz;
+}</code></pre>
+
+                    <h3>Hareket Türleri</h3>
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Hareket Türü</th>
+                                <th>Kod</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Yatay Hareket</strong></td>
+                                <td><code>x += hiz;</code></td>
+                                <td>X koordinatını değiştir → Sağa/Sola</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dikey Hareket</strong></td>
+                                <td><code>y += hiz;</code></td>
+                                <td>Y koordinatını değiştir → Yukarı/Aşağı</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Çapraz Hareket</strong></td>
+                                <td><pre style="margin:0; padding: 0.5rem;"><code style="padding:0;">x += hizX;
+y += hizY;</code></pre></td>
+                                <td>Her iki eksende birden hareket</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Döngüsel Hareket</strong></td>
+                                <td><pre style="margin:0; padding: 0.5rem;"><code style="padding:0;">x = cos(aci) * r;
+y = sin(aci) * r;
+aci += hiz;</code></pre></td>
+                                <td>Trigonometri ile daire çizme</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="editor3"></div>
+                </section>
+
+                <!-- Section: Constraints -->
+                <section id="sinirlama" class="mt-4">
+                    <h2>Sınırlama ve Döngüsel Hareket</h2>
+
+                    <p>
+                        Nesneler ekrandan çıkmasın diye sınır kontrolü yapmanız gerekir. 
+                        Bunun için <strong>if koşulları</strong>, <strong>mod (%)</strong> veya 
+                        <strong>constrain()</strong> kullanabiliriz.
+                    </p>
+
+                    <h3>1. Sarmalama (Mod ile)</h3>
+                    <p>Mod (%) operatörü ile ekran genişliğinde döngüsel hareket:</p>
+                    <pre><code>// x sürekli artar, % width ile 0-399 arasında döner
+x = (frameCount * hiz) % width;</code></pre>
+
+                    <h3>2. Sınırda Durdurma (Constrain)</h3>
+                    <p><code>constrain()</code> fonksiyonu değeri belirli aralıkta tutar:</p>
+                    <pre><code>// x, 0 ile 400 arasında kalır
+x = constrain(x, 0, 400);
+
+// Fare konumunu sınırla
+x = constrain(mouseX, yaricap, width - yaricap);</code></pre>
+
+                    <div class="info-box">
+                        <h4>💡 Zıplama (Bounce)</h4>
+                        <p>
+                            Sınıra çarpınca geri zıplama efekti için <code>if</code> koşulu ile hızın yönünü tersine çeviririz.
+                        </p>
+                    </div>
+
+                    <div id="editor4"></div>
+                </section>
+
+                <!-- Section: Practice Examples -->
+                <section id="ornekler" class="mt-4">
+                    <h2>Uygulama Örnekleri</h2>
+
+                    <h3>Örnek 1: Dairesel Hareket</h3>
+                    <p>sin() ve cos() ile yörünge hareketi:</p>
+                    <div id="editor5"></div>
+
+                    <h3>Örnek 2: Nefes Alan Daire</h3>
+                    <p>sin() ile büyüyüp küçülen animasyon:</p>
+                    <div id="editor6"></div>
+
+                    <h3>Örnek 3: Salıncak Hareketi</h3>
+                    <p>sin() ile sarkaç efekti:</p>
+                    <div id="editor7"></div>
+
+                    <h3>Örnek 4: Yağmur Efekti (for döngüsü ile)</h3>
+                    <p>for döngüsü ve matematikle çoklu parçacık animasyonu:</p>
+                    <div id="editor8"></div>
+
+                    <div class="info-box tip">
+                        <h4>💡 Bu Örneklerde Kullanılan Teknikler</h4>
+                        <p>
+                            Yukarıdaki örneklerde <code>for</code> döngüsü içinde matematiksel formüllerle
+                            her parçacığın konumunu hesapladık. <code>frameCount</code> değişkeni ve 
+                            <code>%</code> (mod) operatörü ile her parçacığın benzersiz hareketini 
+                            oluşturduk.
+                        </p>
+                    </div>
+
+                    <h3>Örnek 5: Havai Fişek Efekti</h3>
+                    <p>Merkezden dışarı doğru yayılan parçacıklar:</p>
+                    <div id="editor9"></div>
+                </section>
+
+                <!-- Bonus Examples -->
+                <section id="bonus-ornekler" class="mt-4">
+                    <h2>Bonus Örnekler</h2>
+                    
+                    <p>Aşağıdaki örnekler, öğrendiğimiz tekniklerin yaratıcı kullanımlarını göstermektedir.</p>
+
+                    <h3>Örnek 6: Dalga Efekti</h3>
+                    <p>sin() ile dalgalanan daireler:</p>
+                    <div id="editor10"></div>
+
+                    <h3>Örnek 7: Yıldızlı Gece</h3>
+                    <p>Yanıp sönen yıldızlar ve kayan yıldız:</p>
+                    <div id="editor11"></div>
+
+                    <h3>Örnek 8: Top Zıplatma</h3>
+                    <p>Yerçekimi ve zıplama fiziği:</p>
+                    <div id="editor12"></div>
+
+                    <h3>Örnek 9: Hipnotik Spiral</h3>
+                    <p>Dönen spiral deseni:</p>
+                    <div id="editor13"></div>
+                </section>
+
+                <!-- Key Concepts Summary -->
+                <section class="mt-4">
+                    <h2>Temel Kavramlar Özeti</h2>
+
+                    <div class="card" style="background: rgba(0, 217, 255, 0.05);">
+                        <h4>Bu Derste Öğrendikleriniz</h4>
+                        <ul>
+                            <li><strong>Animasyon:</strong> Art arda gösterilen karelerle hareket yanılsaması</li>
+                            <li><strong>draw():</strong> Saniyede ~60 kez çalışan döngü fonksiyonu</li>
+                            <li><strong>background():</strong> Her karede tuvali temizler</li>
+                            <li><strong>frameRate():</strong> Kare hızını ayarlar</li>
+                            <li><strong>frameCount:</strong> Toplam kare sayısı sayacı</li>
+                            <li><strong>Hareket:</strong> Her karede konumu biraz değiştirmek</li>
+                            <li><strong>Mod (%):</strong> Döngüsel hareket için</li>
+                            <li><strong>constrain():</strong> Sınırda durma için</li>
+                            <li><strong>sin() / cos():</strong> Dairesel ve salınımlı hareket için</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box tip mt-3">
+                        <div class="info-box-title">💡 Animasyon İpuçları</div>
+                        <ul>
+                            <li>Hızı çok yüksek tutmayın, aksi halde hareket kesik kesik görünür</li>
+                            <li><code>sin()</code> ve <code>cos()</code> ile doğal görünümlü hareketler yapabilirsiniz</li>
+                            <li>Birden fazla nesne animasyonu için diziler (arrays) kullanın</li>
+                            <li><code>lerp()</code> fonksiyonu ile yumuşak geçişler yapabilirsiniz</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <section class="mt-4" style="display: flex; justify-content: space-between; padding: 2rem 0; border-top: 1px solid var(--border-color);">
+                    <a href="06-donguler.html" class="btn btn-secondary">
+                        ← Önceki: Döngüler
+                    </a>
+                    <a href="08-fonksiyonlar.html" class="btn btn-primary">
+                        Sonraki Ders: Fonksiyonlar →
+                    </a>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="../js/editor.js"></script>
+    <script src="../js/theme.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Örnek 1: draw() Döngüsü
+            new P5CodeEditor('editor1', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+  // frameRate(10);  // Yavaşlatmak için açın
+}
+
+function draw() {
+  // Bu satırı silmeyi deneyin!
+  background(220);
+  
+  // Fareyi takip eden daire
+  fill(0, 150, 255);
+  noStroke();
+  circle(mouseX, mouseY, 40);
+  
+  // Kare sayısını göster
+  fill(0);
+  textSize(14);
+  text("Kare: " + frameCount, 10, 25);
+  text("Fare: (" + mouseX + ", " + mouseY + ")", 10, 45);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 2: Frame Rate
+            new P5CodeEditor('editor2', {
+                initialCode: `let x = 0;
+
+function setup() {
+  createCanvas(400, 400);
+  frameRate(60);  // 10, 30, 60 deneyin
+}
+
+function draw() {
+  background(30);
+  
+  // Hareket eden daire
+  fill(255, 100, 100);
+  noStroke();
+  
+  // Mod ile döngüsel hareket
+  x = (frameCount * 3) % (width + 50) - 25;
+  circle(x, 200, 50);
+  
+  // FPS göster
+  fill(255);
+  textSize(16);
+  text("frameCount: " + frameCount, 20, 30);
+  text("Geçen saniye: " + floor(frameCount / 60), 20, 55);
+  
+  // FPS bar (constrain ile sınırla)
+  let fps = frameRate();
+  let barGenislik = constrain(fps * 200 / 60, 0, 200);
+  fill(100);
+  rect(20, 70, 200, 20);
+  fill(0, 255, 0);
+  rect(20, 70, barGenislik, 20);
+  fill(255);
+  text("FPS: " + floor(fps), 230, 87);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 2.5: Manuel Kontrol (redraw)
+            new P5CodeEditor('editor-redraw', {
+                initialCode: `// noLoop() ve redraw() kullanımı
+
+function setup() {
+  createCanvas(400, 400);
+  background(220);
+  
+  fill(0);
+  textSize(16);
+  text("Ekrana tıklayarak bir daire çizdir!", 20, 30);
+  
+  noLoop(); // draw() döngüsünü durdur
+}
+
+function draw() {
+  // Bu kod sadece redraw() çağrıldığında çalışır
+  // (veya program başında bir kez)
+  
+  let x = random(width);
+  let y = random(height);
+  let r = random(20, 80);
+  
+  fill(random(255), random(255), random(255), 200);
+  noStroke();
+  circle(x, y, r);
+}
+
+function mousePressed() {
+  redraw(); // draw() fonksiyonunu BİR KEZ çalıştır
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 3: Hareket Türleri
+            new P5CodeEditor('editor3', {
+                initialCode: `// Farklı hareket türleri
+
+let aci = 0;  // Dairesel hareket için
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  noStroke();
+  
+  // 1. Yatay hareket (mod ile sarmalama)
+  let x1 = (frameCount * 2) % (width + 30) - 15;
+  fill(255, 100, 100);
+  circle(x1, 80, 30);
+  
+  fill(255);
+  textSize(12);
+  text("Yatay hareket (mod ile)", 10, 55);
+  
+  // 2. Dikey hareket (mod ile sarmalama)
+  let y2 = (frameCount * 2) % (height + 30) - 15;
+  fill(100, 255, 100);
+  circle(350, y2, 30);
+  text("Dikey", 330, 55);
+  
+  // 3. Çapraz hareket (mod ile)
+  let x3 = (frameCount * 2) % (width + 30) - 15;
+  let y3 = 200 + (frameCount * 1) % 150;
+  fill(100, 100, 255);
+  circle(x3, y3, 30);
+  text("Çapraz hareket", 10, 185);
+  
+  // 4. Dairesel hareket (sin/cos ile)
+  let merkezX = 200;
+  let merkezY = 320;
+  let yaricap = 50;
+  let x4 = merkezX + cos(aci) * yaricap;
+  let y4 = merkezY + sin(aci) * yaricap;
+  
+  fill(255, 255, 100);
+  circle(x4, y4, 20);
+  
+  // Yörünge çizgisi
+  noFill();
+  stroke(100);
+  circle(merkezX, merkezY, yaricap * 2);
+  
+  aci += 0.05;  // Dönme hızı
+  
+  fill(255);
+  noStroke();
+  text("Dairesel hareket (sin/cos)", merkezX - 60, merkezY - yaricap - 15);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 4: Sınır Kontrolü
+            new P5CodeEditor('editor4', {
+                initialCode: `// Sınır kontrolü ve Zıplama
+
+let topX = 200;
+let topHiz = 5;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  noStroke();
+  
+  let yaricap = 20;
+  
+  // 1. Zıplama (Bounce) - if ile
+  topX = topX + topHiz;
+  
+  // Sağ veya sol sınıra çarparsa yön değiştir
+  if (topX > width - yaricap) {
+    topHiz = -5;
+  }
+  if (topX < yaricap) {
+    topHiz = 5;
+  }
+  
+  fill(255, 100, 100);
+  circle(topX, 100, yaricap * 2);
+  
+  fill(255);
+  textSize(14);
+  text("Zıplama (Bounce): if ile yön değiştirme", 20, 50);
+  text("Hız: " + topHiz, 20, 130);
+  
+  // 2. Sınırda Durdurma (Constrain)
+  let x2 = constrain(mouseX, yaricap, width - yaricap);
+  
+  fill(100, 100, 255);
+  circle(x2, 250, yaricap * 2);
+  
+  text("Sınırda Durdurma: Fareyi kenara götür", 20, 200);
+  
+  // Sınır çizgileri
+  stroke(100, 100, 255, 100);
+  line(yaricap, 220, yaricap, 280);
+  line(width - yaricap, 220, width - yaricap, 280);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 5: Yörünge (Basitleştirilmiş - for olmadan)
+            new P5CodeEditor('editor5', {
+                initialCode: `// Güneş sistemi: Dairesel hareket örneği
+
+let aci = 0;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(10, 10, 30);
+  
+  // Güneş (Merkez)
+  noStroke();
+  fill(255, 200, 0);
+  circle(width/2, height/2, 60);
+  
+  // Yörünge çizgisi
+  noFill();
+  stroke(100, 100, 200, 50);
+  circle(width/2, height/2, 200);
+  
+  // Dünya konumu
+  let dunyaX = width/2 + cos(aci) * 100;
+  let dunyaY = height/2 + sin(aci) * 100;
+  
+  // Dünya
+  noStroke();
+  fill(50, 100, 200);
+  circle(dunyaX, dunyaY, 30);
+  
+  // Ay
+  let ayX = dunyaX + cos(aci * 4) * 25;
+  let ayY = dunyaY + sin(aci * 4) * 25;
+  fill(200);
+  circle(ayX, ayY, 10);
+  
+  // Açıyı artır
+  aci = aci + 0.02;
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 6: Nefes Alan Daire (sin ile yumuşak animasyon)
+            new P5CodeEditor('editor6', {
+                initialCode: `// sin() fonksiyonu ile yumuşak animasyon
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30, 30, 50);
+  
+  // frameCount sürekli artar (0, 1, 2, 3...)
+  // Bunu yavaşlatmak için 0.05 ile çarpıyoruz
+  let dalgaDeger = sin(frameCount * 0.05);
+  
+  // sin() -1 ile 1 arası verir
+  // Bunu 50-150 arasına çevirelim:
+  // dalgaDeger = -1 iken: 100 + (-1)*50 = 50
+  // dalgaDeger = 0 iken:  100 + 0*50 = 100
+  // dalgaDeger = 1 iken:  100 + 1*50 = 150
+  let boyut = 100 + dalgaDeger * 50;
+  
+  // Renk de değişsin (sin değerine göre)
+  let kirmizi = 128 + dalgaDeger * 127;  // 1-255 arası
+  let mavi = 128 - dalgaDeger * 127;     // 255-1 arası
+  
+  // Ana daire
+  noStroke();
+  fill(kirmizi, 50, mavi);
+  circle(width/2, height/2, boyut);
+  
+  // İç daire (ters faz - daire büyürken bu küçülür)
+  let icBoyut = 50 - dalgaDeger * 20;
+  fill(255, 255, 255, 100);
+  circle(width/2, height/2, icBoyut);
+  
+  // Açıklama
+  fill(255);
+  textSize(12);
+  text("frameCount: " + frameCount, 20, 30);
+  text("sin(frameCount * 0.05): " + dalgaDeger.toFixed(2), 20, 50);
+  text("boyut = 100 + sin * 50 = " + floor(boyut), 20, 70);
+  
+  // sin değeri göstergesi
+  fill(50);
+  rect(20, 350, 360, 30, 5);
+  
+  // Gösterge çubuğu (sin değerine göre kayar)
+  let gostergeX = 200 + dalgaDeger * 170;
+  fill(kirmizi, 50, mavi);
+  rect(gostergeX - 5, 355, 10, 20, 3);
+  
+  fill(255);
+  textSize(10);
+  text("-1", 25, 368);
+  text("0", 195, 368);
+  text("+1", 365, 368);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 7: Salıncak (Fiziksel Animasyon)
+            new P5CodeEditor('editor7', {
+                initialCode: `// Basit sarkaç (salıncak) fiziği
+// sin() ve cos() ile konum hesaplama
+
+// Global değişkenler
+let aci = 0.8;        // Başlangıç açısı (radyan)
+let aciHiz = 0;       // Açısal hız
+let yerCekimi = 0.4;  // Yerçekimi kuvveti
+let ipUzunlugu = 150; // İp uzunluğu
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(135, 206, 235);  // Gökyüzü
+  
+  // Zemin (çim)
+  noStroke();
+  fill(100, 180, 100);
+  rect(0, 350, width, 50);
+  
+  // Salıncak direği
+  fill(139, 90, 43);
+  rect(185, 50, 30, 20);
+  
+  // İp başlangıç noktası (asılı olduğu yer)
+  let baslangicX = 200;
+  let baslangicY = 60;
+  
+  // Top/koltuk konumu (sin ve cos ile hesaplanır)
+  // sin(aci) → yatay sapma
+  // cos(aci) → dikey mesafe
+  let topX = baslangicX + sin(aci) * ipUzunlugu;
+  let topY = baslangicY + cos(aci) * ipUzunlugu;
+  
+  // İp
+  stroke(139, 90, 43);
+  strokeWeight(3);
+  line(baslangicX, baslangicY, topX, topY);
+  
+  // Koltuk
+  fill(139, 69, 19);
+  noStroke();
+  rect(topX - 25, topY, 50, 10, 3);
+  
+  // İp bağlantıları (koltuğun iki tarafından)
+  stroke(139, 90, 43);
+  strokeWeight(2);
+  line(topX - 20, topY, baslangicX - 5, baslangicY);
+  line(topX + 20, topY, baslangicX + 5, baslangicY);
+  
+  // Fizik hesaplaması (basit sarkaç denklemi)
+  // İvme = -yerCekimi/ipUzunlugu * sin(açı)
+  let ivme = -yerCekimi / ipUzunlugu * sin(aci);
+  aciHiz = aciHiz + ivme;   // Hıza ivme ekle
+  aciHiz = aciHiz * 0.995;  // Sürtünme (yavaşça durur)
+  aci = aci + aciHiz;       // Açıyı güncelle
+  
+  // Fareye tıklayınca ittir
+  if (mouseIsPressed) {
+    aciHiz = aciHiz + 0.01;
+  }
+  
+  // Bilgi
+  fill(50);
+  noStroke();
+  textSize(14);
+  text("Açı: " + degrees(aci).toFixed(1) + "°", 20, 30);
+  text("Hız: " + (aciHiz * 100).toFixed(2), 20, 50);
+  text("Sallamak için fareye basılı tutun!", 20, 370);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 8: Yağmur (for döngüsü)
+            new P5CodeEditor('editor8', {
+                initialCode: `// for döngüsü ile yağmur efekti
+// Matematikle her damlanın konumunu hesaplıyoruz
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30, 30, 50);
+  
+  stroke(150, 150, 255, 150);
+  strokeWeight(2);
+  
+  // 50 tane yağmur damlası çiz
+  for (let i = 0; i < 50; i = i + 1) {
+    // Her damla için benzersiz bir "tohum" değeri
+    // Bu sayede her damla farklı konumda olur
+    let tohum = i * 137;  // 137 asal sayı, iyi dağılım sağlar
+    
+    // X konumu: tohum değerine göre sabit bir yatay konum
+    // mod (%) ile 0-400 arasında tutar
+    let x = (tohum * 3) % width;
+    
+    // Her damlanın farklı bir hızı olsun (2-5 arası)
+    let hiz = 2 + (tohum % 30) / 10;
+    
+    // Y konumu: frameCount ile sürekli aşağı iner
+    // Her damla farklı "başlangıç noktasından" başlar
+    let baslangic = (tohum * 7) % 500;
+    let y = (baslangic + frameCount * hiz) % (height + 50) - 25;
+    
+    // Damla uzunluğu (hıza göre)
+    let uzunluk = hiz * 4;
+    
+    // Damlayı çiz
+    line(x, y, x, y + uzunluk);
+  }
+  
+  // Bilgi
+  fill(255);
+  noStroke();
+  textSize(12);
+  text("50 yağmur damlası", 20, 30);
+  text("Her damlanın konumu frameCount ile hesaplanır", 20, 50);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 9: Havai Fişek Efekti
+            new P5CodeEditor('editor9', {
+                initialCode: `// Havai fişek efekti
+// Merkezden dışarı doğru yayılan parçacıklar
+// frameCount ile zaman bazlı animasyon
+
+// Patlama zamanı (her 120 karede bir yeni patlama)
+let patlamaSuresi = 120;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  // Yarı saydam arkaplan (iz efekti için)
+  background(20, 20, 40, 50);
+  
+  // Patlamadan bu yana geçen kare sayısı
+  let gecenSure = frameCount % patlamaSuresi;
+  
+  // Patlama merkezi (her patlamada farklı konum)
+  // floor(frameCount / patlamaSuresi) kaçıncı patlama olduğunu verir
+  let patlamaNo = floor(frameCount / patlamaSuresi);
+  let merkezX = 100 + (patlamaNo * 73) % 200;  // 100-300 arası
+  let merkezY = 100 + (patlamaNo * 47) % 150;  // 100-250 arası
+  
+  noStroke();
+  
+  // 30 parçacık çiz
+  for (let i = 0; i < 30; i = i + 1) {
+    // Her parçacık için benzersiz açı (eşit aralıklı)
+    let aci = i * (TWO_PI / 30);
+    
+    // Her parçacığın farklı hızı olsun
+    let hiz = 2 + (i % 5) * 0.5;
+    
+    // Konum: merkezden dışarı doğru
+    // gecenSure arttıkça merkeze olan uzaklık artar
+    let mesafe = gecenSure * hiz;
+    let x = merkezX + cos(aci) * mesafe;
+    let y = merkezY + sin(aci) * mesafe;
+    
+    // Yerçekimi etkisi (y aşağı çekilir)
+    y = y + gecenSure * gecenSure * 0.01;
+    
+    // Sönme efekti (zaman geçtikçe şeffaflaşır)
+    let seffaflik = 255 - gecenSure * 2;
+    if (seffaflik < 0) {
+      seffaflik = 0;
+    }
+    
+    // Renk (parçacık numarasına göre)
+    let r = 200 + (i * 17) % 55;
+    let g = 100 + (i * 23) % 100;
+    let b = 50 + (i * 31) % 100;
+    
+    fill(r, g, b, seffaflik);
+    circle(x, y, 8);
+  }
+  
+  // Bilgi
+  fill(255);
+  textSize(12);
+  text("Havai fişek", 20, 30);
+  text("Patlama: " + (patlamaNo + 1), 20, 50);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 10: Dalga Efekti
+            new P5CodeEditor('editor10', {
+                initialCode: `// Dalga efekti
+// sin() ile yatay hareket eden daireler
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30, 50, 80);
+  
+  noStroke();
+  
+  // 15 sütun daire çiz
+  for (let i = 0; i < 15; i = i + 1) {
+    // X konumu: eşit aralıklı
+    let x = 25 + i * 25;
+    
+    // Her dairenin dalga fazı farklı
+    // i * 0.3 ile daireler arasında gecikme
+    let faz = i * 0.3;
+    
+    // Y konumu: sin() ile dalgalı hareket
+    let dalgaY = sin(frameCount * 0.05 + faz) * 80;
+    let y = height/2 + dalgaY;
+    
+    // Boyut da değişsin (ikinci bir dalga)
+    let boyut = 15 + sin(frameCount * 0.03 + faz) * 5;
+    
+    // Renk: konuma göre değişen mavi tonları
+    let mavi = 150 + sin(frameCount * 0.05 + faz) * 50;
+    fill(100, 150, mavi);
+    
+    circle(x, y, boyut);
+    
+    // İkinci dalga (daha aşağıda, ters fazda)
+    let y2 = height/2 + 100 - dalgaY;
+    fill(100, mavi, 150);
+    circle(x, y2, boyut);
+  }
+  
+  // Bilgi
+  fill(255);
+  textSize(12);
+  text("sin() ile dalga efekti", 20, 30);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 11: Yıldızlı Gece
+            new P5CodeEditor('editor11', {
+                initialCode: `// Yıldızlı gece gökyüzü
+// Yanıp sönen yıldızlar ve kayan yıldız
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(10, 10, 30);
+  
+  noStroke();
+  
+  // 40 yıldız çiz
+  for (let i = 0; i < 40; i = i + 1) {
+    // Her yıldız için sabit konum (tohum ile)
+    let tohum = i * 97;
+    let x = (tohum * 3) % width;
+    let y = (tohum * 7) % (height - 100);
+    
+    // Parlaklık: sin() ile yanıp söner
+    // Her yıldızın farklı hızda yanıp sönmesi için i ekliyoruz
+    let parlaklik = 150 + sin(frameCount * 0.05 + i) * 105;
+    
+    // Boyut da hafifçe değişsin
+    let boyut = 2 + sin(frameCount * 0.03 + i * 0.5) * 1;
+    
+    fill(255, 255, 200, parlaklik);
+    circle(x, y, boyut);
+  }
+  
+  // Kayan yıldız
+  // Her 200 karede bir yeni kayan yıldız
+  let kayanBaslama = (floor(frameCount / 200)) * 200;
+  let kayanSure = frameCount - kayanBaslama;
+  
+  if (kayanSure < 60) {  // 60 kare boyunca görünür
+    let kx = 50 + kayanSure * 5;
+    let ky = 50 + kayanSure * 2;
+    
+    // Kuyruk efekti
+    for (let j = 0; j < 10; j = j + 1) {
+      let seffaflik = 255 - j * 25;
+      fill(255, 255, 200, seffaflik);
+      circle(kx - j * 5, ky - j * 2, 4 - j * 0.3);
+    }
+  }
+  
+  // Ay
+  fill(240, 240, 220);
+  circle(320, 80, 60);
+  // Ay gölgesi
+  fill(10, 10, 30);
+  circle(335, 75, 50);
+  
+  // Zemin (dağ silüeti)
+  fill(20, 30, 40);
+  beginShape();
+  vertex(0, 400);
+  vertex(0, 350);
+  vertex(80, 320);
+  vertex(150, 360);
+  vertex(200, 300);
+  vertex(280, 340);
+  vertex(350, 310);
+  vertex(400, 350);
+  vertex(400, 400);
+  endShape(CLOSE);
+  
+  // Bilgi
+  fill(255);
+  textSize(12);
+  text("Yıldızlı gece (sin ile parıltı)", 20, 390);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 12: Top Zıplatma
+            new P5CodeEditor('editor12', {
+                initialCode: `// Top zıplatma fiziği
+// Yerçekimi ve enerji kaybı ile
+
+let topY = 50;      // Topun Y konumu
+let topHiz = 0;     // Topun dikey hızı
+let yerCekimi = 0.5; // Yerçekimi ivmesi
+let enerjiKaybi = 0.8; // Zıplamada enerji kaybı
+let topX = 200;     // Topun X konumu
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(240);
+  
+  // Zemin
+  fill(100, 150, 100);
+  noStroke();
+  rect(0, 350, width, 50);
+  
+  // Fizik hesaplamaları
+  topHiz = topHiz + yerCekimi;  // Yerçekimi hızı artırır
+  topY = topY + topHiz;         // Hız konumu değiştirir
+  
+  // Zemine çarpma kontrolü
+  if (topY > 330) {
+    topY = 330;                       // Zemin seviyesinde tut
+    topHiz = topHiz * -enerjiKaybi;   // Yönü tersine çevir + enerji kaybı
+  }
+  
+  // Fareye tıklayınca topu sıfırla
+  if (mouseIsPressed) {
+    topY = mouseY;
+    topHiz = 0;
+    topX = mouseX;
+  }
+  
+  // Gölge (topun Y konumuna göre boyut değişir)
+  let golgeGenislik = 40 + (topY - 50) * 0.1;
+  fill(0, 0, 0, 50);
+  ellipse(topX, 355, golgeGenislik, 10);
+  
+  // Top
+  fill(255, 100, 100);
+  stroke(200, 50, 50);
+  strokeWeight(2);
+  circle(topX, topY, 40);
+  
+  // Topun üzerinde parlama efekti
+  noStroke();
+  fill(255, 200, 200, 150);
+  circle(topX - 8, topY - 8, 12);
+  
+  // Bilgi
+  fill(50);
+  noStroke();
+  textSize(12);
+  text("Y: " + floor(topY) + "  Hız: " + topHiz.toFixed(1), 20, 30);
+  text("Fareye tıklayarak topu taşıyın", 20, 380);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 13: Hipnotik Spiral
+            new P5CodeEditor('editor13', {
+                initialCode: `// Hipnotik spiral
+// Dönen ve genişleyen spiral deseni
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(20);
+  
+  // Merkez noktası
+  let merkezX = width / 2;
+  let merkezY = height / 2;
+  
+  noFill();
+  strokeWeight(3);
+  
+  // 200 nokta ile spiral çiz
+  for (let i = 0; i < 200; i = i + 1) {
+    // Açı: i arttıkça açı artar + frameCount ile döner
+    let aci = i * 0.1 + frameCount * 0.02;
+    
+    // Yarıçap: i arttıkça merkeze uzaklık artar
+    let yaricap = i * 0.8;
+    
+    // Konum hesapla (merkeze göre)
+    let x = merkezX + cos(aci) * yaricap;
+    let y = merkezY + sin(aci) * yaricap;
+    
+    // Renk: gökkuşağı efekti
+    // i değerine göre renk tonu değişir
+    let renk = (i * 3 + frameCount) % 360;
+    
+    // RGB ile gökkuşağı
+    let r = 127 + sin(renk * 0.017) * 127;
+    let g = 127 + sin(renk * 0.017 + 2) * 127;
+    let b = 127 + sin(renk * 0.017 + 4) * 127;
+    
+    stroke(r, g, b);
+    
+    // Küçük daire çiz
+    let boyut = 5 + sin(i * 0.1 + frameCount * 0.05) * 3;
+    circle(x, y, boyut);
+  }
+  
+  // Bilgi
+  fill(255);
+  noStroke();
+  textSize(12);
+  text("Hipnotik spiral (sin/cos)", 20, 30);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+        });
+    </script>
+</body>
+</html>

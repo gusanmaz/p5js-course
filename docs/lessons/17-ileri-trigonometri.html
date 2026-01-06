@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    
+    
+    <title>Ders 17: İleri - Trigonometri - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                    <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                    <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                    <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                    <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                    <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                    <li><a href="17-ileri-trigonometri.html" class="active">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#temel">Temel Kavramlar</a></li>
+                    <li><a href="#sin-cos">sin() ve cos()</a></li>
+                    <li><a href="#daire">Daire Üzerinde Hareket</a></li>
+                    <li><a href="#dalga">Dalga Desenleri</a></li>
+                    <li><a href="#polar">Kutupsal Koordinatlar</a></li>
+                    <li><a href="#ornekler">Uygulama Örnekleri</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 17: İleri - Trigonometri</h1>
+                <div class="lesson-meta">
+                    <span>📚 İleri Seviye</span>
+                    <span>⏱️ 60 dakika</span>
+                    <span>🎯 sin, cos ile yaratıcı animasyonlar</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: Temel Kavramlar -->
+                <section id="temel" class="lesson-section">
+                    <h2>📐 Temel Kavramlar</h2>
+                    
+                    <p>
+                        Trigonometri, açılar ve uzunluklar arasındaki ilişkileri inceler. Grafik programlamada 
+                        döngüsel hareketler, dalgalar ve karmaşık desenler için vazgeçilmezdir.
+                    </p>
+                    
+                    <h3>Açı Birimleri: Derece ve Radyan</h3>
+                    
+                    <div class="info-box">
+                        <h4>🤔 Derece Nedir?</h4>
+                        <p>
+                            Günlük hayatta kullandığımız açı birimi <strong>derece</strong>'dir. Bir tam dönüş <strong>360°</strong>'dir. 
+                            Çeyrek dönüş 90°, yarım dönüş 180° demektir. Pusula, saat, pergel - hepsi derece kullanır.
+                        </p>
+                    </div>
+                    
+                    <div class="info-box tip">
+                        <h4>🔄 Radyan Nedir?</h4>
+                        <p>
+                            <strong>Radyan</strong>, matematikteki "doğal" açı birimidir. Bir dairenin çevresinin yarıçapına bölümüne dayanır.
+                        </p>
+                        <ul>
+                            <li>Bir tam dönüş = çemberin çevresi = <strong>2π × yarıçap</strong></li>
+                            <li>Yani tam dönüş = <strong>2π radyan ≈ 6.28 radyan</strong></li>
+                            <li>Yarım dönüş = <strong>π radyan ≈ 3.14 radyan</strong></li>
+                            <li>Çeyrek dönüş = <strong>π/2 radyan ≈ 1.57 radyan</strong></li>
+                        </ul>
+                        <p style="margin-top: 0.5rem;">
+                            <strong>Neden radyan?</strong> Matematik ve fizikteki formüller radyanla çok daha basit olur. 
+                            p5.js varsayılan olarak radyan kullanır çünkü sin/cos hesaplamaları radyanla yapılır.
+                        </p>
+                    </div>
+                    
+                    <div class="info-box warning">
+                        <h4>📐 Dönüşüm Formülü</h4>
+                        <p>
+                            <strong>360° = 2π radyan</strong> olduğundan:
+                        </p>
+                        <ul>
+                            <li>Derece → Radyan: <code>radyan = derece × (π / 180)</code></li>
+                            <li>Radyan → Derece: <code>derece = radyan × (180 / π)</code></li>
+                        </ul>
+                        <p style="margin-top: 0.5rem;">
+                            p5.js'te <code>radians()</code> ve <code>degrees()</code> fonksiyonlarıyla kolayca dönüşüm yapabilirsiniz.
+                        </p>
+                    </div>
+                    
+                    <h4>📊 Derece - Radyan Karşılaştırma Tablosu</h4>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>🧭 Konum</th>
+                                <th>📐 Derece</th>
+                                <th>🔢 Radyan</th>
+                                <th>💻 p5.js</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>➡️ Sağ (Başlangıç)</td>
+                                <td><strong>0°</strong></td>
+                                <td>0</td>
+                                <td><code>0</code></td>
+                            </tr>
+                            <tr>
+                                <td>⬇️ Aşağı (Çeyrek)</td>
+                                <td><strong>90°</strong></td>
+                                <td>π/2 ≈ 1.57</td>
+                                <td><code>HALF_PI</code></td>
+                            </tr>
+                            <tr>
+                                <td>⬅️ Sol (Yarım)</td>
+                                <td><strong>180°</strong></td>
+                                <td>π ≈ 3.14</td>
+                                <td><code>PI</code></td>
+                            </tr>
+                            <tr>
+                                <td>⬆️ Yukarı (Üç Çeyrek)</td>
+                                <td><strong>270°</strong></td>
+                                <td>3π/2 ≈ 4.71</td>
+                                <td><code>PI + HALF_PI</code></td>
+                            </tr>
+                            <tr>
+                                <td>🔄 Tam Dönüş</td>
+                                <td><strong>360°</strong></td>
+                                <td>2π ≈ 6.28</td>
+                                <td><code>TWO_PI</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="info-box">
+                        <h4>💡 Hatırlatma: p5.js'te Açı Yönü</h4>
+                        <p>
+                            p5.js'te açılar <strong>sağdan başlar</strong> ve <strong>saat yönünde</strong> artar 
+                            (normal matematiğin tersi). Yani 90° aşağıyı, 270° yukarıyı gösterir.
+                        </p>
+                    </div>
+                    
+                    <div class="code-box">
+                        <pre><code>// Açı modu ayarlama
+angleMode(DEGREES);  // Derece kullan (0-360) - öğrenmesi kolay
+angleMode(RADIANS);  // Radyan kullan (varsayılan) - matematiksel
+
+// Dönüşüm fonksiyonları
+let rad = radians(90);   // 90° → 1.57 rad (HALF_PI)
+let deg = degrees(PI);   // π rad → 180°
+
+// Örnek: 45 derecelik bir açı
+let aci45_derece = 45;
+let aci45_radyan = radians(45);  // ≈ 0.785
+let aci45_pi = PI / 4;           // Aynı değer!</code></pre>
+                    </div>
+                    
+                    <div id="editor-aci-birimi"></div>
+                </section>
+
+                <!-- Section: sin() ve cos() -->
+                <section id="sin-cos" class="lesson-section">
+                    <h2>📊 sin() ve cos() Fonksiyonları</h2>
+                    
+                    <p>
+                        <code>sin()</code> ve <code>cos()</code> fonksiyonları bir açı alır ve -1 ile 1 arasında 
+                        bir değer döndürür. Bu basit özellik inanılmaz derecede güçlü efektler oluşturmanızı sağlar.
+                    </p>
+                    
+                    <div class="info-box tip">
+                        <h4>💡 Temel Formül</h4>
+                        <p>Bir daire üzerindeki noktanın koordinatları:</p>
+                        <pre><code>x = merkezX + yaricap * cos(aci)
+y = merkezY + yaricap * sin(aci)</code></pre>
+                    </div>
+                    
+                    <h3>sin() ve cos() Özellikleri</h3>
+                    <ul>
+                        <li>Her ikisi de <strong>-1 ile 1</strong> arasında değer döndürür</li>
+                        <li><strong>Periyodik</strong>: Her 2π (360°) de bir tekrar eder</li>
+                        <li><strong>Düzgün</strong>: Değerler yumuşak geçişler yapar</li>
+                        <li><code>cos()</code>, <code>sin()</code>'den <strong>90° önde</strong> gider</li>
+                    </ul>
+                    
+                    <div id="editor-sincos-graph"></div>
+                </section>
+
+                <!-- Section: Daire Üzerinde Hareket -->
+                <section id="daire" class="lesson-section">
+                    <h2>⭕ Daire Üzerinde Hareket</h2>
+                    
+                    <p>
+                        Trigonometrinin en yaygın kullanımı dairesel harekettir. Bir nokta bir daire 
+                        etrafında dönerken sin ve cos ile pozisyonunu hesaplarız.
+                    </p>
+                    
+                    <div class="code-box">
+                        <pre><code>let aci = 0;
+let yaricap = 100;
+
+function draw() {
+  // Açıyı artır (döndür)
+  aci += 0.02;
+  
+  // Daire üzerindeki nokta
+  let x = width/2 + yaricap * cos(aci);
+  let y = height/2 + yaricap * sin(aci);
+  
+  circle(x, y, 20);
+}</code></pre>
+                    </div>
+                    
+                    <div id="editor-daire-hareket"></div>
+                </section>
+
+                <!-- Section: Dalga Desenleri -->
+                <section id="dalga" class="lesson-section">
+                    <h2>🌊 Dalga Desenleri</h2>
+                    
+                    <p>
+                        Sin fonksiyonu doğal olarak dalga şekli oluşturur. Bu özellik animasyonlarda, 
+                        ses görselleştirmede ve dekoratif desenlerde çok kullanılır.
+                    </p>
+                    
+                    <h3>Dalga Parametreleri</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Parametre</th>
+                                <th>Etki</th>
+                                <th>Formül</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Genlik</strong> (Amplitude)</td>
+                                <td>Dalganın yüksekliği</td>
+                                <td><code>genlik * sin(x)</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Frekans</strong> (Frequency)</td>
+                                <td>Dalga sıklığı</td>
+                                <td><code>sin(x * frekans)</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Faz</strong> (Phase)</td>
+                                <td>Dalganın kaydırılması</td>
+                                <td><code>sin(x + faz)</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="code-box">
+                        <pre><code>// Dalga formülü
+y = merkezY + genlik * sin(x * frekans + faz)
+
+// Örnek: Animasyonlu dalga
+y = height/2 + 50 * sin(x * 0.05 + frameCount * 0.1)</code></pre>
+                    </div>
+                    
+                    <div id="editor-dalga"></div>
+                </section>
+
+                <!-- Section: Kutupsal Koordinatlar -->
+                <section id="polar" class="lesson-section">
+                    <h2>🎯 Kutupsal Koordinatlar</h2>
+                    
+                    <p>
+                        Normal (Kartezyen) koordinatlarda nokta <code>(x, y)</code> olarak tanımlanır. 
+                        Kutupsal koordinatlarda ise <code>(r, θ)</code> - yarıçap ve açı ile tanımlanır.
+                    </p>
+                    
+                    <div class="code-box">
+                        <pre><code>// Kutupsal → Kartezyen dönüşümü
+x = r * cos(theta)
+y = r * sin(theta)
+
+// Kartezyen → Kutupsal dönüşümü
+r = sqrt(x*x + y*y)    // veya: dist(0, 0, x, y)
+theta = atan2(y, x)    // Açı</code></pre>
+                    </div>
+                    
+                    <div class="info-box tip">
+                        <h4>💡 Neden Kutupsal Koordinatlar?</h4>
+                        <p>
+                            Spiral, çiçek, yıldız gibi dairesel simetrik şekiller kutupsal koordinatlarla 
+                            çok daha kolay tanımlanır. Yarıçapı açıya göre değiştirerek harika desenler elde edilir.
+                        </p>
+                    </div>
+                    
+                    <h3>Popüler Kutupsal Formüller</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Şekil</th>
+                                <th>Formül</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Daire</td>
+                                <td><code>r = sabit</code></td>
+                            </tr>
+                            <tr>
+                                <td>Spiral</td>
+                                <td><code>r = a * θ</code></td>
+                            </tr>
+                            <tr>
+                                <td>Gül (Rose)</td>
+                                <td><code>r = cos(n * θ)</code></td>
+                            </tr>
+                            <tr>
+                                <td>Kardiyoid</td>
+                                <td><code>r = a * (1 + cos(θ))</code></td>
+                            </tr>
+                            <tr>
+                                <td>Lemniskat</td>
+                                <td><code>r² = a² * cos(2θ)</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div id="editor-polar"></div>
+                </section>
+
+                <!-- Section: Örnekler -->
+                <section id="ornekler" class="lesson-section">
+                    <h2>🎯 Uygulama Örnekleri</h2>
+                    
+                    <h3>Spiral Galaksi</h3>
+                    <p>Logaritmik spiral ile galaksi simülasyonu:</p>
+                    <div id="editor-spiral"></div>
+                    
+                    <h3>Harmonograf</h3>
+                    <p>Birden fazla sin dalgasının kombinasyonu ile sanat:</p>
+                    <div id="editor-harmonograf"></div>
+                    
+                    <h3>Lissajous Desenleri</h3>
+                    <p>İki farklı frekanslı dalganın birleşimi:</p>
+                    <div id="editor-lissajous"></div>
+                    
+                    <h3>Nefes Alan Şekiller</h3>
+                    <p>Sin ile organik, nefes alan efektler:</p>
+                    <div id="editor-nefes"></div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-nav">
+                    <a href="16-ileri-vektorler.html" class="btn">← Önceki Ders</a>
+                    <a href="../index.html" class="btn btn-primary">Ana Sayfa →</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+    <script src="../js/editor.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Açı birimi
+            new P5CodeEditor('editor-aci-birimi', {
+                initialCode: `// Açı Birimleri: Derece vs Radyan
+
+let aci = 0;
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Sol taraf: Derece gösterimi
+  push();
+  translate(100, 200);
+  
+  // Daire
+  noFill();
+  stroke(100);
+  circle(0, 0, 120);
+  
+  // Açı yayı
+  fill(100, 200, 255, 100);
+  noStroke();
+  arc(0, 0, 120, 120, 0, radians(aci));
+  
+  // Çizgi
+  stroke(100, 200, 255);
+  strokeWeight(2);
+  let x = 60 * cos(radians(aci));
+  let y = 60 * sin(radians(aci));
+  line(0, 0, x, y);
+  
+  // Nokta
+  fill(255, 100, 100);
+  noStroke();
+  circle(x, y, 12);
+  
+  // Etiket
+  fill(255);
+  textAlign(CENTER);
+  textSize(14);
+  text("DERECE", 0, 90);
+  text(int(aci) + "°", 0, 110);
+  pop();
+  
+  // Sağ taraf: Radyan gösterimi
+  push();
+  translate(300, 200);
+  
+  // Daire
+  noFill();
+  stroke(100);
+  circle(0, 0, 120);
+  
+  // Açı yayı
+  let rad = radians(aci);
+  fill(255, 200, 100, 100);
+  noStroke();
+  arc(0, 0, 120, 120, 0, rad);
+  
+  // Çizgi
+  stroke(255, 200, 100);
+  strokeWeight(2);
+  let x2 = 60 * cos(rad);
+  let y2 = 60 * sin(rad);
+  line(0, 0, x2, y2);
+  
+  // Nokta
+  fill(255, 100, 100);
+  noStroke();
+  circle(x2, y2, 12);
+  
+  // Etiket
+  fill(255);
+  textAlign(CENTER);
+  textSize(14);
+  text("RADYAN", 0, 90);
+  text(rad.toFixed(2) + " rad", 0, 110);
+  pop();
+  
+  // p5.js sabitleri
+  fill(255);
+  textSize(12);
+  textAlign(LEFT);
+  text("p5.js Sabitleri:", 20, 30);
+  text("HALF_PI = " + HALF_PI.toFixed(2) + " (90°)", 20, 50);
+  text("PI = " + PI.toFixed(2) + " (180°)", 20, 70);
+  text("TWO_PI = " + TWO_PI.toFixed(2) + " (360°)", 20, 90);
+  
+  // Açıyı artır
+  aci += 1;
+  if (aci > 360) aci = 0;
+  
+  // Slider simülasyonu
+  fill(100);
+  rect(100, 350, 200, 10, 5);
+  fill(100, 200, 255);
+  let sliderX = map(aci, 0, 360, 100, 300);
+  circle(sliderX, 355, 20);
+  
+  fill(255);
+  textAlign(CENTER);
+  textSize(12);
+  text("Tıklayarak açıyı ayarlayın", 200, 380);
+}
+
+function mousePressed() {
+  if (mouseY > 340 && mouseY < 370) {
+    aci = map(mouseX, 100, 300, 0, 360);
+    aci = constrain(aci, 0, 360);
+  }
+}
+
+function mouseDragged() {
+  if (mouseY > 340 && mouseY < 370) {
+    aci = map(mouseX, 100, 300, 0, 360);
+    aci = constrain(aci, 0, 360);
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Sin/Cos grafik
+            new P5CodeEditor('editor-sincos-graph', {
+                initialCode: `// sin() ve cos() Grafikleri
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Grafik alanı
+  let grafikY = 100;
+  let grafikH = 80;
+  
+  // sin() grafiği (kırmızı)
+  stroke(255, 100, 100);
+  strokeWeight(2);
+  noFill();
+  beginShape();
+  for (let x = 0; x < width; x++) {
+    let aci = map(x, 0, width, 0, TWO_PI * 2);
+    let y = grafikY + sin(aci + frameCount * 0.05) * (grafikH / 2);
+    vertex(x, y);
+  }
+  endShape();
+  
+  // cos() grafiği (mavi)
+  stroke(100, 100, 255);
+  beginShape();
+  for (let x = 0; x < width; x++) {
+    let aci = map(x, 0, width, 0, TWO_PI * 2);
+    let y = grafikY + cos(aci + frameCount * 0.05) * (grafikH / 2);
+    vertex(x, y);
+  }
+  endShape();
+  
+  // Eksenler
+  stroke(100);
+  strokeWeight(1);
+  line(0, grafikY, width, grafikY);  // Yatay
+  
+  // Etiketler
+  fill(255);
+  textSize(10);
+  textAlign(RIGHT);
+  text("1", 15, grafikY - grafikH/2 + 5);
+  text("0", 15, grafikY + 5);
+  text("-1", 15, grafikY + grafikH/2 + 5);
+  
+  // Başlıklar
+  fill(255, 100, 100);
+  textAlign(LEFT);
+  text("sin()", 20, 30);
+  fill(100, 100, 255);
+  text("cos()", 70, 30);
+  
+  // Birim çember gösterimi
+  let cemberX = width / 2;
+  let cemberY = 280;
+  let cemberR = 80;
+  
+  // Çember
+  noFill();
+  stroke(100);
+  strokeWeight(1);
+  circle(cemberX, cemberY, cemberR * 2);
+  
+  // Eksenler
+  line(cemberX - cemberR - 20, cemberY, cemberX + cemberR + 20, cemberY);
+  line(cemberX, cemberY - cemberR - 20, cemberX, cemberY + cemberR + 20);
+  
+  // Açı
+  let aci = frameCount * 0.03;
+  let noktaX = cemberX + cos(aci) * cemberR;
+  let noktaY = cemberY + sin(aci) * cemberR;
+  
+  // Yarıçap çizgisi
+  stroke(255);
+  strokeWeight(2);
+  line(cemberX, cemberY, noktaX, noktaY);
+  
+  // cos projeksiyonu (x eksenine)
+  stroke(100, 100, 255);
+  strokeWeight(2);
+  line(noktaX, noktaY, noktaX, cemberY);
+  line(cemberX, cemberY, noktaX, cemberY);
+  
+  // sin projeksiyonu (y eksenine)
+  stroke(255, 100, 100);
+  line(noktaX, noktaY, cemberX, noktaY);
+  line(cemberX, cemberY, cemberX, noktaY);
+  
+  // Nokta
+  fill(255);
+  noStroke();
+  circle(noktaX, noktaY, 10);
+  
+  // Değerler
+  fill(255);
+  textSize(12);
+  textAlign(LEFT);
+  
+  fill(100, 100, 255);
+  text("cos(θ) = " + cos(aci).toFixed(2), 20, 200);
+  fill(255, 100, 100);
+  text("sin(θ) = " + sin(aci).toFixed(2), 20, 220);
+  fill(255);
+  text("θ = " + degrees(aci % TWO_PI).toFixed(0) + "°", 20, 240);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Daire hareketi
+            new P5CodeEditor('editor-daire-hareket', {
+                initialCode: `// Daire Üzerinde Hareket
+
+let aci = 0;
+let hiz = 0.03;
+let iz = [];
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  let merkezX = width / 2;
+  let merkezY = height / 2;
+  let yaricap = 120;
+  
+  // Daire yolu
+  noFill();
+  stroke(60);
+  strokeWeight(2);
+  circle(merkezX, merkezY, yaricap * 2);
+  
+  // Merkez
+  fill(255, 50);
+  noStroke();
+  circle(merkezX, merkezY, 10);
+  
+  // Dönen noktanın pozisyonu
+  let x = merkezX + yaricap * cos(aci);
+  let y = merkezY + yaricap * sin(aci);
+  
+  // İzi kaydet
+  iz.push({x: x, y: y});
+  if (iz.length > 100) iz.shift();
+  
+  // İzi çiz
+  noFill();
+  stroke(100, 200, 255, 150);
+  strokeWeight(3);
+  beginShape();
+  for (let p of iz) {
+    vertex(p.x, p.y);
+  }
+  endShape();
+  
+  // Yarıçap çizgisi
+  stroke(255, 100);
+  strokeWeight(1);
+  line(merkezX, merkezY, x, y);
+  
+  // Dönen nokta
+  fill(100, 200, 255);
+  noStroke();
+  circle(x, y, 20);
+  
+  // X ve Y projeksiyonları
+  stroke(255, 100, 100, 150);
+  strokeWeight(2);
+  line(x, y, x, merkezY + yaricap + 30);  // Y projeksiyonu
+  
+  stroke(100, 255, 100, 150);
+  line(x, y, merkezX + yaricap + 30, y);  // X projeksiyonu
+  
+  // Projeksiyon noktaları
+  fill(255, 100, 100);
+  noStroke();
+  circle(x, merkezY + yaricap + 30, 10);
+  
+  fill(100, 255, 100);
+  circle(merkezX + yaricap + 30, y, 10);
+  
+  // Açıyı artır
+  aci += hiz;
+  
+  // Bilgi
+  fill(255);
+  textSize(12);
+  textAlign(LEFT);
+  text("Açı: " + degrees(aci % TWO_PI).toFixed(0) + "°", 20, 30);
+  text("X = merkez + r × cos(θ)", 20, 50);
+  text("Y = merkez + r × sin(θ)", 20, 70);
+  
+  fill(100, 200, 255);
+  text("X: " + int(x) + ", Y: " + int(y), 20, 100);
+  
+  // Hız kontrolü
+  fill(200);
+  textAlign(CENTER);
+  text("← → Hız: " + hiz.toFixed(2), width/2, height - 20);
+}
+
+function keyPressed() {
+  if (keyCode === RIGHT_ARROW) hiz += 0.01;
+  if (keyCode === LEFT_ARROW) hiz = max(0.01, hiz - 0.01);
+  return false;
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Dalga desenleri
+            new P5CodeEditor('editor-dalga', {
+                initialCode: `// Dalga Desenleri
+
+let genlik = 50;     // Dalga yüksekliği
+let frekans = 0.02;  // Dalga sıklığı
+let faz = 0;         // Dalga kaydırması
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Faz animasyonu
+  faz += 0.05;
+  
+  // Dalga 1: Temel sin dalgası
+  stroke(100, 200, 255);
+  strokeWeight(3);
+  noFill();
+  
+  beginShape();
+  for (let x = 0; x < width; x++) {
+    let y = height/4 + genlik * sin(x * frekans + faz);
+    vertex(x, y);
+  }
+  endShape();
+  
+  // Dalga 2: Çift frekans
+  stroke(255, 200, 100);
+  beginShape();
+  for (let x = 0; x < width; x++) {
+    let y = height/2 + genlik * sin(x * frekans * 2 + faz);
+    vertex(x, y);
+  }
+  endShape();
+  
+  // Dalga 3: Birleşik dalgalar
+  stroke(200, 100, 255);
+  beginShape();
+  for (let x = 0; x < width; x++) {
+    let y1 = genlik * sin(x * frekans + faz);
+    let y2 = genlik/2 * sin(x * frekans * 2 + faz * 1.5);
+    let y3 = genlik/3 * sin(x * frekans * 3 + faz * 2);
+    let y = height * 0.75 + y1 + y2 + y3;
+    vertex(x, y);
+  }
+  endShape();
+  
+  // Etiketler
+  fill(255);
+  textSize(12);
+  textAlign(LEFT);
+  
+  fill(100, 200, 255);
+  text("1. Temel dalga: sin(x × f + φ)", 20, 30);
+  
+  fill(255, 200, 100);
+  text("2. Çift frekans: sin(x × 2f + φ)", 20, height/2 - 60);
+  
+  fill(200, 100, 255);
+  text("3. Birleşik: sin + sin/2 + sin/3", 20, height * 0.75 - 60);
+  
+  // Kontroller
+  fill(255);
+  textAlign(CENTER);
+  textSize(10);
+  text("↑↓: Genlik | ←→: Frekans", width/2, height - 15);
+}
+
+function keyPressed() {
+  if (keyCode === UP_ARROW) genlik = min(80, genlik + 5);
+  if (keyCode === DOWN_ARROW) genlik = max(10, genlik - 5);
+  if (keyCode === RIGHT_ARROW) frekans += 0.005;
+  if (keyCode === LEFT_ARROW) frekans = max(0.005, frekans - 0.005);
+  return false;
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Kutupsal koordinatlar
+            new P5CodeEditor('editor-polar', {
+                initialCode: `// Kutupsal Koordinatlar ve Güzel Desenler
+
+let sekil = 0;
+let n = 5;  // Yaprak sayısı parametresi
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  translate(width/2, height/2);
+  
+  // Yardımcı çemberler
+  noFill();
+  stroke(40);
+  for (let r = 50; r <= 150; r += 50) {
+    circle(0, 0, r * 2);
+  }
+  
+  // Kutupsal şekil çiz
+  stroke(100, 200, 255);
+  strokeWeight(2);
+  noFill();
+  
+  beginShape();
+  for (let aci = 0; aci <= TWO_PI; aci += 0.01) {
+    let r;
+    
+    switch(sekil) {
+      case 0:  // Daire
+        r = 100;
+        break;
+      case 1:  // Gül (Rose)
+        r = 100 * cos(n * aci);
+        break;
+      case 2:  // Kardiyoid
+        r = 50 * (1 + cos(aci));
+        break;
+      case 3:  // Spiral
+        r = 5 * (aci + frameCount * 0.02);
+        if (r > 150) continue;
+        break;
+      case 4:  // Kelebek
+        r = 80 * (sin(aci) * (pow(Math.E, cos(aci)) - 2 * cos(4*aci)));
+        r = abs(r);
+        break;
+    }
+    
+    let x = r * cos(aci);
+    let y = r * sin(aci);
+    vertex(x, y);
+  }
+  endShape(sekil !== 3 ? CLOSE : undefined);
+  
+  // Şekil adları
+  let isimler = ["Daire", "Gül (Rose) n=" + n, "Kardiyoid", "Spiral", "Kelebek"];
+  
+  resetMatrix();
+  fill(255);
+  textSize(16);
+  textAlign(CENTER);
+  text(isimler[sekil], width/2, 30);
+  
+  // Formül
+  textSize(12);
+  fill(200);
+  let formuller = [
+    "r = sabit",
+    "r = cos(n × θ)",
+    "r = 1 + cos(θ)",
+    "r = a × θ",
+    "r = sin(θ) × (e^cos(θ) - 2cos(4θ))"
+  ];
+  text(formuller[sekil], width/2, 55);
+  
+  // Butonlar
+  let btnY = height - 40;
+  for (let i = 0; i < 5; i++) {
+    fill(i === sekil ? color(100, 200, 100) : color(80));
+    noStroke();
+    rect(20 + i * 75, btnY, 65, 25, 5);
+    
+    fill(255);
+    textSize(10);
+    text(isimler[i].split(" ")[0], 52 + i * 75, btnY + 17);
+  }
+  
+  // n parametresi (Gül için)
+  if (sekil === 1) {
+    fill(255);
+    textSize(12);
+    text("↑↓: n değeri", width/2, height - 60);
+  }
+}
+
+function mousePressed() {
+  if (mouseY > height - 50) {
+    let idx = floor((mouseX - 20) / 75);
+    if (idx >= 0 && idx < 5) {
+      sekil = idx;
+    }
+  }
+}
+
+function keyPressed() {
+  if (sekil === 1) {
+    if (keyCode === UP_ARROW) n = min(12, n + 1);
+    if (keyCode === DOWN_ARROW) n = max(2, n - 1);
+  }
+  return false;
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Spiral galaksi
+            new P5CodeEditor('editor-spiral', {
+                initialCode: `// Spiral Galaksi
+
+let yildizlar = [];
+let kolSayisi = 3;
+let donus = 0;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // Yıldızları oluştur
+  for (let i = 0; i < 2000; i++) {
+    // Spiralde rastgele konum
+    let kol = floor(random(kolSayisi));
+    let mesafe = pow(random(), 0.5) * 180;  // Merkeze yakın daha yoğun
+    let aciOffset = kol * (TWO_PI / kolSayisi);
+    let spiralAci = mesafe * 0.03 + aciOffset;
+    let rastgelelik = random(-0.3, 0.3);
+    
+    yildizlar.push({
+      mesafe: mesafe,
+      aci: spiralAci + rastgelelik,
+      parlaklik: random(100, 255),
+      boyut: random(1, 3)
+    });
+  }
+}
+
+function draw() {
+  background(10, 10, 20);
+  translate(width/2, height/2);
+  
+  // Galaksi dönüşü
+  donus += 0.003;
+  
+  // Merkez parlaklığı
+  for (let r = 50; r > 0; r -= 10) {
+    fill(255, 200, 150, 30);
+    noStroke();
+    circle(0, 0, r * 2);
+  }
+  
+  // Yıldızları çiz
+  for (let y of yildizlar) {
+    let aci = y.aci + donus;
+    let x = y.mesafe * cos(aci);
+    let yPos = y.mesafe * sin(aci);
+    
+    // Mesafeye göre renk (merkez sarı, dış mavi)
+    let renk = lerpColor(
+      color(255, 200, 150),
+      color(150, 200, 255),
+      y.mesafe / 180
+    );
+    
+    fill(red(renk), green(renk), blue(renk), y.parlaklik);
+    noStroke();
+    circle(x, yPos, y.boyut);
+  }
+  
+  // Merkez yıldız
+  fill(255, 255, 200);
+  circle(0, 0, 8);
+  
+  resetMatrix();
+  fill(255);
+  textSize(12);
+  textAlign(LEFT);
+  text("Spiral Galaksi", 20, 30);
+  text("Kol sayısı: " + kolSayisi + " (↑↓)", 20, 50);
+}
+
+function keyPressed() {
+  if (keyCode === UP_ARROW) {
+    kolSayisi = min(8, kolSayisi + 1);
+    yenile();
+  }
+  if (keyCode === DOWN_ARROW) {
+    kolSayisi = max(2, kolSayisi - 1);
+    yenile();
+  }
+  return false;
+}
+
+function yenile() {
+  yildizlar = [];
+  for (let i = 0; i < 2000; i++) {
+    let kol = floor(random(kolSayisi));
+    let mesafe = pow(random(), 0.5) * 180;
+    let aciOffset = kol * (TWO_PI / kolSayisi);
+    let spiralAci = mesafe * 0.03 + aciOffset;
+    let rastgelelik = random(-0.3, 0.3);
+    
+    yildizlar.push({
+      mesafe: mesafe,
+      aci: spiralAci + rastgelelik,
+      parlaklik: random(100, 255),
+      boyut: random(1, 3)
+    });
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Harmonograf
+            new P5CodeEditor('editor-harmonograf', {
+                initialCode: `// Harmonograf - Sarkaç Çizimleri
+
+let t = 0;
+let noktalar = [];
+
+// Sarkaç parametreleri
+let f1 = 3, f2 = 2;  // Frekanslar
+let p1, p2;  // Fazlar (setup'ta ayarlanacak)
+let d1 = 0.002, d2 = 0.002;  // Sönümleme
+
+function setup() {
+  createCanvas(400, 400);
+  background(30);
+  // PI sabitleri sadece setup/draw içinde kullanılabilir
+  p1 = 0;
+  p2 = HALF_PI;  // 90 derece = PI/2
+}
+
+function draw() {
+  // Yarı saydam arka plan (solma efekti)
+  fill(30, 10);
+  noStroke();
+  rect(0, 0, width, height);
+  
+  translate(width/2, height/2);
+  
+  // Harmonograph formülü
+  // Her sarkaç sin dalgası üretir
+  // Sönümleme ile zamanla küçülür
+  
+  let A1 = 150 * exp(-d1 * t);  // Genlik 1 (sönümlü)
+  let A2 = 150 * exp(-d2 * t);  // Genlik 2 (sönümlü)
+  
+  // X ve Y pozisyonları
+  let x = A1 * sin(f1 * t + p1);
+  let y = A2 * sin(f2 * t + p2);
+  
+  // Çizim
+  if (A1 > 1) {  // Çok küçük olunca dur
+    // Renk zamanla değişir
+    let renk = map(t % 100, 0, 100, 0, 255);
+    stroke(renk, 200, 255 - renk, 150);
+    strokeWeight(1.5);
+    
+    if (noktalar.length > 0) {
+      let son = noktalar[noktalar.length - 1];
+      line(son.x, son.y, x, y);
+    }
+    
+    noktalar.push({x: x, y: y});
+    if (noktalar.length > 5000) noktalar.shift();
+    
+    t += 0.1;
+  }
+  
+  // Bilgi
+  resetMatrix();
+  fill(255);
+  textSize(11);
+  textAlign(LEFT);
+  text("Harmonograph", 20, 25);
+  text("f1:" + f1 + " f2:" + f2, 20, 45);
+  text("Tıkla: Yeni desen", 20, height - 20);
+}
+
+function mousePressed() {
+  // Yeni rastgele parametreler
+  f1 = floor(random(1, 8));
+  f2 = floor(random(1, 8));
+  p1 = random(TWO_PI);
+  p2 = random(TWO_PI);
+  d1 = random(0.001, 0.005);
+  d2 = random(0.001, 0.005);
+  
+  // Sıfırla
+  t = 0;
+  noktalar = [];
+  background(30);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Lissajous
+            new P5CodeEditor('editor-lissajous', {
+                initialCode: `// Lissajous Desenleri
+
+let a = 3, b = 4;  // Frekans oranı
+let delta;  // Faz farkı (setup'ta ayarlanacak)
+let t = 0;
+
+function setup() {
+  createCanvas(400, 400);
+  // PI sabitleri sadece setup/draw içinde kullanılabilir
+  delta = HALF_PI;  // 90 derece = PI/2
+}
+
+function draw() {
+  background(30);
+  translate(width/2, height/2);
+  
+  // Lissajous formülü:
+  // x = A × sin(a×t + δ)
+  // y = B × sin(b×t)
+  
+  let A = 150;  // X genliği
+  let B = 150;  // Y genliği
+  
+  // Deseni çiz
+  stroke(100, 200, 255);
+  strokeWeight(2);
+  noFill();
+  
+  beginShape();
+  for (let angle = 0; angle <= TWO_PI * 10; angle += 0.01) {
+    let x = A * sin(a * angle + delta);
+    let y = B * sin(b * angle);
+    vertex(x, y);
+  }
+  endShape();
+  
+  // Hareketli nokta
+  let x = A * sin(a * t + delta);
+  let y = B * sin(b * t);
+  
+  fill(255, 100, 100);
+  noStroke();
+  circle(x, y, 15);
+  
+  // X ve Y projeksiyonları
+  stroke(100, 100);
+  strokeWeight(1);
+  line(x, y, x, B + 30);
+  line(x, y, A + 30, y);
+  
+  // X dalgası (alt)
+  stroke(255, 100, 100, 150);
+  strokeWeight(2);
+  noFill();
+  beginShape();
+  for (let i = -A; i <= A; i++) {
+    let angle = map(i, -A, A, 0, TWO_PI);
+    let yWave = B + 30 + 20 * sin(a * (angle + t) + delta);
+    vertex(i, yWave);
+  }
+  endShape();
+  
+  // Y dalgası (sağ)
+  stroke(100, 255, 100, 150);
+  beginShape();
+  for (let i = -B; i <= B; i++) {
+    let angle = map(i, -B, B, 0, TWO_PI);
+    let xWave = A + 30 + 20 * sin(b * (angle + t));
+    vertex(xWave, i);
+  }
+  endShape();
+  
+  t += 0.02;
+  
+  // Bilgi
+  resetMatrix();
+  fill(255);
+  textSize(14);
+  textAlign(CENTER);
+  text("Lissajous " + a + ":" + b, width/2, 30);
+  
+  textSize(11);
+  fill(200);
+  text("x = sin(" + a + "t + δ), y = sin(" + b + "t)", width/2, 50);
+  
+  // Kontroller
+  textAlign(LEFT);
+  text("a (←→): " + a, 20, height - 40);
+  text("b (↑↓): " + b, 20, height - 25);
+  text("δ (A/D): " + (delta/PI).toFixed(2) + "π", 120, height - 40);
+}
+
+function keyPressed() {
+  if (keyCode === RIGHT_ARROW) a = min(10, a + 1);
+  if (keyCode === LEFT_ARROW) a = max(1, a - 1);
+  if (keyCode === UP_ARROW) b = min(10, b + 1);
+  if (keyCode === DOWN_ARROW) b = max(1, b - 1);
+  if (key === 'a' || key === 'A') delta -= 0.1;
+  if (key === 'd' || key === 'D') delta += 0.1;
+  return false;
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Nefes alan şekiller
+            new P5CodeEditor('editor-nefes', {
+                initialCode: `// Nefes Alan Şekiller
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // "Nefes" değeri (0-1 arası döngüsel)
+  let nefes = (sin(frameCount * 0.03) + 1) / 2;
+  
+  // 1. Nefes alan daire
+  push();
+  translate(100, 100);
+  let boyut1 = lerp(40, 80, nefes);
+  let alpha1 = lerp(100, 255, nefes);
+  
+  fill(100, 200, 255, alpha1);
+  noStroke();
+  circle(0, 0, boyut1);
+  
+  fill(255);
+  textSize(10);
+  textAlign(CENTER);
+  text("Daire", 0, 60);
+  pop();
+  
+  // 2. Nefes alan halka
+  push();
+  translate(300, 100);
+  let ic = lerp(20, 40, nefes);
+  let dis = lerp(50, 70, nefes);
+  
+  noFill();
+  stroke(255, 200, 100);
+  strokeWeight(dis - ic);
+  circle(0, 0, (ic + dis) / 2 * 2);
+  
+  fill(255);
+  noStroke();
+  textSize(10);
+  textAlign(CENTER);
+  text("Halka", 0, 60);
+  pop();
+  
+  // 3. Nefes alan yıldız
+  push();
+  translate(100, 280);
+  let icR = lerp(15, 25, nefes);
+  let disR = lerp(35, 55, nefes);
+  
+  fill(255, 100, 150);
+  noStroke();
+  beginShape();
+  for (let i = 0; i < 10; i++) {
+    let angle = TWO_PI / 10 * i - HALF_PI;
+    let r = (i % 2 === 0) ? disR : icR;
+    let x = cos(angle) * r;
+    let y = sin(angle) * r;
+    vertex(x, y);
+  }
+  endShape(CLOSE);
+  
+  fill(255);
+  textSize(10);
+  textAlign(CENTER);
+  text("Yıldız", 0, 70);
+  pop();
+  
+  // 4. Nefes alan çiçek
+  push();
+  translate(300, 280);
+  let yaprakR = lerp(20, 35, nefes);
+  let yaprakSayi = 6;
+  
+  for (let i = 0; i < yaprakSayi; i++) {
+    let angle = TWO_PI / yaprakSayi * i;
+    let x = cos(angle) * yaprakR * 0.8;
+    let y = sin(angle) * yaprakR * 0.8;
+    
+    fill(150, 100, 255, lerp(150, 255, nefes));
+    noStroke();
+    ellipse(x, y, yaprakR, yaprakR * 0.5);
+  }
+  
+  fill(255, 200, 100);
+  circle(0, 0, lerp(15, 25, nefes));
+  
+  fill(255);
+  textSize(10);
+  textAlign(CENTER);
+  text("Çiçek", 0, 70);
+  pop();
+  
+  // 5. Ortadaki birleşik efekt
+  push();
+  translate(200, 190);
+  
+  // Dıştan içe halkalar
+  for (let i = 5; i >= 0; i--) {
+    let offset = i * 0.2;  // Her halka farklı fazda
+    let n = (sin(frameCount * 0.03 + offset) + 1) / 2;
+    let r = lerp(10 + i * 15, 20 + i * 20, n);
+    
+    let renk = lerpColor(
+      color(100, 100, 255),
+      color(255, 100, 100),
+      i / 5
+    );
+    
+    fill(red(renk), green(renk), blue(renk), lerp(50, 150, n));
+    noStroke();
+    circle(0, 0, r * 2);
+  }
+  pop();
+  
+  // Bilgi
+  fill(255);
+  textSize(12);
+  textAlign(LEFT);
+  text("sin() ile 'nefes' efekti", 20, 30);
+  text("nefes = (sin(t) + 1) / 2", 20, 50);
+  
+  // Nefes göstergesi
+  fill(100);
+  rect(width - 30, 50, 15, 100);
+  fill(100, 200, 255);
+  let barH = nefes * 100;
+  rect(width - 30, 150 - barH, 15, barH);
+  
+  fill(255);
+  textSize(10);
+  textAlign(CENTER);
+  text(nefes.toFixed(2), width - 22, 165);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="text-align: center; padding: 1.5rem 0;">
+                <p style="margin: 0;">İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="../js/theme.js"></script>
+</body>
+</html>

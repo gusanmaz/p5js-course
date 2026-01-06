@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <title>Ders 10: Nesneler ve Sınıflar - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html" class="active">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#oop-felsefesi">OOP Nedir?</a></li>
+                    <li><a href="#terminoloji">Terimler Sözlüğü</a></li>
+                    <li><a href="#nesne-nedir">Nesne Nedir?</a></li>
+                    <li><a href="#nesne-literal">Nesne Literal</a></li>
+                    <li><a href="#sinif">Sınıf (Class)</a></li>
+                    <li><a href="#metodlar">Metodlar</a></li>
+                    <li><a href="#ornekler">Proje Örnekleri</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 10: Nesneler ve Sınıflar</h1>
+                <div class="lesson-meta">
+                    <span>📚 İleri Seviye</span>
+                    <span>⏱️ 70 dakika</span>
+                    <span>🎯 Nesne Yönelimli Programlama</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: OOP Felsefesi -->
+                <section id="oop-felsefesi" class="lesson-section">
+                    <h2>🧠 Nesne Yönelimli Programlama (OOP) Nedir?</h2>
+                    
+                    <div class="info-box note">
+                        <div class="info-box-title">📚 Bu Konuyu Neden Öğreniyoruz?</div>
+                        <p>
+                            Şu ana kadar değişkenler, fonksiyonlar, diziler öğrendik. 
+                            Ama programlar büyüdükçe <strong>kodları organize etmek</strong> zorlaşır. 
+                            OOP, kodlarımızı gerçek dünya gibi <strong>"nesneler"</strong> şeklinde düzenlememizi sağlar.
+                        </p>
+                    </div>
+                    
+                    <h3>🎯 OOP'nin Temel Felsefesi</h3>
+                    <p>
+                        OOP, 1960'larda ortaya çıkmış ve bugün en yaygın programlama paradigmasıdır. 
+                        Temel fikir şu: <strong>Gerçek dünyayı modellemek için, gerçek dünyadaki gibi düşünelim.</strong>
+                    </p>
+                    <p>
+                        Düşün: Etrafına bak. Her şey bir "nesne" - telefon, masa, kalem, araba... 
+                        Her nesnenin <strong>özellikleri</strong> (renk, boyut, ağırlık) ve 
+                        <strong>davranışları</strong> (telefon arayabilir, araba gidebilir) var.
+                    </p>
+                    <p>
+                        OOP'de de aynı mantıkla kod yazıyoruz:
+                    </p>
+                    <ul>
+                        <li><strong>Özellikler (İng: Properties):</strong> Nesnenin taşıdığı veriler - <code>this.x</code>, <code>this.renk</code></li>
+                        <li><strong>Davranışlar (İng: Methods):</strong> Nesnenin yapabileceği işlemler - <code>hareket()</code>, <code>goster()</code></li>
+                    </ul>
+
+                    <h3>😱 Problem: Kodlar Karışıyor!</h3>
+                    <p>Düşün: Bir oyun yapıyorsun ve 50 tane düşman var. Her birinin x, y, sağlık, hız değeri var:</p>
+                    
+                    <pre><code>// 😱 KARİŞIK YOL - Her şey ayrı ayrı
+let dusman1_x = 100;
+let dusman1_y = 50;
+let dusman1_saglik = 100;
+let dusman1_hiz = 2;
+
+let dusman2_x = 200;
+let dusman2_y = 80;
+let dusman2_saglik = 100;
+let dusman2_hiz = 3;
+
+// 50 düşman için 200 değişken! 🤯</code></pre>
+
+                    <pre><code>// ✅ NESNE YOL - Her şey bir arada
+let dusman1 = { x: 100, y: 50, saglik: 100, hiz: 2 };
+let dusman2 = { x: 200, y: 80, saglik: 100, hiz: 3 };
+
+// Daha temiz! Ama hala tekrar var...</code></pre>
+
+                    <pre><code>// 🎯 SINIF YOL - Şablon kullan, istediğin kadar üret!
+class Dusman {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.saglik = 100;
+    this.hiz = random(1, 3);
+  }
+}
+
+let dusmanlar = [];
+for (let i = 0; i < 50; i++) {
+  dusmanlar.push(new Dusman(random(width), random(height)));
+}
+// 50 düşman 5 satır kodla! 🎉</code></pre>
+
+                    <h3>OOP'nin Temel Mantığı</h3>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h4>🏭 Sınıf (Class)</h4>
+                            <p>Bir <strong>fabrika planı</strong> gibi. "Top nasıl olmalı?" sorusunun cevabı.</p>
+                            <p class="small">Örnek: Top sınıfı - x, y, renk, hız bilgilerini içerir</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>🎾 Nesne (Object)</h4>
+                            <p>O plandan üretilen <strong>gerçek ürün</strong>. Her biri bağımsız.</p>
+                            <p class="small">Örnek: top1, top2 - aynı sınıftan farklı toplar</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>📊 Özellik (Property)</h4>
+                            <p>Nesnenin <strong>sahip olduğu veriler</strong>.</p>
+                            <p class="small">Örnek: x, y, renk, boyut değerleri</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>⚙️ Metod (Method)</h4>
+                            <p>Nesnenin <strong>yapabildiği işlemler</strong>.</p>
+                            <p class="small">Örnek: hareket(), goster(), zipla() fonksiyonları</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section: Terminology -->
+                <section id="terminoloji" class="lesson-section">
+                    <h2>📖 OOP Terimler Sözlüğü</h2>
+                    
+                    <p>Programlamada İngilizce terimler çok kullanılır. İşte karşılaşacağın tüm OOP terimleri:</p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>İngilizce</th>
+                                <th>Türkçe</th>
+                                <th>Açıklama</th>
+                                <th>Örnek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>class</code></td>
+                                <td>Sınıf</td>
+                                <td>Nesne şablonu, plan</td>
+                                <td><code>class Top { }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>object</code></td>
+                                <td>Nesne</td>
+                                <td>Sınıftan üretilen örnek</td>
+                                <td><code>let top = new Top()</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>instance</code></td>
+                                <td>Örnek, Örnek Nesne</td>
+                                <td>Bir sınıfın somut örneği</td>
+                                <td class="comment">top1, top2 birer instance</td>
+                            </tr>
+                            <tr>
+                                <td><code>constructor</code></td>
+                                <td>Kurucu, Yapıcı</td>
+                                <td>Nesne oluşurken çalışan fonksiyon</td>
+                                <td><code>constructor(x, y) { }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>property</code></td>
+                                <td>Özellik, Nitelik</td>
+                                <td>Nesnenin sahip olduğu veri</td>
+                                <td><code>this.x = 100</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>method</code></td>
+                                <td>Metod, Yöntem</td>
+                                <td>Nesnenin fonksiyonu</td>
+                                <td><code>goster() { }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>this</code></td>
+                                <td>Bu, Kendisi</td>
+                                <td>O anki nesneye referans</td>
+                                <td><code>this.x += this.hiz</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>new</code></td>
+                                <td>Yeni</td>
+                                <td>Yeni nesne oluşturma komutu</td>
+                                <td><code>new Top(100, 200)</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>inheritance</code></td>
+                                <td>Kalıtım, Miras</td>
+                                <td>Bir sınıfın başkasından özellik alması</td>
+                                <td><code>class Araba extends Arac</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>extends</code></td>
+                                <td>Genişletir</td>
+                                <td>Kalıtım için kullanılan kelime</td>
+                                <td><code>class X extends Y</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>İsimlendirme Kuralları</h3>
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Stil</th>
+                                <th>Kullanım Yeri</th>
+                                <th>Örnekler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>PascalCase</strong></td>
+                                <td>Sınıf isimleri</td>
+                                <td><code>Top</code>, <code>DusmanKarakter</code>, <code>ZiplayanTop</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>camelCase</strong></td>
+                                <td>Değişken ve fonksiyonlar</td>
+                                <td><code>topHiz</code>, <code>dusmanSaglik</code>, <code>karakterHareket()</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>UPPER_CASE</strong></td>
+                                <td>Sabitler (değişmeyen değerler)</td>
+                                <td><code>MAX_SKOR</code>, <code>OYUN_GENISLIK</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Section: What is Object -->
+                <section id="nesne-nedir" class="lesson-section">
+                    <h2>Nesne Nedir?</h2>
+                    
+                    <p>
+                        Nesne, <strong>ilişkili verileri ve fonksiyonları bir arada tutan</strong> 
+                        veri yapısıdır. Gerçek dünyadaki nesneler gibi özellikleri ve davranışları vardır.
+                    </p>
+
+                    <div class="info-box note">
+                        <div class="info-box-title">🧠 Gerçek Hayat Benzetmesi</div>
+                        <p>
+                            Bir araba nesnesi düşünün:<br>
+                            <strong>Özellikler (Properties):</strong> renk, hız, yakıt miktarı<br>
+                            <strong>Davranışlar (Methods):</strong> hızlan(), frenYap(), kornaCal()
+                        </p>
+                    </div>
+
+                    <h3>Nesne vs Dizi</h3>
+                    <p>
+                        Dizi ve nesne arasındaki en büyük fark: dizide verilere <strong>sıra numarası</strong> ile, 
+                        nesnede ise <strong>isim</strong> ile erişirsin. Bu da kodun okunabilirliğini çok artırır.
+                    </p>
+                    <pre><code>// Dizi: sadece değerler (sıralı)
+let top = [200, 150, 30, 2, -1];  // Ne anlama geliyor? 🤔
+// top[0] neydi? x mi? y mi? Hafızada tutmak zor!
+
+// Nesne: isimlendirilmiş özellikler (anlaşılır)
+let top = {
+  x: 200,        // X pozisyonu - net!
+  y: 150,        // Y pozisyonu - net!
+  yaricap: 30,   // Yarıçap - net!
+  hizX: 2,       // X yönü hızı - net!
+  hizY: -1       // Y yönü hızı - net!
+};
+// top.x diyince ne olduğu açık! ✅
+// 6 ay sonra koda baktığında da anlarsın</code></pre>
+                    
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 Ne Zaman Hangisi?</div>
+                        <p>
+                            <strong>Dizi kullan:</strong> Benzer türde sıralı veriler için - puanlar, renkler listesi, koordinat dizisi<br>
+                            <strong>Nesne kullan:</strong> Farklı türde ilişkili veriler için - bir karakterin tüm özellikleri
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Section: Object Literal -->
+                <section id="nesne-literal" class="mt-4">
+                    <h2>Nesne Literal (Object Literal)</h2>
+
+                    <pre><code>let ogrenci = {
+  isim: "Ayşe",
+  yas: 15,
+  sinif: 9,
+  notlar: [85, 92, 78]
+};
+
+// Erişim
+console.log(ogrenci.isim);      // "Ayşe"
+console.log(ogrenci["yas"]);    // 15
+
+// Değiştirme
+ogrenci.yas = 16;
+
+// Yeni özellik ekleme
+ogrenci.okul = "Anadolu Lisesi";</code></pre>
+
+                    <div id="editor1"></div>
+                </section>
+
+                <!-- Section: Class -->
+                <section id="sinif" class="mt-4">
+                    <h2>Sınıf (Class)</h2>
+
+                    <p>
+                        Sınıf, benzer nesneler oluşturmak için <strong>şablon</strong> görevi görür. 
+                        Bir kez tanımla, istediğin kadar nesne oluştur!
+                    </p>
+                    
+                    <p>
+                        Düşün: Bir araba fabrikası var. Fabrikanın <strong>planı</strong> (sınıf) bir tane, 
+                        ama bu plandan <strong>binlerce araba</strong> (örnek/instance) üretebilirsin. 
+                        Her araba aynı yapıda ama farklı renk, plaka, motor gücü olabilir.
+                    </p>
+
+                    <pre><code>// SINIF TANIMI - Bu bir şablon, plan
+class Top {
+  // CONSTRUCTOR (KURUCU) FONKSİYON
+  // "new Top()" dendiğinde otomatik çağrılır
+  // Nesnenin ilk değerlerini ayarlar
+  constructor(x, y, r) {
+    // "this" = "şu an oluşturulan nesne"
+    this.x = x;           // Parametre olarak gelen x
+    this.y = y;           // Parametre olarak gelen y
+    this.yaricap = r;     // Parametre olarak gelen yarıçap
+    // Rastgele renk - her nesne için farklı olacak
+    this.renk = color(random(255), random(255), random(255));
+  }
+  
+  // METOD - Nesnenin yapabileceği işlem
+  // Fonksiyon gibi ama "function" yazılmaz
+  goster() {
+    fill(this.renk);      // Bu nesnenin rengi
+    circle(this.x, this.y, this.yaricap * 2);
+  }
+}
+
+// NESNE OLUŞTURMA - Şablondan gerçek ürün
+// "new" kelimesi yeni nesne oluşturur ve constructor'ı çağırır
+let top1 = new Top(100, 200, 30);  // x=100, y=200, r=30
+let top2 = new Top(300, 150, 50);  // Farklı değerlerle başka top
+// top1 ve top2 bağımsız nesneler, birini değiştirmek diğerini etkilemez</code></pre>
+
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 "this" Anahtar Kelimesi - Çok Önemli!</div>
+                        <p>
+                            <code>this</code>, o anda çalışan nesneyi temsil eder. 
+                            <code>this.x</code> "bu nesnenin x'i" anlamına gelir.
+                        </p>
+                        <p>
+                            <strong>Örnek:</strong> <code>top1.goster()</code> çağrıldığında, 
+                            <code>this</code> = <code>top1</code> olur. <code>top2.goster()</code> çağrılınca 
+                            <code>this</code> = <code>top2</code> olur. Böylece aynı kod, hangi nesne için çağrıldıysa 
+                            onun verilerini kullanır.
+                        </p>
+                    </div>
+
+                    <div id="editor2"></div>
+                </section>
+
+                <!-- Section: Methods -->
+                <section id="metodlar" class="mt-4">
+                    <h2>Metodlar</h2>
+
+                    <p>
+                        Metodlar, nesnenin yapabildiği işlemlerdir. Normal fonksiyonlar gibi çalışır 
+                        ama <strong>o nesneye ait verilere <code>this</code> ile erişir</strong>.
+                    </p>
+                    
+                    <p>
+                        <strong>Metod türleri:</strong>
+                    </p>
+                    <ul>
+                        <li><strong>Eylem metodları:</strong> Bir şey yapar - <code>hareket()</code>, <code>saldir()</code>, <code>zipla()</code></li>
+                        <li><strong>Gösterim metodları:</strong> Nesneyi çizer - <code>goster()</code>, <code>ciz()</code></li>
+                        <li><strong>Sorgulama metodları:</strong> Bilgi döndürür - <code>yasiyorMu()</code>, <code>carpisiyorMu()</code></li>
+                        <li><strong>Değiştirme metodları:</strong> Özellikleri değiştirir - <code>hasarAl()</code>, <code>iyiles()</code></li>
+                    </ul>
+
+                    <pre><code>class Canavar {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.enerji = 100;
+  }
+  
+  // EYLEM METODU - Parametre alır, nesneyi değiştirir
+  hareket(dx, dy) {
+    this.x += dx;       // x'i dx kadar artır
+    this.y += dy;       // y'yi dy kadar artır
+    this.enerji -= 1;   // Her harekette enerji azalır
+  }
+  
+  // DEĞİŞTİRME METODU - Değer döndürür
+  saldir() {
+    console.log("Rawr! 🦖");
+    return 10;  // Hasar değeri - bu değeri dışarıda kullanabilirsin
+  }
+  
+  // SORGULAMA METODU - true/false döndürür
+  yasiyorMu() {
+    return this.enerji > 0;  // Enerji 0'dan büyükse true
+  }
+}
+
+// Kullanım:
+let canavar = new Canavar(100, 100);
+canavar.hareket(10, 5);           // Canavarı hareket ettir
+let hasar = canavar.saldir();     // Saldır, hasar değerini al
+if (canavar.yasiyorMu()) { ... }  // Yaşıyor mu kontrol et</code></pre>
+
+                    <div id="editor3"></div>
+                </section>
+
+                <!-- Section: Examples -->
+                <section id="ornekler" class="mt-4">
+                    <h2>Proje Örnekleri</h2>
+
+                    <h3>Örnek 1: Top Sınıfı (Zıplayan Toplar)</h3>
+                    <p>Temel sınıf kullanımı:</p>
+                    <div id="editor4"></div>
+
+                    <h3>Örnek 2: Parçacık Sistemi</h3>
+                    <p>Particle sınıfı ile efekt sistemi:</p>
+                    <div id="editor5"></div>
+
+                    <h3>Örnek 3: Düşman Sınıfı (Oyun)</h3>
+                    <p>Oyun karakterleri için sınıf:</p>
+                    <div id="editor6"></div>
+
+                    <h3>Örnek 4: Yıldız Simülasyonu</h3>
+                    <p>3D perspektif efekti:</p>
+                    <div id="editor7"></div>
+                </section>
+
+                <!-- Summary -->
+                <section class="mt-4">
+                    <h2>Kurs Özeti</h2>
+
+                    <div class="card" style="background: rgba(0, 217, 255, 0.05);">
+                        <h4>🎉 Tebrikler! Kursu Tamamladınız!</h4>
+                        <p>Bu kursta öğrendikleriniz:</p>
+                        <ul>
+                            <li><strong>Temel Kavramlar:</strong> setup(), draw(), koordinat sistemi</li>
+                            <li><strong>Şekiller ve Renkler:</strong> circle, rect, line, fill, stroke</li>
+                            <li><strong>Değişkenler:</strong> let, veri tipleri, sistem değişkenleri</li>
+                            <li><strong>Animasyon:</strong> frameCount, hareket, sınır kontrolü</li>
+                            <li><strong>Etkileşim:</strong> mouseX/Y, mousePressed, keyPressed</li>
+                            <li><strong>Koşullar:</strong> if/else, karşılaştırma operatörleri</li>
+                            <li><strong>Döngüler:</strong> for, while, iç içe döngüler</li>
+                            <li><strong>Fonksiyonlar:</strong> function, parametreler, return</li>
+                            <li><strong>Diziler:</strong> array, push, pop, döngü ile işleme</li>
+                            <li><strong>Nesneler ve Sınıflar:</strong> class, constructor, this, metodlar</li>
+                        </ul>
+                    </div>
+
+                    <div class="card mt-4" style="background: rgba(100, 255, 100, 0.05);">
+                        <h4>🚀 Sonraki Adımlar</h4>
+                        <ul>
+                            <li>Kendi projelerinizi oluşturun!</li>
+                            <li><a href="../oyun-alani.html">Oyun Alanı</a>'nda denemeler yapın</li>
+                            <li><a href="../kaynaklar.html">Kaynaklar</a> sayfasından daha fazla öğrenin</li>
+                            <li>The Coding Train videoları izleyin</li>
+                            <li>OpenProcessing'de başkalarının projelerini inceleyin</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <section class="mt-4" style="display: flex; justify-content: space-between; padding: 2rem 0; border-top: 1px solid var(--border-color);">
+                    <a href="09-diziler.html" class="btn btn-secondary">
+                        ← Önceki: Diziler
+                    </a>
+                    <a href="../oyun-alani.html" class="btn btn-primary">
+                        Oyun Alanına Git →
+                    </a>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="../js/editor.js"></script>
+    <script src="../js/theme.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Örnek 1: Nesne Literal
+            new P5CodeEditor('editor1', {
+                initialCode: `let karakter;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // Nesne oluştur
+  karakter = {
+    x: 200,
+    y: 200,
+    boyut: 50,
+    renk: color(100, 200, 255),
+    hiz: 3,
+    isim: "Robo",
+    puan: 0
+  };
+}
+
+function draw() {
+  background(30);
+  
+  // Klavye kontrolü
+  if (keyIsDown(LEFT_ARROW)) karakter.x -= karakter.hiz;
+  if (keyIsDown(RIGHT_ARROW)) karakter.x += karakter.hiz;
+  if (keyIsDown(UP_ARROW)) karakter.y -= karakter.hiz;
+  if (keyIsDown(DOWN_ARROW)) karakter.y += karakter.hiz;
+  
+  // Sınırlar
+  karakter.x = constrain(karakter.x, 0, width);
+  karakter.y = constrain(karakter.y, 0, height);
+  
+  // Karakteri çiz
+  fill(karakter.renk);
+  noStroke();
+  rectMode(CENTER);
+  rect(karakter.x, karakter.y, karakter.boyut, karakter.boyut, 10);
+  
+  // Gözler
+  fill(255);
+  circle(karakter.x - 10, karakter.y - 5, 15);
+  circle(karakter.x + 10, karakter.y - 5, 15);
+  fill(0);
+  circle(karakter.x - 10, karakter.y - 5, 7);
+  circle(karakter.x + 10, karakter.y - 5, 7);
+  
+  // İsim
+  fill(255);
+  textAlign(CENTER);
+  textSize(14);
+  text(karakter.isim, karakter.x, karakter.y - 40);
+  
+  // Bilgi
+  textAlign(LEFT);
+  textSize(12);
+  text("Konum: (" + floor(karakter.x) + ", " + floor(karakter.y) + ")", 10, 25);
+  text("Ok tuşlarıyla hareket et", 10, 45);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 2: Sınıf Tanımlama
+            new P5CodeEditor('editor2', {
+                initialCode: `// ========================================
+// TOP SINIFI TANIMI
+// ========================================
+class Top {
+  // CONSTRUCTOR - "new Top()" dendiğinde çalışır
+  // x, y, r parametreleri dışarıdan gelir
+  constructor(x, y, r) {
+    // "this" = şu an oluşturulan top nesnesi
+    this.x = x;          // Parametre değerini nesneye kaydet
+    this.y = y;
+    this.yaricap = r;
+    // Her top için RASTGELE renk ve hız
+    this.renk = color(random(255), random(255), random(255));
+    this.vx = random(-2, 2);  // X yönü hız (-2 ile +2 arası)
+    this.vy = random(-2, 2);  // Y yönü hız
+  }
+  
+  // GUNCELLE METODU - Her karede çağrılacak
+  guncelle() {
+    // Pozisyonu hıza göre değiştir
+    this.x += this.vx;  // x = x + vx
+    this.y += this.vy;
+    
+    // SINIR KONTROLÜ - Duvarlara çarptıysa geri sek
+    // Sol veya sağ duvara çarptı mı?
+    if (this.x < this.yaricap || this.x > width - this.yaricap) {
+      this.vx *= -1;  // X hızını tersle (sağa gidiyorsa sola)
+    }
+    // Üst veya alt duvara çarptı mı?
+    if (this.y < this.yaricap || this.y > height - this.yaricap) {
+      this.vy *= -1;  // Y hızını tersle
+    }
+  }
+  
+  // GOSTER METODU - Topu ekrana çiz
+  goster() {
+    noStroke();
+    fill(this.renk);  // Bu topun kendi rengi
+    circle(this.x, this.y, this.yaricap * 2);  // Çap = yarıçap * 2
+    
+    // Parlaklık efekti (küçük beyaz daire)
+    fill(255, 255, 255, 100);  // Yarı saydam beyaz
+    circle(this.x - this.yaricap/4, this.y - this.yaricap/4, this.yaricap/2);
+  }
+}
+
+// ========================================
+// ANA PROGRAM
+// ========================================
+let toplar = [];  // Tüm topları tutacak dizi
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // BAŞLANGIÇTA 10 TOP OLUŞTUR
+  for (let i = 0; i < 10; i++) {
+    // new Top(...) -> Yeni top nesnesi oluştur
+    // constructor(x, y, r) çağrılır
+    let yeniTop = new Top(
+      random(width),    // Rastgele x
+      random(height),   // Rastgele y
+      random(15, 35)    // Rastgele yarıçap
+    );
+    toplar.push(yeniTop);  // Diziye ekle
+  }
+}
+
+function draw() {
+  background(30);
+  
+  // TÜM TOPLARI GÜNCELLE VE GÖSTER
+  // for...of ile dizideki her nesneye eriş
+  for (let top of toplar) {
+    top.guncelle();  // Bu topun guncelle metodunu çağır
+    top.goster();    // Bu topun goster metodunu çağır
+  }
+  
+  fill(255);
+  textSize(12);
+  text("Tıkla: yeni top ekle", 10, 25);
+}
+
+function mousePressed() {
+  // Tıklanan yerde yeni top ekle
+  toplar.push(new Top(mouseX, mouseY, random(20, 40)));
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 3: Metodlar
+            new P5CodeEditor('editor3', {
+                initialCode: `class Oyuncu {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.can = 100;
+    this.boyut = 40;
+    this.hiz = 4;
+    this.renk = color(100, 200, 100);
+  }
+  
+  hareket() {
+    if (keyIsDown(65)) this.x -= this.hiz; // A
+    if (keyIsDown(68)) this.x += this.hiz; // D
+    if (keyIsDown(87)) this.y -= this.hiz; // W
+    if (keyIsDown(83)) this.y += this.hiz; // S
+    
+    this.x = constrain(this.x, 20, width - 20);
+    this.y = constrain(this.y, 20, height - 20);
+  }
+  
+  hasarAl(miktar) {
+    this.can -= miktar;
+    if (this.can < 0) this.can = 0;
+  }
+  
+  iyiles(miktar) {
+    this.can += miktar;
+    if (this.can > 100) this.can = 100;
+  }
+  
+  yasiyorMu() {
+    return this.can > 0;
+  }
+  
+  goster() {
+    // Gölge
+    fill(0, 50);
+    noStroke();
+    ellipse(this.x + 5, this.y + 25, this.boyut, 15);
+    
+    // Karakter
+    fill(this.renk);
+    circle(this.x, this.y, this.boyut);
+    
+    // Göz
+    fill(255);
+    circle(this.x - 8, this.y - 5, 12);
+    circle(this.x + 8, this.y - 5, 12);
+    fill(0);
+    circle(this.x - 8, this.y - 5, 6);
+    circle(this.x + 8, this.y - 5, 6);
+    
+    // Can barı
+    let barGenislik = 50;
+    let canOran = this.can / 100;
+    
+    fill(50);
+    rect(this.x - barGenislik/2, this.y - 35, barGenislik, 8, 3);
+    fill(canOran > 0.3 ? color(100, 255, 100) : color(255, 100, 100));
+    rect(this.x - barGenislik/2, this.y - 35, barGenislik * canOran, 8, 3);
+  }
+}
+
+let oyuncu;
+
+function setup() {
+  createCanvas(400, 400);
+  oyuncu = new Oyuncu(200, 200);
+}
+
+function draw() {
+  background(40, 40, 60);
+  
+  oyuncu.hareket();
+  oyuncu.goster();
+  
+  // Bilgi
+  fill(255);
+  textSize(12);
+  text("WASD: hareket", 10, 25);
+  text("Q: hasar al, E: iyileş", 10, 45);
+  text("Can: " + oyuncu.can, 10, 65);
+}
+
+function keyPressed() {
+  if (key == 'q' || key == 'Q') oyuncu.hasarAl(10);
+  if (key == 'e' || key == 'E') oyuncu.iyiles(15);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 4: Zıplayan Toplar
+            new P5CodeEditor('editor4', {
+                initialCode: `class Top {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.vx = random(-5, 5);
+    this.vy = random(-5, 5);
+    this.r = random(15, 40);
+    this.renk = color(random(255), random(255), random(255), 200);
+  }
+  
+  guncelle() {
+    this.x += this.vx;
+    this.y += this.vy;
+    
+    // Yerçekimi
+    this.vy += 0.2;
+    
+    // Sınırlar
+    if (this.x < this.r) { this.x = this.r; this.vx *= -0.9; }
+    if (this.x > width - this.r) { this.x = width - this.r; this.vx *= -0.9; }
+    if (this.y > height - this.r) { this.y = height - this.r; this.vy *= -0.9; }
+  }
+  
+  goster() {
+    noStroke();
+    fill(this.renk);
+    circle(this.x, this.y, this.r * 2);
+    
+    fill(255, 100);
+    circle(this.x - this.r * 0.3, this.y - this.r * 0.3, this.r * 0.5);
+  }
+  
+  carpisiyorMu(diger) {
+    let d = dist(this.x, this.y, diger.x, diger.y);
+    return d < this.r + diger.r;
+  }
+}
+
+let toplar = [];
+
+function setup() {
+  createCanvas(400, 400);
+  
+  for (let i = 0; i < 8; i++) {
+    toplar.push(new Top(random(50, 350), random(50, 200)));
+  }
+}
+
+function draw() {
+  background(20, 20, 40);
+  
+  // Zemin
+  fill(40);
+  noStroke();
+  rect(0, height - 30, width, 30);
+  
+  for (let top of toplar) {
+    top.guncelle();
+    top.goster();
+  }
+  
+  fill(255);
+  textSize(12);
+  text("Top sayısı: " + toplar.length, 10, 25);
+  text("Tıkla: top ekle", 10, 45);
+}
+
+function mousePressed() {
+  toplar.push(new Top(mouseX, mouseY));
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 5: Parçacık Sistemi
+            new P5CodeEditor('editor5', {
+                initialCode: `// ========================================
+// PARÇACIK SINIFI - Tek bir parçacığı temsil eder
+// ========================================
+class Parcacik {
+  constructor(x, y, renk) {
+    this.x = x;              // Başlangıç konumu (patlama noktası)
+    this.y = y;
+    this.vx = random(-3, 3); // Rastgele yönde fırla
+    this.vy = random(-6, -2);// Yukarı doğru fırla (negatif = yukarı)
+    this.boyut = random(5, 15);
+    this.alfa = 255;         // Opaklık (255 = tam görünür)
+    // Renk verilmediyse rastgele seç
+    this.renk = renk || color(random(255), random(255), random(255));
+  }
+  
+  guncelle() {
+    // FİZİK SİMÜLASYONU
+    this.x += this.vx;       // Yatay hareket
+    this.y += this.vy;       // Dikey hareket
+    this.vy += 0.15;         // YERÇEKİMİ: Her karede aşağı hız artar
+    this.alfa -= 4;          // SOLMA: Yavaşça kaybol
+    this.boyut *= 0.97;      // KÜÇÜLME: Her karede %3 küçül
+  }
+  
+  goster() {
+    noStroke();
+    // red(), green(), blue() rengin bileşenlerini alır
+    let c = this.renk;
+    fill(red(c), green(c), blue(c), this.alfa);  // Alfa ile saydamlık
+    circle(this.x, this.y, this.boyut);
+  }
+  
+  // Parçacık öldü mü kontrolü
+  bitti() {
+    return this.alfa <= 0 || this.boyut < 0.5;
+  }
+}
+
+// ========================================
+// PARÇACIK SİSTEMİ SINIFI - Parçacıkları yönetir
+// ========================================
+class ParcacikSistemi {
+  constructor() {
+    this.parcaciklar = [];   // Tüm parçacıkları tutan dizi
+  }
+  
+  // PATLAMA OLUŞTUR - x,y konumunda belirli sayıda parçacık
+  patlat(x, y, sayi, renk) {
+    for (let i = 0; i < sayi; i++) {
+      // Her parçacık aynı noktadan başlar
+      // ama farklı yönlere gider (constructor'da random)
+      this.parcaciklar.push(new Parcacik(x, y, renk));
+    }
+  }
+  
+  // TÜM PARÇACIKLARI GÜNCELLE
+  guncelle() {
+    // TERSİNE DÖNGÜ! Çünkü silme yapıyoruz
+    // Düz döngüde silince indexler kayar, hata olur
+    for (let i = this.parcaciklar.length - 1; i >= 0; i--) {
+      this.parcaciklar[i].guncelle();
+      // Ölü parçacıkları diziden sil
+      if (this.parcaciklar[i].bitti()) {
+        this.parcaciklar.splice(i, 1);  // i. elemanı sil
+      }
+    }
+  }
+  
+  // TÜM PARÇACIKLARI ÇİZ
+  goster() {
+    for (let p of this.parcaciklar) {
+      p.goster();
+    }
+  }
+}
+
+// ========================================
+// ANA PROGRAM
+// ========================================
+let sistem;
+let renkler = [];  // Patlama renk paleti
+
+function setup() {
+  createCanvas(400, 400);
+  sistem = new ParcacikSistemi();  // Sistem nesnesini oluştur
+  
+  // Renk paleti tanımla
+  renkler = [
+    color(255, 100, 100),  // Kırmızı
+    color(100, 255, 100),  // Yeşil
+    color(100, 100, 255),  // Mavi
+    color(255, 255, 100),  // Sarı
+    color(255, 100, 255)   // Pembe
+  ];
+}
+
+function draw() {
+  // Yarı saydam arkaplan = iz bırakma efekti
+  background(20, 20, 30, 50);
+  
+  sistem.guncelle();  // Tüm parçacıkları güncelle
+  sistem.goster();    // Tüm parçacıkları çiz
+  
+  fill(255);
+  textSize(12);
+  text("Parçacık: " + sistem.parcaciklar.length, 10, 25);
+  text("Tıkla: patlama!", 10, 45);
+}
+
+function mousePressed() {
+  // Paletten rastgele renk seç
+  let renk = random(renkler);
+  // Tıklanan yerde 25 parçacıklık patlama
+  sistem.patlat(mouseX, mouseY, 25, renk);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 6: Oyun
+            new P5CodeEditor('editor6', {
+                initialCode: `// ========================================
+// DÜŞMAN SINIFI
+// ========================================
+class Dusman {
+  constructor() {
+    // Rastgele x konumu, ekranın üstünden başla
+    this.x = random(width);
+    this.y = -30;                    // Ekranın dışında (üstte)
+    this.boyut = random(20, 40);     // Rastgele boyut
+    this.hiz = random(1, 4);         // Rastgele düşme hızı
+    // Kırmızımsı renkler
+    this.renk = color(255, random(50, 150), random(50, 100));
+  }
+  
+  guncelle() {
+    // Sadece aşağı doğru hareket
+    this.y += this.hiz;
+  }
+  
+  goster() {
+    fill(this.renk);
+    noStroke();
+    
+    // Düşman şekli (uzaylı yüzü)
+    circle(this.x, this.y, this.boyut);
+    
+    // Gözler - boyuta orantılı
+    fill(255);
+    circle(this.x - this.boyut/4, this.y - 2, this.boyut/3);
+    circle(this.x + this.boyut/4, this.y - 2, this.boyut/3);
+    fill(0);  // Göz bebekleri
+    circle(this.x - this.boyut/4, this.y - 2, this.boyut/6);
+    circle(this.x + this.boyut/4, this.y - 2, this.boyut/6);
+  }
+  
+  // Ekrandan çıktı mı? (alt kenar)
+  ekranDisi() {
+    return this.y > height + this.boyut;
+  }
+  
+  // Başka bir nesneyle çarpışıyor mu?
+  // dist() iki nokta arası mesafeyi hesaplar
+  carpisiyor(x, y, r) {
+    return dist(this.x, this.y, x, y) < this.boyut/2 + r;
+  }
+}
+
+// ========================================
+// OYUN DEĞİŞKENLERİ
+// ========================================
+let oyuncuX;       // Oyuncu X konumu (Y sabit)
+let puan = 0;      // Kaçırılan düşman sayısı
+let can = 3;       // Kalan can
+let dusmanlar = []; // Düşman dizisi
+
+function setup() {
+  createCanvas(400, 400);
+  oyuncuX = width / 2;  // Ortadan başla
+}
+
+function draw() {
+  background(20, 20, 50);  // Uzay rengi
+  
+  // ===== ARKA PLAN YILDIZLARI =====
+  // randomSeed: aynı seed = aynı rastgele değerler
+  // Her karede aynı yıldızlar çizilir (titreme olmaz)
+  randomSeed(99);
+  for (let i = 0; i < 50; i++) {
+    fill(255, random(100, 200));
+    noStroke();
+    circle(random(width), random(height), random(1, 3));
+  }
+  randomSeed(frameCount);  // Normal rastgeleliğe dön
+  
+  // ===== OYUNCU HAREKETİ =====
+  // lerp: "linear interpolation" - yumuşak geçiş
+  // oyuncuX yavaşça mouseX'e yaklaşır (%10 her karede)
+  oyuncuX = lerp(oyuncuX, mouseX, 0.1);
+  oyuncuX = constrain(oyuncuX, 20, width - 20);  // Sınırda tut
+  
+  // ===== OYUNCU ÇİZİMİ (üçgen uzay gemisi) =====
+  fill(100, 200, 255);
+  noStroke();
+  // triangle(x1,y1, x2,y2, x3,y3)
+  triangle(oyuncuX, height - 50,         // Üst nokta
+           oyuncuX - 20, height - 20,    // Sol alt
+           oyuncuX + 20, height - 20);   // Sağ alt
+  
+  // ===== YENİ DÜŞMAN OLUŞTUR =====
+  // Her 30 karede bir (saniyede 2 düşman)
+  if (frameCount % 30 == 0) {
+    dusmanlar.push(new Dusman());
+  }
+  
+  // ===== DÜŞMANLARI GÜNCELLE =====
+  // Tersine döngü (silme için güvenli)
+  for (let i = dusmanlar.length - 1; i >= 0; i--) {
+    let d = dusmanlar[i];
+    d.guncelle();
+    d.goster();
+    
+    // ÇARPIŞMA KONTROLÜ
+    // Düşman oyuncuya değdi mi?
+    if (d.carpisiyor(oyuncuX, height - 35, 15)) {
+      can--;                      // Can azalt
+      dusmanlar.splice(i, 1);     // Düşmanı sil
+      continue;                   // Sonraki düşmana geç
+    }
+    
+    // EKRAN DIŞI KONTROLÜ
+    // Düşman aşağıdan çıktıysa = kaçırdık = puan!
+    if (d.ekranDisi()) {
+      puan++;                     // Puan artır
+      dusmanlar.splice(i, 1);     // Düşmanı sil
+    }
+  }
+  
+  // ===== KULLANICI ARAYÜZÜ =====
+  fill(255);
+  textSize(16);
+  text("Puan: " + puan, 10, 30);
+  text("Can: " + "❤️".repeat(can), 10, 55);  // can kadar kalp emoji
+  
+  // ===== OYUN BİTTİ =====
+  if (can <= 0) {
+    textAlign(CENTER, CENTER);
+    textSize(32);
+    fill(255, 100, 100);
+    text("OYUN BİTTİ", width/2, height/2);
+    textSize(18);
+    fill(255);
+    text("Puan: " + puan, width/2, height/2 + 40);
+    noLoop();  // Oyunu durdur
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 7: Yıldız Simülasyonu
+            new P5CodeEditor('editor7', {
+                initialCode: `// ========================================
+// YILDIZ SINIFI - 3D Perspektif Simülasyonu
+// ========================================
+class Yildiz {
+  constructor() {
+    this.reset();  // İlk değerleri ayarla
+  }
+  
+  // Yıldızı sıfırla (başlangıç veya ekran dışına çıkınca)
+  reset() {
+    // 3D KOORDİNATLAR
+    // x, y: Ekranın ortamından ne kadar uzakta
+    // z: Derinlik (bize ne kadar yakın)
+    this.x = random(-width, width);   // -400 ile +400 arası
+    this.y = random(-height, height); // -400 ile +400 arası
+    this.z = random(width);           // 0 ile 400 arası (derinlik)
+    this.pz = this.z;                 // Önceki z (iz çizmek için)
+  }
+  
+  guncelle(hiz) {
+    // Z'yi azalt = yıldız bize doğru gelir
+    this.z -= hiz;
+    
+    // Ekrandan geçtiyse (z < 1) başa sar
+    if (this.z < 1) {
+      this.reset();
+      this.z = width;     // En uzaktan başlat
+      this.pz = this.z;   // İz için aynı nokta
+    }
+  }
+  
+  goster() {
+    // ========================================
+    // PERSPEKTİF HESAPLAMA - 3D'yi 2D'ye dönüştür
+    // ========================================
+    // Formül: ekranX = 3dX / z
+    // z küçüldükçe (yakınlaştıkça) ekranX büyür
+    // Bu 3D perspektif yanılsaması yaratır
+    
+    // Şimdiki konum
+    let sx = map(this.x / this.z, 0, 1, 0, width);
+    let sy = map(this.y / this.z, 0, 1, 0, height);
+    
+    // Önceki konum (iz çizmek için)
+    let px = map(this.x / this.pz, 0, 1, 0, width);
+    let py = map(this.y / this.pz, 0, 1, 0, height);
+    
+    this.pz = this.z;  // Sonraki kare için kaydet
+    
+    // BOYUT: Uzaktaki küçük, yakındaki büyük
+    // z=width (en uzak) -> boyut=0
+    // z=0 (en yakın) -> boyut=4
+    let boyut = map(this.z, 0, width, 4, 0);
+    
+    // PARLAKLIK: Uzaktaki soluk, yakındaki parlak
+    let parlaklik = map(this.z, 0, width, 255, 50);
+    
+    // ÇİZİM: Önceki noktadan şimdiki noktaya çizgi
+    // Bu hareket izi efekti yaratır
+    stroke(parlaklik);
+    strokeWeight(boyut);
+    line(px, py, sx, sy);
+  }
+}
+
+// ========================================
+// ANA PROGRAM
+// ========================================
+let yildizlar = [];
+let hiz = 10;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  // 200 yıldız oluştur
+  for (let i = 0; i < 200; i++) {
+    yildizlar.push(new Yildiz());
+  }
+}
+
+function draw() {
+  background(0, 0, 20);  // Koyu mavi uzay
+  
+  // Hızı fare X konumuna göre ayarla
+  // Sol: yavaş (0), Sağ: hızlı (30)
+  hiz = map(mouseX, 0, width, 0, 30);
+  
+  // MERKEZE TAŞI
+  // translate() tüm çizimlerin başlangıç noktasını değiştirir
+  // Böylece yıldızlar merkezden dışarı açılır
+  translate(width/2, height/2);
+  
+  for (let y of yildizlar) {
+    y.guncelle(hiz);
+    y.goster();
+  }
+  
+  // UI için translate'ı sıfırla
+  resetMatrix();
+  fill(255);
+  noStroke();
+  textSize(12);
+  text("Hız: " + floor(hiz), 10, 25);
+  text("Fareyi sağa taşı: hızlan", 10, 45);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+        });
+    </script>
+</body>
+</html>

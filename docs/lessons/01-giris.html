@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <title>Ders 1: p5.js'e Giriş - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html" class="active">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#p5-nedir">p5.js Nedir?</a></li>
+                    <li><a href="#nasil-calisir">Nasıl Çalışır?</a></li>
+                    <li><a href="#setup-draw">setup() ve draw()</a></li>
+                    <li><a href="#ilk-cizim">İlk Çiziminiz</a></li>
+                    <li><a href="#koordinat-sistemi">Koordinat Sistemi</a></li>
+                    <li><a href="#nerede-yazilir">Kod Nerede Yazılır?</a></li>
+                    <li><a href="#ornekler">Alıştırma Örnekleri</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 1: p5.js'e Giriş</h1>
+                <div class="lesson-meta">
+                    <span>📚 Başlangıç</span>
+                    <span>⏱️ 30 dakika</span>
+                    <span>🎯 Temel Kavramlar</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: What is p5.js -->
+                <section id="p5-nedir">
+                    <h2>p5.js Nedir?</h2>
+                    
+                    <p>
+                        Bilgisayar ekranınızda sihirli bir tuval hayal edin. p5.js ile basit 
+                        talimatlar yazarak şekiller çizebilir, animasyonlar oluşturabilir, 
+                        fare tıklamalarına tepki verebilir ve etkileşimli deneyimler 
+                        oluşturabilirsiniz—hepsi JavaScript kodu kullanarak.
+                    </p>
+
+                    <div class="info-box note">
+                        <div class="info-box-title">🎯 Önemli Nokta</div>
+                        <p>
+                            <strong>p5.js</strong>, görsel ve etkileşimli programlar oluşturmanız 
+                            için basit komutlar sağlayan bir JavaScript kütüphanesidir. Sanatçılar, 
+                            tasarımcılar ve yeni başlayanlar için—kodla yaratıcı olmak isteyen 
+                            herkes için—tasarlanmıştır.
+                        </p>
+                    </div>
+
+                    <h3>Kütüphane Nedir?</h3>
+                    <p>
+                        Kütüphaneyi bir alet kutusu gibi düşünün. Nasıl ki bir marangozun 
+                        işini kolaylaştıran aletleri (çekiç, testere, tornavida) varsa, 
+                        programcıların da kütüphaneleri vardır—belirli görevleri kolaylaştıran 
+                        önceden yazılmış kod koleksiyonları.
+                    </p>
+                    <p>
+                        p5.js olmadan ekranda bir daire çizmek çok sayıda karmaşık kod satırı 
+                        gerektirir. p5.js ile sadece şu kadar:
+                    </p>
+                    <pre><code>circle(200, 200, 100);</code></pre>
+                    <p>
+                        İşte bu kadar! Bir satır kod ile daire çizilir. Kütüphane tüm 
+                        karmaşık işleri arka planda halleder.
+                    </p>
+
+                    <h3>Yaratıcı Kodlama Araçları Ailesi</h3>
+                    <p>p5.js bir ailenin parçasıdır:</p>
+                    <ul>
+                        <li>
+                            <strong>Processing</strong> (2001) - Orijinal versiyon, sanatçılara 
+                            programlamayı öğretmek için oluşturuldu. Java dili kullanır.
+                        </li>
+                        <li>
+                            <strong>p5.js</strong> (2014) - Web tarayıcılarında çalışan JavaScript 
+                            versiyonu. Biz bunu öğreniyoruz!
+                        </li>
+                        <li>
+                            <strong>Processing.py</strong> - Python tercih edenler için Python versiyonu.
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- Section: How p5.js Works -->
+                <section id="nasil-calisir" class="mt-4">
+                    <h2>p5.js Nasıl Çalışır?</h2>
+
+                    <p>
+                        Her p5.js programı ("çizim" veya "sketch" olarak adlandırılır) 
+                        aynı temel yapıyı izler. Bu yapıyı anlamak, oluşturacağınız 
+                        her şeyin temelidir.
+                    </p>
+
+                    <h3>İki Temel Fonksiyon</h3>
+                    <p>
+                        Her p5.js çiziminin iki ana bölümü vardır:
+                    </p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Fonksiyon</th>
+                                <th>Ne Zaman Çalışır?</th>
+                                <th>Örnek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="color: var(--accent-success);"><strong>setup()</strong></td>
+                                <td>Program başında <strong>BİR KEZ</strong> çalışır.<br>Başlangıç ayarları burada yapılır.</td>
+                                <td><pre><code>function setup() {
+  createCanvas(400, 400);
+}</code></pre></td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--accent-warning);"><strong>draw()</strong></td>
+                                <td>Saniyede ~60 kez <strong>SÜREKLI</strong> çalışır.<br>Animasyonlar burada gerçekleşir.</td>
+                                <td><pre><code>function draw() {
+  background(220);
+  circle(mouseX, mouseY, 50);
+}</code></pre></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 Döngüyü Anlamak</div>
+                        <p>
+                            <code>draw()</code> fonksiyonu bir döngü oluşturur—bir flip-book 
+                            animasyonu gibi. Her çalıştığında bir "kare" çizer. Saniyede 60 
+                            kare (60 FPS) ile değişiklikler gözlerimize akıcı görünür. 
+                            Animasyonlar böyle çalışır!
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Section: setup and draw -->
+                <section id="setup-draw" class="mt-4">
+                    <h2>setup() ve draw() Fonksiyonlarını Anlamak</h2>
+
+                    <p>Bunu uygulamada görelim. Aşağıdaki örnekte:</p>
+                    <ol>
+                        <li><code>setup()</code> 400×400 piksellik bir tuval oluşturur</li>
+                        <li><code>draw()</code> sürekli çalışır, arka planı gri boyar ve fare konumunda bir daire çizer</li>
+                    </ol>
+                </section>
+
+                <!-- Interactive Example 1 -->
+                <section id="ilk-cizim" class="mt-4">
+                    <h2>İlk Çiziminiz</h2>
+                    
+                    <p>
+                        İşte basit bir p5.js çizimi. <strong>Kendiniz deneyin:</strong> 
+                        Editörün içine tıklayın ve bazı sayıları değiştirin, sonra 
+                        ne olduğunu görmek için "Çalıştır" butonuna basın!
+                    </p>
+
+                    <div id="editor1"></div>
+
+                    <div class="challenge-box">
+                        <h4>🧪 Bu Deneyleri Yapın</h4>
+                        <ul>
+                            <li><code>400, 400</code>'ü <code>600, 300</code> yapın - tuvale ne oldu?</li>
+                            <li><code>background(220)</code>'yi <code>background(0)</code> yapın - 0 hangi renk?</li>
+                            <li>Dairenin son sayısını (50) 100 yapın - daire nasıl değişti?</li>
+                            <li>Farenizi önizleme alanında hareket ettirin - dairenin takip ettiğini izleyin!</li>
+                        </ul>
+                    </div>
+
+                    <h3>Kodu Parçalara Ayıralım</h3>
+                    <p>Her bir bölümü anlayalım:</p>
+
+                    <pre><code>function setup() {
+  createCanvas(400, 400);  // 400 piksel genişlik, 400 piksel yükseklik tuval oluştur
+}</code></pre>
+                    <p>
+                        <code>createCanvas(genişlik, yükseklik)</code> çizim alanını oluşturur. 
+                        Bu olmadan çizim yapacak yeriniz olmaz!
+                    </p>
+
+                    <pre><code>function draw() {
+  background(220);         // Tüm tuvali griye boya (220 = açık gri)
+  circle(mouseX, mouseY, 50);  // Fare konumunda daire çiz, boyut 50
+}</code></pre>
+                    <p>
+                        <code>background(220)</code> tüm tuvali bir renkle doldurur. 
+                        0 (siyah) ile 255 (beyaz) arasındaki değerler gri tonlar oluşturur.
+                    </p>
+                    <p>
+                        <code>mouseX</code> ve <code>mouseY</code>, p5.js'in otomatik olarak 
+                        mevcut fare konumuyla güncellediği özel değişkenlerdir. Bu 
+                        "yerleşik değişkenler" hakkında yakında daha fazla öğreneceksiniz!
+                    </p>
+                </section>
+
+                <!-- Section: Coordinate System -->
+                <section id="koordinat-sistemi" class="mt-4">
+                    <h2>Koordinat Sistemi</h2>
+
+                    <p>
+                        Şekil çizmek için p5.js'e <em>nereye</em> çizeceğini söylemeniz gerekir. 
+                        Bu, koordinatlar kullanılarak yapılır: X (yatay) ve Y (dikey) konumları.
+                    </p>
+
+                    <div class="info-box warning">
+                        <div class="info-box-title">⚠️ Önemli: Y Ters Çevrilmiş!</div>
+                        <p>
+                            Matematik dersinden farklı olarak, Y'nin <em>yukarı</em> gidince arttığı 
+                            yerde, p5.js'de (ve çoğu bilgisayar grafiğinde) Y <em>aşağı</em> gidince 
+                            artar. Bu birçok yeni başlayanı şaşırtır!
+                        </p>
+                    </div>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Kavram</th>
+                                <th>Açıklama</th>
+                                <th>Örnek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Orijin (0, 0)</strong></td>
+                                <td>Tuvalin <strong>sol üst köşesi</strong>. Koordinat sistemi buradan başlar.</td>
+                                <td><code>circle(0, 0, 20)</code> sol üst köşede</td>
+                            </tr>
+                            <tr>
+                                <td><strong>X Ekseni</strong></td>
+                                <td><strong>Sağa</strong> hareket ettikçe X artar. Sola gidince azalır.</td>
+                                <td><code>x = 100</code> → soldan 100 piksel</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Y Ekseni</strong></td>
+                                <td><strong>Aşağı</strong> hareket ettikçe Y artar. (Matematikten farklı!)</td>
+                                <td><code>y = 200</code> → üstten 200 piksel</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tuval Sınırları</strong></td>
+                                <td>400×400 tuval için sağ alt köşe (399, 399)'dadır.</td>
+                                <td><code>circle(width/2, height/2, 30)</code> → merkez</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>İşte koordinat sisteminin görsel bir gösterimi:</p>
+
+                    <div id="editor2"></div>
+
+                    <div class="challenge-box">
+                        <h4>🧪 Koordinat Deneyleri</h4>
+                        <ul>
+                            <li>Kırmızı kare (0, 0)'da - sol üst köşe</li>
+                            <li>Mavi kare (350, 350)'de - sağ alt köşeye yakın</li>
+                            <li>Yeşil daire (200, 200)'de - 400×400 tuvalin merkezi</li>
+                            <li>Koordinatların nasıl çalıştığını anlamak için bu konumları değiştirmeyi deneyin!</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Section: Where to Write Code -->
+                <section id="nerede-yazilir" class="mt-4">
+                    <h2>Kodunuzu Nerede Yazabilirsiniz?</h2>
+
+                    <p>
+                        p5.js ile kodlama için birkaç seçeneğiniz var. Çevrimiçi editörlerle 
+                        başlayın ve daha rahat olduğunuzda yerel geliştirmeye geçin.
+                    </p>
+
+                    <h3>Seçenek 1: p5.js Web Editörü (Başlangıç İçin Önerilir)</h3>
+                    <p>
+                        Resmi <a href="https://editor.p5js.org/" target="_blank">p5.js Web Editörü</a> 
+                        başlamanın en kolay yoludur. Tarayıcınızda çalışır—kurulum gerekmez!
+                    </p>
+                    <ul>
+                        <li>✅ Kurulum gerekmez</li>
+                        <li>✅ Çizimlerinizi çevrimiçi kaydedin ve paylaşın</li>
+                        <li>✅ Başlangıç için harika</li>
+                        <li>⚠️ İnternet bağlantısı gerektirir</li>
+                    </ul>
+
+                    <h3>Seçenek 2: OpenProcessing</h3>
+                    <p>
+                        <a href="https://openprocessing.org/" target="_blank">OpenProcessing</a>, 
+                        p5.js çizimleri oluşturabileceğiniz, paylaşabileceğiniz ve 
+                        keşfedebileceğiniz bir topluluk platformudur.
+                    </p>
+
+                    <h3>Seçenek 3: Yerel Geliştirme (İleri Seviye)</h3>
+                    <p>
+                        İlerledikçe, <a href="https://code.visualstudio.com/" target="_blank">VS Code</a> 
+                        gibi bir metin editörü kullanarak yerel olarak kod yazmak isteyebilirsiniz. 
+                        Bu size daha fazla kontrol sağlar ve çevrimdışı çalışır.
+                    </p>
+
+                    <div class="info-box note">
+                        <div class="info-box-title">📝 Yerel Kurulum (daha sonra için)</div>
+                        <p>
+                            p5.js'i yerel olarak çalıştırmak için şunlara ihtiyacınız var:
+                        </p>
+                        <ol>
+                            <li>p5.js kütüphanesini yükleyen bir HTML dosyası</li>
+                            <li>Kodunuzu içeren bir JavaScript dosyası</li>
+                            <li>Yerel bir web sunucusu (VS Code'da "Live Server" eklentisi var)</li>
+                        </ol>
+                        <p>Bunu daha sonra ayrıntılı olarak ele alacağız. Şimdilik çevrimiçi editörleri kullanın!</p>
+                    </div>
+
+                    <h3>Hata Ayıklama (Debug) Temelleri</h3>
+                    <p>
+                        Kod yazarken hatalar kaçınılmazdır. İşte başlangıç için temel ipuçları:
+                    </p>
+                    <ul>
+                        <li><strong>console.log()</strong> kullanın - Değişken değerlerini konsola yazdırarak kontrol edin</li>
+                        <li><strong>Tarayıcı Konsolu</strong> - F12 tuşuna basarak hata mesajlarını görün</li>
+                        <li><strong>Adım adım ilerleyin</strong> - Küçük parçalar yazın ve her birini test edin</li>
+                    </ul>
+                    <p>
+                        <em>Detaylı hata ayıklama teknikleri için <a href="12-hata-ayiklama.html">Hata Ayıklama Dersi</a>'ne bakın.</em>
+                    </p>
+                </section>
+
+                <!-- Section: Basic Functions -->
+                <section class="mt-4">
+                    <h2>Sık Kullanılan p5.js Fonksiyonları</h2>
+                    
+                    <p>
+                        p5.js size birçok hazır fonksiyon sunar. İşte en sık kullanacaklarınız:
+                    </p>
+
+                    <h3>random() - Rastgele Sayı</h3>
+                    <p>
+                        <code>random()</code> fonksiyonu rastgele sayılar üretir. 
+                        Oyunlar, sanat ve animasyonlar için çok kullanışlıdır!
+                    </p>
+                    <pre><code>random()           // 0 ile 1 arasında
+random(100)        // 0 ile 100 arasında  
+random(50, 100)    // 50 ile 100 arasında
+random(["elma", "armut", "muz"])  // Diziden rastgele seç</code></pre>
+
+                    <h3>floor() ve round() - Sayıları Yuvarlama</h3>
+                    <pre><code>floor(3.7)   // 3 (aşağı yuvarla)
+round(3.7)   // 4 (en yakına yuvarla)
+ceil(3.2)    // 4 (yukarı yuvarla)</code></pre>
+
+                    <h3>Trigonometri (İleri Dersler İçin)</h3>
+                    <p>
+                        Dairesel hareketler ve dalgalar için trigonometri kullanılır. 
+                        Bunları ilerleyen derslerde göreceksiniz:
+                    </p>
+                    <pre><code>// PI sabiti: 3.14159... (180 derece)
+sin(aci)    // -1 ile 1 arası dalgalı değer
+cos(aci)    // -1 ile 1 arası dalgalı değer (sin'den 90° fark)
+
+// Örnek: Dairesel hareket
+let x = cos(aci) * yaricap;
+let y = sin(aci) * yaricap;</code></pre>
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 Şimdilik Bilmeniz Gereken</div>
+                        <p>
+                            Bu kursta <code>random()</code> sık kullanılır. Trigonometri (sin/cos) 
+                            animasyon dersinde açıklanacak. Şimdilik sadece random() ve 
+                            yuvarlamaları öğrenmeniz yeterli!
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Section: Practice Examples -->
+                <section id="ornekler" class="mt-4">
+                    <h2>Alıştırma Örnekleri</h2>
+
+                    <p>
+                        Öğrenmenin en iyi yolu yaparak öğrenmektir! İşte keşfedebileceğiniz 
+                        daha fazla örnek. Her biri farklı bir kavram öğretir. Bunları 
+                        değiştirin ve ne olduğunu görün!
+                    </p>
+
+                    <h3>Örnek 1: Statik Çizim</h3>
+                    <p>Bu çizim şekilleri bir kez çizer (animasyon yok):</p>
+
+                    <div id="editor3"></div>
+
+                    <h3>Örnek 2: Basit Animasyon</h3>
+                    <p>Bu çizim akıcı hareket oluşturur:</p>
+
+                    <div id="editor4"></div>
+
+                    <div class="challenge-box">
+                        <h4>🧪 Animasyon Deneyleri</h4>
+                        <ul>
+                            <li><code>x = x + 2</code>'yi <code>x = x + 5</code> yapın - daha hızlı mı yavaş mı?</li>
+                            <li>Yeni bir <code>y</code> değişkeni ile dikey hareket ekleyin</li>
+                            <li><code>background()</code> satırını silerseniz ne olur?</li>
+                        </ul>
+                    </div>
+
+                    <h3>Örnek 3: Çizim Aracı</h3>
+                    <p>Önizlemede farenizi hareket ettirmeyi deneyin:</p>
+
+                    <div id="editor5"></div>
+
+                    <h3>Örnek 4: Renkli Toplar</h3>
+                    <p>Fareyi tıklayarak yeni toplar ekleyin:</p>
+
+                    <div id="editor6"></div>
+                </section>
+
+                <!-- Key Concepts Summary -->
+                <section class="mt-4">
+                    <h2>Temel Kavramlar Özeti</h2>
+
+                    <div class="card" style="background: rgba(0, 217, 255, 0.05);">
+                        <h4>Bu Derste Öğrendikleriniz</h4>
+                        <ul>
+                            <li><strong>p5.js</strong> yaratıcı kodlama için bir JavaScript kütüphanesidir</li>
+                            <li><strong>setup()</strong> başlangıçta bir kez çalışır</li>
+                            <li><strong>draw()</strong> sürekli tekrar eder (saniyede yaklaşık 60 kez)</li>
+                            <li><strong>Koordinatlar:</strong> (0, 0) sol üstte; X sağa, Y aşağı gider</li>
+                            <li><strong>createCanvas(genişlik, yükseklik)</strong> çizim alanınızı oluşturur</li>
+                            <li><strong>background(renk)</strong> tuvali bir renkle doldurur</li>
+                            <li><strong>mouseX, mouseY</strong> fare konumunu takip eder</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <section class="mt-4" style="display: flex; justify-content: space-between; padding: 2rem 0; border-top: 1px solid var(--border-color);">
+                    <div></div>
+                    <a href="02-sekiller-renkler.html" class="btn btn-primary">
+                        Sonraki Ders: Şekiller ve Renkler →
+                    </a>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="../js/editor.js"></script>
+    <script src="../js/theme.js"></script>
+    
+    <script>
+        // Kod editörlerini örneklerle başlat
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Örnek 1: İlk Çizim - Fareyi Takip Eden Daire
+            const editor1 = new P5CodeEditor('editor1', {
+                initialCode: `// İlk p5.js çiziminiz!
+// Farenizi önizleme alanında hareket ettirin
+
+function setup() {
+  // Bu, program başladığında BİR KEZ çalışır
+  createCanvas(400, 400);
+}
+
+function draw() {
+  // Bu, SANİYEDE 60 KEZ çalışır
+  background(220);  // Gri arka plan (0=siyah, 255=beyaz)
+  
+  // Fare konumunda bir daire çiz
+  // circle(x, y, çap)
+  circle(mouseX, mouseY, 50);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 2: Koordinat Sistemi
+            const editor2 = new P5CodeEditor('editor2', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(50);  // Koyu gri arka plan
+  
+  // ÖNEMLİ: (0,0) SOL ÜST köşededir!
+  // X SAĞA gidince artar
+  // Y AŞAĞI gidince artar
+  
+  // Sol üst köşede kırmızı kare (0, 0)
+  fill(255, 0, 0);  // Kırmızı renk
+  rect(0, 0, 50, 50);
+  
+  // Sağ alt köşeye yakın mavi kare (350, 350)
+  fill(0, 0, 255);  // Mavi renk
+  rect(350, 350, 50, 50);
+  
+  // Merkezde yeşil daire (200, 200)
+  fill(0, 255, 0);  // Yeşil renk
+  circle(200, 200, 50);
+  
+  // Merkezde sarı çapraz çizgiler
+  stroke(255, 255, 0);  // Sarı çizgiler
+  line(200, 0, 200, 400);  // Dikey çizgi
+  line(0, 200, 400, 200);  // Yatay çizgi
+  
+  // Koordinatları gösteren etiketler
+  fill(255);
+  noStroke();
+  textSize(12);
+  text("(0, 0)", 5, 70);
+  text("(350, 350)", 305, 345);
+  text("(200, 200)", 165, 180);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 3: Statik Çizim
+            const editor3 = new P5CodeEditor('editor3', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+  background(240);  // Açık gri arka plan
+  
+  // Sadece setup()'ta çizdiğimiz için BİR KEZ çizer
+  // Animasyon yok - sadece statik bir resim
+  
+  // Bir ev çiz
+  fill(150, 75, 0);  // Çatı için kahverengi
+  triangle(200, 100, 100, 200, 300, 200);
+  
+  fill(200, 180, 150);  // Duvarlar için bej
+  rect(120, 200, 160, 150);
+  
+  fill(100, 50, 0);  // Kapı için koyu kahverengi
+  rect(175, 270, 50, 80);
+  
+  fill(150, 200, 255);  // Pencereler için açık mavi
+  rect(140, 220, 40, 40);
+  rect(220, 220, 40, 40);
+  
+  // Güneş
+  fill(255, 255, 0);  // Sarı
+  circle(350, 60, 60);
+}
+
+function draw() {
+  // draw() boş - hiçbir şey değişmiyor!
+  // Bu statik (animasyonsuz) bir çizim oluşturur
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 4: Basit Animasyon
+            const editor4 = new P5CodeEditor('editor4', {
+                initialCode: `// Hareket eden top animasyonu
+// frameCount ve mod (%) ile if kullanmadan hareket
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);  // Koyu arka plan
+  
+  // Topu çiz
+  fill(255, 100, 100);  // Pembe/kırmızı renk
+  
+  // frameCount sürekli artan bir sayaç
+  // % (mod) ile ekran genişliğinde döndürüyoruz
+  let topX = (frameCount * 2) % 440 - 20;
+  
+  circle(topX, 200, 50);   // Top hareket ediyor
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 5: Fareyi Takip Eden Daire
+            const editor5 = new P5CodeEditor('editor5', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);  // Her karede temizle
+  
+  // mouseX ve mouseY: Farenin anlık konumu
+  // Bu değişkenler sürekli güncellenir!
+  
+  // Fareyi takip eden ana daire
+  fill(0, 200, 255);
+  noStroke();
+  circle(mouseX, mouseY, 60);
+  
+  // Gözler (fareye göre konumlanır)
+  fill(255);
+  circle(mouseX - 12, mouseY - 10, 18);
+  circle(mouseX + 12, mouseY - 10, 18);
+  
+  // Göz bebekleri
+  fill(0);
+  circle(mouseX - 12, mouseY - 10, 8);
+  circle(mouseX + 12, mouseY - 10, 8);
+  
+  // Bilgi
+  fill(255);
+  textSize(14);
+  text("Fare: (" + mouseX + ", " + mouseY + ")", 10, 25);
+}
+
+// İpucu: Fareyi hareket ettirin!`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 6: Renkli Toplar - Tıklayınca Top Ekle
+            const editor6 = new P5CodeEditor('editor6', {
+                initialCode: `// Tıkladığınızda yeni top eklenir
+// Toplar x, y, renk bilgisi tutar
+
+let topX = 200;
+let topY = 200;
+let topRenk = 0;
+
+function setup() {
+  createCanvas(400, 400);
+  noStroke();
+}
+
+function draw() {
+  background(30);
+  
+  // Topu çiz
+  fill(topRenk, 100, 255);
+  circle(topX, topY, 60);
+  
+  // Bilgi
+  fill(255);
+  textSize(14);
+  text("Tuvale tıklayın!", 20, 30);
+}
+
+function mousePressed() {
+  // Tıklanan yere top taşı
+  topX = mouseX;
+  topY = mouseY;
+  // Rastgele renk
+  topRenk = random(255);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+        });
+    </script>
+</body>
+</html>

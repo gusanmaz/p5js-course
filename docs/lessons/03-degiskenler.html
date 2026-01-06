@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <title>Ders 3: Değişkenler - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html" class="active">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#degisken-nedir">Değişken Nedir?</a></li>
+                    <li><a href="#tanimlama">Değişken Tanımlama</a></li>
+                    <li><a href="#veri-tipleri">Veri Tipleri</a></li>
+                    <li><a href="#tip-sistemleri">Dinamik vs Statik Tip</a></li>
+                    <li><a href="#typeof">typeof Operatörü</a></li>
+                    <li><a href="#kapsam">Global ve Lokal Değişkenler</a></li>
+                    <li><a href="#sistem-degiskenleri">Sistem Değişkenleri</a></li>
+                    <li><a href="#aritmetik">Aritmetik İşlemler</a></li>
+                    <li><a href="#ornekler">Uygulama Örnekleri</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 3: Değişkenler</h1>
+                <div class="lesson-meta">
+                    <span>📚 Temel Kavramlar</span>
+                    <span>⏱️ 50 dakika</span>
+                    <span>🎯 Veri Saklama</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: What is a Variable -->
+                <section id="degisken-nedir">
+                    <h2>Değişken Nedir?</h2>
+                    
+                    <p>
+                        Değişken, programlama dünyasının en temel kavramlarından biridir. 
+                        Basitçe söylemek gerekirse, değişken <strong>bir değeri saklamak için kullandığımız 
+                        kutucuktur</strong>.
+                    </p>
+
+                    <div class="info-box note">
+                        <div class="info-box-title">🧠 Gerçek Hayat Benzetmesi</div>
+                        <p>
+                            Bir değişkeni, üzerinde etiket olan bir kutu gibi düşünebilirsiniz.
+                            Kutunun içine bir değer koyarsınız ve daha sonra etiketi kullanarak 
+                            o değere ulaşırsınız.
+                        </p>
+                        <ul>
+                            <li>📦 Kutu = Değişken (bellek alanı)</li>
+                            <li>🏷️ Etiket = Değişken adı</li>
+                            <li>🔢 İçindeki şey = Değer</li>
+                        </ul>
+                    </div>
+
+                    <h3>Neden Değişken Kullanırız?</h3>
+                    <ul>
+                        <li><strong>Değerleri saklamak:</strong> Bir sayı, metin veya durumu hafızada tutmak</li>
+                        <li><strong>Kod tekrarını azaltmak:</strong> Aynı değeri birçok yerde kullanmak</li>
+                        <li><strong>Dinamik davranış:</strong> Değerleri program çalışırken değiştirmek</li>
+                        <li><strong>Okunabilirlik:</strong> <code>genislik</code> yazmak, <code>400</code> yazmaktan daha anlaşılır</li>
+                    </ul>
+                </section>
+
+                <!-- Section: Defining Variables -->
+                <section id="tanimlama" class="mt-4">
+                    <h2>Değişken Tanımlama</h2>
+
+                    <p>
+                        JavaScript'te (ve dolayısıyla p5.js'te) değişken tanımlamak için 
+                        <code>let</code> anahtar kelimesini kullanırız.
+                    </p>
+
+                    <pre><code>let degiskenAdi = deger;</code></pre>
+
+                    <h3>Örnekler</h3>
+                    <pre><code>let yas = 25;              // Sayı
+let isim = "Ahmet";        // Metin (string)
+let ogrenciMi = true;      // Boolean (true/false)
+let x = 100;               // Koordinat
+let hiz = 5.5;             // Ondalıklı sayı</code></pre>
+
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 let vs const vs var</div>
+                        <p>
+                            <strong>let:</strong> Değeri değişebilen değişkenler için (en çok kullanılan)<br>
+                            <strong>const:</strong> Sabit değerler için (değiştirilemez)<br>
+                            <strong>var:</strong> Eski yöntem (artık kullanılması önerilmez)
+                        </p>
+                    </div>
+
+                    <h3>İsimlendirme Kuralları</h3>
+                    <ul>
+                        <li>✅ Harfle başlamalı: <code>daire</code>, <code>x1</code></li>
+                        <li>✅ Alt çizgi veya $ ile başlayabilir: <code>_toplam</code>, <code>$fiyat</code></li>
+                        <li>❌ Rakamla başlayamaz: <code>1deger</code> hatalı!</li>
+                        <li>❌ Boşluk içeremez: <code>benim degiskenim</code> hatalı!</li>
+                        <li>❌ Özel karakterler kullanılamaz: <code>deger-1</code>, <code>toplam@</code> hatalı!</li>
+                        <li>⚠️ Büyük/küçük harf duyarlı: <code>Deger</code> ile <code>deger</code> farklıdır</li>
+                    </ul>
+
+                    <h3>Camel Case Yazım Stili</h3>
+                    <p>
+                        JavaScript'te birden fazla kelimeden oluşan değişken isimleri için 
+                        <strong>camelCase</strong> kullanılır:
+                    </p>
+                    <pre><code>let topCapi = 80;
+let oyuncuPuani = 0;
+let oyunBittiMi = false;
+let enYuksekSkor = 100;</code></pre>
+
+                    <div id="editor1"></div>
+                </section>
+
+                <!-- Section: Data Types -->
+                <section id="veri-tipleri" class="mt-4">
+                    <h2>Veri Tipleri</h2>
+
+                    <p>
+                        JavaScript'te değerler farklı türlerde olabilir. En yaygın kullanılan 
+                        veri tipleri:
+                    </p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Veri Tipi</th>
+                                <th>Açıklama</th>
+                                <th>Örnekler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Number</strong> (Sayı)</td>
+                                <td>Tamsayılar ve ondalıklı sayılar</td>
+                                <td><code>let sayi = 42;</code><br><code>let pi = 3.14;</code><br><code>let negatif = -10;</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>String</strong> (Metin)</td>
+                                <td>Tırnak içinde yazılan metinler</td>
+                                <td><code>let isim = "Ayşe";</code><br><code>let mesaj = 'Merhaba!';</code><br><code>let cumle = `Yaş: ${yas}`;</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Boolean</strong> (Mantıksal)</td>
+                                <td>Sadece <code>true</code> veya <code>false</code></td>
+                                <td><code>let acikMi = true;</code><br><code>let oyunBitti = false;</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Undefined / Null</strong></td>
+                                <td>Değer atanmamış veya boş</td>
+                                <td><code>let x;</code> → undefined<br><code>let y = null;</code> → boş</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="tip-sistemleri">Dinamik ve Statik Tip Sistemleri</h3>
+                    
+                    <p>
+                        Programlama dilleri, değişken tiplerini nasıl ele aldıklarına göre iki ana kategoriye ayrılır:
+                    </p>
+
+                    <div class="info-box">
+                        <h4>🔄 Dinamik Tipli Diller (JavaScript, Python, Ruby)</h4>
+                        <p>
+                            JavaScript <strong>dinamik tipli</strong> bir dildir. Bu ne demek?
+                        </p>
+                        <ul>
+                            <li>Değişken tipini <strong>önceden belirtmek zorunda değilsiniz</strong></li>
+                            <li>Tip, atanan değerden <strong>otomatik olarak anlaşılır</strong></li>
+                            <li>Aynı değişkene <strong>farklı tipte değerler atanabilir</strong></li>
+                        </ul>
+                        <pre><code>// JavaScript - tip belirtmeye gerek yok
+let x = 42;        // x şu an Number
+x = "merhaba";     // x artık String oldu! (hata vermez)
+x = true;          // x artık Boolean oldu!</code></pre>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>🔒 Statik Tipli Diller (Java, C, C++, C#, TypeScript)</h4>
+                        <p>
+                            Bu dillerde değişkenin tipi <strong>önceden açıkça belirtilmeli</strong> (explicit typing) 
+                            ve değişken ömrü boyunca <strong>aynı tipte kalır</strong>.
+                        </p>
+                        <pre><code>// Java - tip açıkça belirtilmeli
+int sayi = 42;           // sayi sadece int olabilir
+String isim = "Ayşe";    // isim sadece String olabilir
+sayi = "merhaba";        // HATA! int değişkene String atanamaz</code></pre>
+                        <pre><code>// C - benzer şekilde
+int x = 10;
+float pi = 3.14f;
+char harf = 'A';</code></pre>
+                    </div>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Özellik</th>
+                                <th>Dinamik Tipli (JS)</th>
+                                <th>Statik Tipli (Java, C)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tip belirtme</td>
+                                <td>Otomatik (implicit)</td>
+                                <td>Zorunlu (explicit)</td>
+                            </tr>
+                            <tr>
+                                <td>Tip değişimi</td>
+                                <td>✅ İzin verilir</td>
+                                <td>❌ İzin verilmez</td>
+                            </tr>
+                            <tr>
+                                <td>Hata tespiti</td>
+                                <td>Çalışma zamanında</td>
+                                <td>Derleme zamanında</td>
+                            </tr>
+                            <tr>
+                                <td>Esneklik</td>
+                                <td>✅ Yüksek</td>
+                                <td>⚠️ Düşük</td>
+                            </tr>
+                            <tr>
+                                <td>Güvenlik</td>
+                                <td>⚠️ Riskli olabilir</td>
+                                <td>✅ Daha güvenli</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="typeof"><code>typeof</code> Operatörü</h3>
+                    
+                    <p>
+                        JavaScript'te bir değişkenin <strong>mevcut tipini öğrenmek</strong> için 
+                        <code>typeof</code> operatörü kullanılır. Bu özellikle dinamik tipli dillerde 
+                        çok önemlidir çünkü değişkenin tipi çalışma sırasında değişebilir.
+                    </p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Değer</th>
+                                <th>typeof Sonucu</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>42</code> veya <code>3.14</code></td>
+                                <td><code>"number"</code></td>
+                                <td>Tüm sayılar (tamsayı, ondalık)</td>
+                            </tr>
+                            <tr>
+                                <td><code>"merhaba"</code></td>
+                                <td><code>"string"</code></td>
+                                <td>Metin değerleri</td>
+                            </tr>
+                            <tr>
+                                <td><code>true</code> veya <code>false</code></td>
+                                <td><code>"boolean"</code></td>
+                                <td>Mantıksal değerler</td>
+                            </tr>
+                            <tr>
+                                <td><code>undefined</code></td>
+                                <td><code>"undefined"</code></td>
+                                <td>Değer atanmamış</td>
+                            </tr>
+                            <tr>
+                                <td><code>null</code></td>
+                                <td><code>"object"</code></td>
+                                <td>⚠️ Tarihi bir hata! (aslında null)</td>
+                            </tr>
+                            <tr>
+                                <td><code>[1, 2, 3]</code></td>
+                                <td><code>"object"</code></td>
+                                <td>Diziler de object döner</td>
+                            </tr>
+                            <tr>
+                                <td><code>function() {}</code></td>
+                                <td><code>"function"</code></td>
+                                <td>Fonksiyonlar</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="info-box">
+                        <h4>💡 <code>typeof</code> Ne İşe Yarar?</h4>
+                        <ul>
+                            <li><strong>Hata ayıklama:</strong> Beklenmeyen tip hatalarını bulmak</li>
+                            <li><strong>Güvenli kod:</strong> İşlem yapmadan önce tipi kontrol etmek</li>
+                            <li><strong>Dinamik davranış:</strong> Tipe göre farklı işlemler yapmak</li>
+                        </ul>
+                        <pre><code>// Örnek: Güvenli toplama
+let a = 5;
+let b = "10";
+
+// Dikkat! b aslında string
+console.log(typeof a);  // "number"
+console.log(typeof b);  // "string"
+console.log(a + b);     // "510" (string birleştirme!)
+console.log(a + Number(b)); // 15 (doğru toplama)</code></pre>
+                    </div>
+
+                    <div id="editor2"></div>
+                </section>
+
+                <!-- Section: Variable Scope -->
+                <section id="kapsam" class="mt-4">
+                    <h2>Global ve Lokal Değişkenler</h2>
+
+                    <p>
+                        Değişkenlerin <strong>kapsamı (scope)</strong>, onlara kodun hangi bölümlerinden 
+                        erişilebileceğini belirler. Bu, programlamanın en önemli kavramlarından biridir.
+                    </p>
+
+                    <h3>🌍 Global Değişkenler</h3>
+                    <p>
+                        Fonksiyonların <strong>dışında</strong> tanımlanan değişkenlerdir. 
+                        Programın <strong>her yerinden</strong> erişilebilir ve değiştirilebilir.
+                    </p>
+
+                    <div class="info-box" style="border-left-color: var(--accent-success);">
+                        <h4>✅ Ne zaman global kullanmalı?</h4>
+                        <ul>
+                            <li>Birden fazla fonksiyon aynı değere erişmeli (örn: oyuncu skoru)</li>
+                            <li>Değer <code>setup()</code> ile <code>draw()</code> arasında paylaşılmalı</li>
+                            <li>Program boyunca değer korunmalı (örn: oyun durumu)</li>
+                        </ul>
+                    </div>
+
+                    <pre><code>// ✅ GLOBAL - Fonksiyonların dışında
+let skor = 0;        // Her yerden erişilebilir
+let oyuncuX = 200;   // setup ve draw'da kullanılacak
+let canliMi = true;  // Oyun durumu
+
+function setup() {
+  createCanvas(400, 400);
+  // skor, oyuncuX, canliMi burada erişilebilir
+}
+
+function draw() {
+  // skor, oyuncuX, canliMi burada da erişilebilir
+  oyuncuX = oyuncuX + 1;  // Global değişkeni değiştir
+}
+
+function mousePressed() {
+  // Burada da erişilebilir
+  skor = skor + 10;
+}</code></pre>
+
+                    <h3>📦 Lokal Değişkenler</h3>
+                    <p>
+                        Fonksiyonların <strong>içinde</strong> tanımlanan değişkenlerdir. 
+                        Sadece tanımlandıkları fonksiyon içinde erişilebilir.
+                    </p>
+
+                    <div class="info-box" style="border-left-color: var(--accent-primary);">
+                        <h4>✅ Ne zaman lokal kullanmalı?</h4>
+                        <ul>
+                            <li>Değer sadece o fonksiyonda gerekli (örn: geçici hesaplama)</li>
+                            <li>Her çağrıda sıfırdan başlaması gereken değerler</li>
+                            <li>Döngü sayaçları ve geçici değişkenler</li>
+                        </ul>
+                    </div>
+
+                    <pre><code>function draw() {
+  background(220);
+  
+  // ✅ LOKAL - Sadece draw() içinde var
+  let x = mouseX;      // Her frame yeniden oluşturulur
+  let y = mouseY;      // Sadece burada erişilebilir
+  let cap = 50;        // Geçici değer
+  
+  circle(x, y, cap);
+}
+
+function mousePressed() {
+  // ❌ HATA! x, y, cap burada tanımlı değil
+  // console.log(x);  // ReferenceError!
+}</code></pre>
+
+                    <h3>⏱️ Değişken Ömrü (Lifetime)</h3>
+                    
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Tür</th>
+                                <th>Oluşturulma</th>
+                                <th>Yok Olma</th>
+                                <th>Ömür</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Global</strong></td>
+                                <td>Program başladığında</td>
+                                <td>Program kapandığında</td>
+                                <td>Tüm program süresi</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Lokal</strong></td>
+                                <td>Fonksiyon çağrıldığında</td>
+                                <td>Fonksiyon bittiğinde</td>
+                                <td>Sadece fonksiyon süresi</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>🎮 Oyun Örneği: Global vs Lokal</h3>
+                    <pre><code>// === GLOBAL DEĞİŞKENLER ===
+// Bunlar program boyunca yaşar
+let topX = 200;      // Topun X konumu (korunmalı)
+let topY = 200;      // Topun Y konumu (korunmalı)
+let hiz = 3;         // Hareket hızı (paylaşılmalı)
+let skor = 0;        // Oyuncu skoru (korunmalı)
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // === LOKAL DEĞİŞKENLER ===
+  // Bunlar her frame yeniden hesaplanır
+  let mesafe = dist(mouseX, mouseY, topX, topY);
+  let yakalandi = mesafe < 25;
+  
+  // Global değişkenleri güncelle
+  topX = topX + hiz;
+  
+  // Sınır kontrolü
+  if (topX > 400) topX = 0;
+  
+  // Topu çiz
+  fill(yakalandi ? 'green' : 'red');
+  circle(topX, topY, 50);
+  
+  // Skor göster
+  fill(255);
+  text("Skor: " + skor, 20, 30);
+}
+
+function mousePressed() {
+  // Lokal: sadece bu fonksiyonda
+  let mesafe = dist(mouseX, mouseY, topX, topY);
+  
+  if (mesafe < 25) {
+    skor = skor + 10;  // Global'i değiştir
+  }
+}</code></pre>
+
+                    <div class="info-box warning">
+                        <h4>⚠️ Sık Yapılan Hatalar</h4>
+                        <pre><code>// ❌ HATA 1: draw() içinde tanımlayıp değeri korumaya çalışmak
+function draw() {
+  let x = 0;   // Her frame 0'dan başlar!
+  x = x + 1;   // Hep 1 olur, artmaz
+  circle(x, 200, 50);  // Top hiç hareket etmez
+}
+
+// ✅ DOĞRU: Global tanımla
+let x = 0;
+function draw() {
+  x = x + 1;   // Artık gerçekten artar
+  circle(x, 200, 50);  // Top hareket eder
+}</code></pre>
+                        <pre><code>// ❌ HATA 2: Aynı isimde global ve lokal
+let renk = 'red';  // Global
+
+function draw() {
+  let renk = 'blue';  // Lokal - global'i gölgeler!
+  fill(renk);         // 'blue' kullanır
+}
+// Global 'renk' hâlâ 'red'</code></pre>
+                    </div>
+
+                    <div id="editor-scope"></div>
+                </section>
+
+                <!-- Section: System Variables -->
+                <section id="sistem-degiskenleri" class="mt-4">
+                    <h2>p5.js Sistem Değişkenleri</h2>
+
+                    <p>
+                        p5.js, hazır olarak tanımlanmış birçok <strong>sistem değişkeni</strong> sunar. 
+                        Bunları tanımlamanıza gerek yok, doğrudan kullanabilirsiniz!
+                    </p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Kategori</th>
+                                <th>Değişken</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="2"><strong>Tuval</strong></td>
+                                <td><code>width</code></td>
+                                <td>Tuval genişliği (piksel)</td>
+                            </tr>
+                            <tr>
+                                <td><code>height</code></td>
+                                <td>Tuval yüksekliği (piksel)</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="4"><strong>Fare</strong></td>
+                                <td><code>mouseX</code></td>
+                                <td>Farenin X koordinatı</td>
+                            </tr>
+                            <tr>
+                                <td><code>mouseY</code></td>
+                                <td>Farenin Y koordinatı</td>
+                            </tr>
+                            <tr>
+                                <td><code>mouseIsPressed</code></td>
+                                <td>Fare tıklanıyor mu? (true/false)</td>
+                            </tr>
+                            <tr>
+                                <td><code>mouseButton</code></td>
+                                <td>Hangi tuş? (LEFT, RIGHT, CENTER)</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2"><strong>Zaman</strong></td>
+                                <td><code>frameCount</code></td>
+                                <td>Başlangıçtan beri toplam kare sayısı</td>
+                            </tr>
+                            <tr>
+                                <td><code>deltaTime</code></td>
+                                <td>Kareler arası geçen süre (ms)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="editor3"></div>
+
+                    <div class="challenge-box">
+                        <h4>🧪 Deney Zamanı!</h4>
+                        <ul>
+                            <li><code>width/2</code> ve <code>height/2</code> kullanarak daireyi tam ortaya konumlandırın</li>
+                            <li>Fare konumunu ekranda gösterin</li>
+                            <li><code>frameCount</code> ile bir sayaç yapın</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Section: Arithmetic -->
+                <section id="aritmetik" class="mt-4">
+                    <h2>Aritmetik İşlemler</h2>
+
+                    <p>
+                        Değişkenlerle matematiksel işlemler yapabilirsiniz:
+                    </p>
+
+                    <h3>Temel İşlemler</h3>
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Operatör</th>
+                                <th>İşlem</th>
+                                <th>Örnek</th>
+                                <th>Sonuç</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>+</code></td>
+                                <td>Toplama</td>
+                                <td><code>10 + 3</code></td>
+                                <td class="result">13</td>
+                            </tr>
+                            <tr>
+                                <td><code>-</code></td>
+                                <td>Çıkarma</td>
+                                <td><code>10 - 3</code></td>
+                                <td class="result">7</td>
+                            </tr>
+                            <tr>
+                                <td><code>*</code></td>
+                                <td>Çarpma</td>
+                                <td><code>10 * 3</code></td>
+                                <td class="result">30</td>
+                            </tr>
+                            <tr>
+                                <td><code>/</code></td>
+                                <td>Bölme</td>
+                                <td><code>10 / 3</code></td>
+                                <td class="result">3.33...</td>
+                            </tr>
+                            <tr>
+                                <td><code>%</code></td>
+                                <td>Mod (kalan)</td>
+                                <td><code>10 % 3</code></td>
+                                <td class="result">1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Kısayol İşlemler</h3>
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>Kısayol</th>
+                                <th>Anlamı</th>
+                                <th>Örnek (x = 10)</th>
+                                <th>x'in Yeni Değeri</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>x += 5</code></td>
+                                <td><code>x = x + 5</code></td>
+                                <td>10 + 5</td>
+                                <td class="result">15</td>
+                            </tr>
+                            <tr>
+                                <td><code>x -= 3</code></td>
+                                <td><code>x = x - 3</code></td>
+                                <td>15 - 3</td>
+                                <td class="result">12</td>
+                            </tr>
+                            <tr>
+                                <td><code>x *= 2</code></td>
+                                <td><code>x = x * 2</code></td>
+                                <td>12 * 2</td>
+                                <td class="result">24</td>
+                            </tr>
+                            <tr>
+                                <td><code>x /= 4</code></td>
+                                <td><code>x = x / 4</code></td>
+                                <td>24 / 4</td>
+                                <td class="result">6</td>
+                            </tr>
+                            <tr>
+                                <td><code>x++</code></td>
+                                <td><code>x = x + 1</code></td>
+                                <td>6 + 1</td>
+                                <td class="result">7</td>
+                            </tr>
+                            <tr>
+                                <td><code>x--</code></td>
+                                <td><code>x = x - 1</code></td>
+                                <td>7 - 1</td>
+                                <td class="result">6</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Mod İşlemi (%)</h3>
+                    <p>
+                        Mod işlemi, bölme işleminden <strong>kalanı</strong> verir. 
+                        Bu çok yararlı bir işlemdir!
+                    </p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>İfade</th>
+                                <th>Hesaplama</th>
+                                <th>Sonuç</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>10 % 3</code></td>
+                                <td>10 ÷ 3 = 3 kalan...</td>
+                                <td class="result">1</td>
+                                <td class="comment">3×3=9, 10-9=1</td>
+                            </tr>
+                            <tr>
+                                <td><code>15 % 5</code></td>
+                                <td>15 ÷ 5 = 3 kalan...</td>
+                                <td class="result">0</td>
+                                <td class="comment">Tam bölünüyor</td>
+                            </tr>
+                            <tr>
+                                <td><code>7 % 2</code></td>
+                                <td>7 ÷ 2 = 3 kalan...</td>
+                                <td class="result">1</td>
+                                <td class="comment">Tek sayı!</td>
+                            </tr>
+                            <tr>
+                                <td><code>8 % 2</code></td>
+                                <td>8 ÷ 2 = 4 kalan...</td>
+                                <td class="result">0</td>
+                                <td class="comment">Çift sayı!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 Mod İşleminin Kullanım Alanları</div>
+                        <ul>
+                            <li><strong>Tek/Çift kontrolü:</strong> <code>sayi % 2 == 0</code> ise çift</li>
+                            <li><strong>Döngüsel animasyon:</strong> <code>frameCount % 60</code> 0-59 arası değişir</li>
+                            <li><strong>Ekran sınırına geri dönme:</strong> <code>x % width</code></li>
+                        </ul>
+                    </div>
+
+                    <div id="editor4"></div>
+                </section>
+
+                <!-- Section: Practice Examples -->
+                <section id="ornekler" class="mt-4">
+                    <h2>Uygulama Örnekleri</h2>
+
+                    <h3>Örnek 1: Hareketli Top</h3>
+                    <p>Değişkenlerle basit animasyon:</p>
+                    <div id="editor5"></div>
+
+                    <h3>Örnek 2: Zıplayan Top</h3>
+                    <p>Sınırlara çarpınca yön değiştiren top:</p>
+                    <div id="editor6"></div>
+
+                    <h3>Örnek 3: Fareyi Takip Eden Daire</h3>
+                    <p>Sistem değişkenlerini kullanarak:</p>
+                    <div id="editor7"></div>
+
+                    <h3>Örnek 4: Büyüyüp Küçülen Daire</h3>
+                    <p>Mod işlemi ile döngüsel animasyon:</p>
+                    <div id="editor8"></div>
+
+                    <h3>Örnek 5: Renk Değişimi</h3>
+                    <p>Değişkenlerle renk animasyonu:</p>
+                    <div id="editor9"></div>
+                </section>
+
+                <!-- Key Concepts Summary -->
+                <section class="mt-4">
+                    <h2>Temel Kavramlar Özeti</h2>
+
+                    <div class="card" style="background: rgba(0, 217, 255, 0.05);">
+                        <h4>Bu Derste Öğrendikleriniz</h4>
+                        <ul>
+                            <li><strong>Değişken:</strong> Değerleri saklamak için kullanılan isimlendirilmiş kutucuklar</li>
+                            <li><strong>let:</strong> Değişken tanımlama anahtar kelimesi</li>
+                            <li><strong>Veri Tipleri:</strong> Number, String, Boolean, undefined, null</li>
+                            <li><strong>Sistem Değişkenleri:</strong> width, height, mouseX, mouseY, frameCount...</li>
+                            <li><strong>Aritmetik:</strong> +, -, *, /, % (mod)</li>
+                            <li><strong>Kısayollar:</strong> +=, -=, *=, /=, ++, --</li>
+                            <li><strong>camelCase:</strong> Değişken isimlendirme standardı</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box note mt-3">
+                        <div class="info-box-title">📚 Değişkenler Her Yerde!</div>
+                        <p>
+                            Değişkenler programlamanın en temel yapı taşıdır. Bundan sonraki derslerde 
+                            değişkenleri sürekli kullanacaksınız. Animasyon, oyun mantığı, kullanıcı 
+                            etkileşimi... hepsi değişkenlere dayanır!
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <section class="mt-4" style="display: flex; justify-content: space-between; padding: 2rem 0; border-top: 1px solid var(--border-color);">
+                    <a href="02-sekiller-renkler.html" class="btn btn-secondary">
+                        ← Önceki: Şekiller ve Renkler
+                    </a>
+                    <a href="04-kosullar.html" class="btn btn-primary">
+                        Sonraki Ders: Koşullar →
+                    </a>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="../js/editor.js"></script>
+    <script src="../js/theme.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Örnek 1: Değişken Tanımlama
+            new P5CodeEditor('editor1', {
+                initialCode: `// Değişken tanımlama örnekleri
+let daireX = 100;      // X koordinatı
+let daireY = 200;      // Y koordinatı
+let cap = 80;          // Çap
+let renk = 200;        // Gri tonu
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(220);
+  
+  // Değişkenleri kullanarak daire çiz
+  fill(renk, 100, 150);
+  circle(daireX, daireY, cap);
+  
+  // Bilgi metni
+  fill(0);
+  textSize(14);
+  text("daireX: " + daireX, 20, 30);
+  text("daireY: " + daireY, 20, 50);
+  text("cap: " + cap, 20, 70);
+  
+  // Değişkenleri değiştirerek deneyin!
+  // daireX, daireY ve cap değerlerini 
+  // yukarıda değiştirin ve ne olduğunu görün
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek: Global vs Lokal Değişkenler
+            new P5CodeEditor('editor-scope', {
+                initialCode: `// Global değişkenler - fonksiyonların DIŞINDA
+let topX = 200;   // Topun X konumu (korunur)
+let topY = 200;   // Topun Y konumu (korunur)
+let hiz = 2;      // Hareket hızı
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Lokal değişken - sadece draw() içinde var
+  let renk = (topX > 200) ? 'cyan' : 'orange';
+  
+  // Global değişkeni güncelle (değer korunur!)
+  topX = topX + hiz;
+  
+  // Sınıra ulaşınca geri dön
+  if (topX > 380) hiz = -2;
+  if (topX < 20) hiz = 2;
+  
+  // Topu çiz
+  fill(renk);
+  noStroke();
+  circle(topX, topY, 40);
+  
+  // Bilgi göster
+  fill(255);
+  textSize(14);
+  text("topX (global): " + topX, 20, 30);
+  text("hiz (global): " + hiz, 20, 50);
+  text("renk (lokal): " + renk, 20, 70);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 2: Veri Tipleri
+            new P5CodeEditor('editor2', {
+                initialCode: `// JavaScript'te farklı veri tipleri
+let sayi = 42;                    // Number (sayı)
+let isim = "p5.js Öğrencisi";     // String (metin)
+let aktifMi = true;               // Boolean (doğru/yanlış)
+let tanimsiz;                     // undefined (değer verilmemiş)
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  fill(255);
+  textSize(16);
+  
+  // Her tipi ve değerini göster
+  text("Sayı (Number): " + sayi, 20, 40);
+  text("Metin (String): " + isim, 20, 80);
+  text("Mantıksal (Boolean): " + aktifMi, 20, 120);
+  text("Tanımsız (undefined): " + tanimsiz, 20, 160);
+  
+  // typeof ile değişkenin tipini öğrenme
+  // typeof operatörü bir değişkenin veri tipini döndürür
+  fill(0, 217, 255);
+  textSize(14);
+  text("typeof sayi: " + typeof sayi, 20, 210);
+  text("typeof isim: " + typeof isim, 20, 240);
+  text("typeof aktifMi: " + typeof aktifMi, 20, 270);
+  text("typeof tanimsiz: " + typeof tanimsiz, 20, 300);
+  
+  // Fareyi takip eden basit gösterge
+  fill(100, 200, 255);
+  noStroke();
+  circle(mouseX, mouseY, 25);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 3: Sistem Değişkenleri
+            new P5CodeEditor('editor3', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+  textSize(16);
+}
+
+function draw() {
+  background(30);
+  fill(255);
+  
+  // Tuval boyutları
+  text("Tuval Genişliği (width): " + width, 20, 30);
+  text("Tuval Yüksekliği (height): " + height, 20, 55);
+  
+  // Fare konumu
+  fill(255, 200, 0);
+  text("Fare X (mouseX): " + mouseX, 20, 100);
+  text("Fare Y (mouseY): " + mouseY, 20, 125);
+  
+  // Kare sayısı
+  fill(0, 255, 150);
+  text("Kare Sayısı (frameCount): " + frameCount, 20, 170);
+  
+  // Fare durumu
+  fill(255, 100, 150);
+  text("Fare Tıklı mı? " + mouseIsPressed, 20, 215);
+  
+  // Fareyi takip eden daire
+  noStroke();
+  fill(0, 217, 255);
+  circle(mouseX, mouseY, 30);
+  
+  // Merkez noktası
+  stroke(255, 0, 0);
+  strokeWeight(2);
+  line(width/2 - 10, height/2, width/2 + 10, height/2);
+  line(width/2, height/2 - 10, width/2, height/2 + 10);
+  
+  fill(255, 0, 0);
+  noStroke();
+  textSize(12);
+  text("Merkez: (" + width/2 + ", " + height/2 + ")", width/2 + 15, height/2);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 4: Aritmetik
+            new P5CodeEditor('editor4', {
+                initialCode: `let a = 17;
+let b = 5;
+
+function setup() {
+  createCanvas(400, 400);
+  textSize(18);
+}
+
+function draw() {
+  background(30);
+  fill(255);
+  
+  // Aritmetik işlemler
+  text("a = " + a, 20, 40);
+  text("b = " + b, 150, 40);
+  
+  fill(100, 255, 200);
+  text("a + b = " + (a + b), 20, 90);
+  text("a - b = " + (a - b), 20, 120);
+  text("a * b = " + (a * b), 20, 150);
+  text("a / b = " + (a / b).toFixed(2), 20, 180);
+  
+  // Mod işlemi (kalan)
+  fill(255, 200, 100);
+  text("a % b = " + (a % b) + " (kalan)", 20, 230);
+  
+  // frameCount ile mod örneği
+  let saniye = floor(frameCount / 60);  // Yaklaşık saniye
+  let kare60 = frameCount % 60;  // 0-59 arası döner
+  
+  fill(200, 150, 255);
+  text("Yaklaşık saniye: " + saniye, 20, 290);
+  text("frameCount % 60: " + kare60, 20, 320);
+  
+  // Görsel mod örneği - basit çarpma ile genişlik
+  // kare60: 0-60 arası, bunu 0-200 yapmak için: kare60 * 200 / 60
+  noStroke();
+  fill(0, 217, 255);
+  let barGenislik = kare60 * 200 / 60;  // Basit oran
+  rect(20, 350, barGenislik, 20);
+  
+  stroke(100);
+  noFill();
+  rect(20, 350, 200, 20);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 5: Yatay Hareket (Mod ile Sargılama)
+            new P5CodeEditor('editor5', {
+                initialCode: `// frameCount sürekli artan bir sayaçtır
+// Mod (%) kullanarak ekranda döngüsel hareket yaparız
+// (if kullanmadan!)
+
+let hiz = 3;  // Hareket hızı çarpanı
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // frameCount * hiz ile pozisyon hesapla
+  // % width ile ekran genişliğinde döndür
+  let x = (frameCount * hiz) % width;
+  
+  // Topu çiz
+  fill(255, 100, 100);
+  noStroke();
+  circle(x, 200, 50);
+  
+  // Dikey hareket de ekleyelim
+  let y = (frameCount * 2) % height;
+  fill(100, 100, 255);
+  circle(350, y, 30);
+  
+  // Çapraz hareket
+  let cx = (frameCount * 2) % width;
+  let cy = (frameCount * 1) % height;
+  fill(100, 255, 100);
+  circle(cx, cy, 25);
+  
+  // Bilgi
+  fill(255);
+  textSize(14);
+  text("frameCount: " + frameCount, 20, 30);
+  text("x = (frameCount * " + hiz + ") % " + width + " = " + x, 20, 50);
+  text("(Hız değerini değiştirmeyi deneyin!)", 20, 80);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 6: Değişkenler ile Takip
+            new P5CodeEditor('editor6', {
+                initialCode: `// Bu örnekte daire fareyi yumuşakça takip eder
+// (if ve for kullanmadan!)
+
+// Dairenin konumu
+let x = 200;
+let y = 200;
+let takipHizi = 0.05;  // 0-1 arası (küçük = yavaş)
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Yumuşak hareket formülü:
+  // Mevcut konumdan hedefe doğru küçük adım at
+  // Fark * küçük sayı = küçük adım
+  x = x + (mouseX - x) * takipHizi;
+  y = y + (mouseY - y) * takipHizi;
+  
+  // İzi çiz (önceki fare konumundan şimdiki konuma)
+  stroke(100, 200, 255, 100);
+  strokeWeight(2);
+  line(pmouseX, pmouseY, mouseX, mouseY);
+  
+  // Ana daireyi çiz
+  noStroke();
+  fill(0, 217, 255);
+  circle(x, y, 50);
+  
+  // Merkezde sabit bir referans noktası
+  fill(255, 100, 100);
+  circle(width/2, height/2, 20);
+  
+  // Bilgi
+  fill(255);
+  textSize(12);
+  text("Daire: (" + floor(x) + ", " + floor(y) + ")", 10, 20);
+  text("Fare: (" + mouseX + ", " + mouseY + ")", 10, 40);
+  text("takipHizi: " + takipHizi + " (değiştirmeyi dene!)", 10, 60);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 7: Fareye Bakan Yüz
+            new P5CodeEditor('editor7', {
+                initialCode: `// Fareye bakan basit yüz
+// mouseX ve mouseY ile göz hareketi
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30, 30, 50);
+  
+  // Yüz
+  fill(255, 220, 180);
+  noStroke();
+  ellipse(200, 200, 200, 220);
+  
+  // Göz beyazları
+  fill(255);
+  ellipse(150, 180, 50, 35);
+  ellipse(250, 180, 50, 35);
+  
+  // Göz bebekleri - fareye göre hareket
+  // Basit formül: fare ekranın neresinde?
+  // mouseX 0-400 arası, bunu -8 ile +8 arasına sıkıştır
+  let gozX = (mouseX - 200) / 25;  // -8 ile +8 arası
+  let gozY = (mouseY - 200) / 25;  // -8 ile +8 arası
+  
+  // Göz bebeklerini sınırla (çok uç değerler olmasın)
+  // constrain henüz anlatılmadı ama basit matematik kullanıyoruz
+  
+  fill(50, 30, 20);
+  ellipse(150 + gozX, 180 + gozY, 18, 22);
+  ellipse(250 + gozX, 180 + gozY, 18, 22);
+  
+  // Göz parıltısı
+  fill(255);
+  ellipse(153 + gozX, 175 + gozY, 5, 5);
+  ellipse(253 + gozX, 175 + gozY, 5, 5);
+  
+  // Ağız
+  fill(200, 100, 100);
+  arc(200, 260, 80, 50, 0, PI);
+  
+  // Bilgi
+  fill(255);
+  textSize(12);
+  text("Fare: (" + mouseX + ", " + mouseY + ")", 10, 20);
+  text("Göz kaydırma: (" + gozX.toFixed(1) + ", " + gozY.toFixed(1) + ")", 10, 40);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 8: Boyut ve Konum Değişimi
+            new P5CodeEditor('editor8', {
+                initialCode: `// frameCount ve mod ile animasyonlar
+// (sin, for kullanmadan basit versiyon)
+
+function setup() {
+  createCanvas(400, 400);
+  noStroke();
+}
+
+function draw() {
+  background(30);
+  
+  // Mod ile döngüsel boyut değişimi
+  // 0'dan 100'e, sonra tekrar 0'dan başlar
+  let boyut = frameCount % 100;
+  
+  fill(255, 100, 100);
+  circle(100, 200, boyut);
+  
+  // Farklı hızda boyut değişimi
+  let boyut2 = (frameCount * 2) % 80;
+  fill(100, 255, 100);
+  circle(200, 200, boyut2);
+  
+  // Mod ile renk değişimi
+  let renk = (frameCount * 3) % 256;
+  fill(renk, 100, 255 - renk);
+  circle(300, 200, 60);
+  
+  // Fare ile boyut kontrolü
+  // mouseX'i boyut olarak kullan
+  fill(100, 200, 255);
+  circle(200, 320, mouseX / 3);
+  
+  // Bilgi
+  fill(255);
+  textSize(14);
+  text("frameCount: " + frameCount, 20, 30);
+  text("boyut1 (fc % 100): " + boyut, 20, 50);
+  text("boyut2 (fc*2 % 80): " + boyut2, 20, 70);
+  text("renk (fc*3 % 256): " + renk, 20, 90);
+  text("Alttaki daire boyutu: mouseX/3 = " + floor(mouseX/3), 20, 380);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 9: Renk Değişimi (Mod ile)
+            new P5CodeEditor('editor9', {
+                initialCode: `// Mod kullanarak renk değişimi
+// (if kullanmadan!)
+
+function setup() {
+  createCanvas(400, 400);
+  noStroke();
+}
+
+function draw() {
+  // Mod ile 0-255 arasında dönen renkler
+  // Her renk farklı hızda değişir
+  let r = (frameCount * 2) % 256;
+  let g = (frameCount * 3) % 256;
+  let b = (frameCount * 5) % 256;
+  
+  // Arka plan değişen renkte
+  background(r, g, b);
+  
+  // Ters renkli daire
+  fill(255 - r, 255 - g, 255 - b);
+  circle(width/2, height/2, 150);
+  
+  // RGB bilgisi
+  fill(255);
+  textSize(16);
+  textAlign(CENTER);
+  text("RGB(" + r + ", " + g + ", " + b + ")", width/2, 40);
+  
+  // Renk göstergesi kutuları
+  textAlign(LEFT);
+  
+  fill(r, 0, 0);
+  rect(50, 340, 80, 30);
+  fill(0, g, 0);
+  rect(160, 340, 80, 30);
+  fill(0, 0, b);
+  rect(270, 340, 80, 30);
+  
+  fill(255);
+  textSize(12);
+  text("R: " + r, 70, 360);
+  text("G: " + g, 180, 360);
+  text("B: " + b, 290, 360);
+  
+  // Açıklama
+  textSize(11);
+  text("r = (frameCount * 2) % 256", 50, 390);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+        });
+    </script>
+</body>
+</html>

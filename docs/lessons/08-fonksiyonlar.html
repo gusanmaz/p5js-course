@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <title>Ders 8: Fonksiyonlar - p5.js Kursu</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/tomorrow-night-eighties.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="nav-brand">
+                    <span>🎨</span>
+                    <span>İnteraktif p5.js Eğitimi</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Ana Sayfa</a></li>
+                    <li><a href="01-giris.html" class="active">Dersler</a></li>
+                    <li><a href="../kaynaklar.html">Kaynaklar</a></li>
+                    <li><a href="../oyun-alani.html">Oyun Alanı</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="layout-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dersler</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-giris.html">01. Giriş</a></li>
+                    <li><a href="02-sekiller-renkler.html">02. Şekiller ve Renkler</a></li>
+                    <li><a href="03-degiskenler.html">03. Değişkenler</a></li>
+                    <li><a href="04-kosullar.html">04. Koşullar</a></li>
+                    <li><a href="05-etkilesim.html">05. Etkileşim</a></li>
+                    <li><a href="06-donguler.html">06. Döngüler</a></li>
+                    <li><a href="07-animasyon.html">07. Animasyon</a></li>
+                    <li><a href="08-fonksiyonlar.html" class="active">08. Fonksiyonlar</a></li>
+                    <li><a href="09-diziler.html">09. Diziler</a></li>
+                    <li><a href="10-nesneler.html">10. Nesneler ve Sınıflar</a></li>
+                    <li><a href="11-stringler.html">11. Stringler</a></li>
+                <li><a href="12-hata-ayiklama.html">12. Hata Ayıklama</a></li>
+                <li><a href="13-ileri-konular.html">13. İleri: Modern JS</a></li>
+                <li><a href="14-ileri-gorseller.html">14. İleri: Görseller</a></li>
+                <li><a href="15-ileri-responsive.html">15. İleri: Responsive</a></li>
+                <li><a href="16-ileri-vektorler.html">16. İleri: Vektörler</a></li>
+                <li><a href="17-ileri-trigonometri.html">17. İleri: Trigonometri</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bu Derste</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#fonksiyon-nedir">Fonksiyon Nedir?</a></li>
+                    <li><a href="#tanimlama">Fonksiyon Tanımlama</a></li>
+                    <li><a href="#parametreler">Parametreler</a></li>
+                    <li><a href="#return">return İfadesi</a></li>
+                    <li><a href="#ornekler">Uygulama Örnekleri</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="lesson-header">
+                <h1>Ders 8: Fonksiyonlar</h1>
+                <div class="lesson-meta">
+                    <span>📚 Orta-İleri Seviye</span>
+                    <span>⏱️ 55 dakika</span>
+                    <span>🎯 Kod Organizasyonu</span>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Section: What is Function -->
+                <section id="fonksiyon-nedir">
+                    <h2>Fonksiyon Nedir ve Neden Önemli?</h2>
+                    
+                    <p>
+                        Fonksiyon, belirli bir görevi yerine getiren, <strong>yeniden kullanılabilir 
+                        kod bloğudur</strong>. Kodunuzu düzenli tutar ve tekrarı önler.
+                    </p>
+
+                    <div class="info-box note">
+                        <div class="info-box-title">🎮 Oyun Programcısı İçin Neden Önemli?</div>
+                        <p>
+                            Bir oyunda düşman çizme, mermi ateşleme, skor hesaplama gibi işlemler 
+                            <strong>sürekli tekrarlanır</strong>. Her seferinde aynı kodu yazmak yerine, 
+                            bir fonksiyon yazarsın ve istediğin yerde çağırırsın. Profesyonel oyunlarda 
+                            binlerce fonksiyon bulunur!
+                        </p>
+                    </div>
+
+                    <h3>🎯 Problem: Tekrar Eden Kod</h3>
+                    <p>Diyelim ki 5 farklı yerde yıldız çizmek istiyorsun:</p>
+
+                    <table class="code-table">
+                        <thead>
+                            <tr>
+                                <th>❌ Fonksiyon Olmadan</th>
+                                <th>✅ Fonksiyon ile</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><pre style="margin:0;"><code>// Yıldız 1 (50, 50)
+stroke(255, 255, 0);
+line(50, 35, 50, 65);
+line(35, 50, 65, 50);
+line(40, 40, 60, 60);
+line(60, 40, 40, 60);
+
+// Yıldız 2 (150, 80)
+stroke(255, 255, 0);
+line(150, 65, 150, 95);
+line(135, 80, 165, 80);
+line(140, 70, 160, 90);
+line(160, 70, 140, 90);
+
+// Yıldız 3, 4, 5...
+// 20+ satır daha!</code></pre>
+                                <p style="color:#ff6b6b; font-size:12px; margin-top:5px;">😫 Her yıldız için 5 satır!</p></td>
+                                <td><pre style="margin:0;"><code>function yildizCiz(x, y) {
+  stroke(255, 255, 0);
+  line(x, y-15, x, y+15);
+  line(x-15, y, x+15, y);
+  line(x-10, y-10, x+10, y+10);
+  line(x+10, y-10, x-10, y+10);
+}
+
+// Kullanım - tek satır!
+yildizCiz(50, 50);
+yildizCiz(150, 80);
+yildizCiz(200, 150);
+yildizCiz(300, 100);
+yildizCiz(250, 200);</code></pre>
+                                <p style="color:#4ecdc4; font-size:12px; margin-top:5px;">🎉 Toplamda 12 satır!</p></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Fonksiyonların 5 Büyük Faydası</h3>
+                    <ul>
+                        <li><strong>🔄 Yeniden Kullanım:</strong> Bir kez yaz, istediğin kadar çağır</li>
+                        <li><strong>📖 Okunabilirlik:</strong> <code>dusmanCiz()</code> ne yaptığı açık</li>
+                        <li><strong>🔧 Bakım Kolaylığı:</strong> Değişiklik tek yerde, her yere yansır</li>
+                        <li><strong>🧩 Modülerlik:</strong> Büyük problemi küçük parçalara böl</li>
+                        <li><strong>🐛 Hata Ayıklama:</strong> Sorun varsa tek bir yere bakarsın</li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 Zaten Fonksiyon Kullanıyordunuz!</div>
+                        <p>
+                            <code>setup()</code>, <code>draw()</code>, <code>circle()</code>, 
+                            <code>background()</code>, <code>fill()</code> - hepsi fonksiyon! 
+                            p5.js size hazır fonksiyonlar sunar, şimdi kendi fonksiyonlarınızı yazmayı öğreneceksiniz.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Section: Defining -->
+                <section id="tanimlama" class="mt-4">
+                    <h2>Fonksiyon Tanımlama</h2>
+
+                    <pre><code>function fonksiyonAdi() {
+  // Yapılacak işler
+}
+
+// Çağırma:
+fonksiyonAdi();</code></pre>
+
+                    <div id="editor1"></div>
+
+                    <div class="challenge-box">
+                        <h4>🧪 Deneyin</h4>
+                        <ul>
+                            <li>Yeni bir <code>yildizCiz()</code> fonksiyonu oluşturun</li>
+                            <li><code>agacCiz()</code> fonksiyonunu birden fazla kez çağırın</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Section: Parameters -->
+                <section id="parametreler" class="mt-4">
+                    <h2>Parametreler (Argümanlar)</h2>
+
+                    <p>
+                        Fonksiyonlara değer göndererek farklı sonuçlar alabilirsiniz:
+                    </p>
+
+                    <pre><code>function selamVer(isim) {
+  console.log("Merhaba " + isim + "!");
+}
+
+selamVer("Ayşe");  // "Merhaba Ayşe!"
+selamVer("Mehmet");  // "Merhaba Mehmet!"</code></pre>
+
+                    <h3>Birden Fazla Parametre</h3>
+                    <pre><code>function daireCiz(x, y, boyut, renk) {
+  fill(renk);
+  circle(x, y, boyut);
+}
+
+daireCiz(100, 200, 50, "red");
+daireCiz(200, 200, 80, "blue");</code></pre>
+
+                    <div id="editor2"></div>
+                </section>
+
+                <!-- Section: Return -->
+                <section id="return" class="mt-4">
+                    <h2>return İfadesi</h2>
+
+                    <p>
+                        Fonksiyonlar değer döndürebilir. Bu değer başka yerlerde kullanılabilir:
+                    </p>
+
+                    <pre><code>function topla(a, b) {
+  return a + b;
+}
+
+let sonuc = topla(5, 3);  // sonuc = 8
+let x = topla(10, topla(2, 3));  // x = 15</code></pre>
+
+                    <div class="info-box tip">
+                        <div class="info-box-title">💡 return Kullanımı</div>
+                        <ul>
+                            <li><code>return</code> fonksiyonu hemen sonlandırır</li>
+                            <li>Değer döndürmeyenler <code>undefined</code> döner</li>
+                            <li>Birden fazla <code>return</code> olabilir (koşullarda)</li>
+                        </ul>
+                    </div>
+
+                    <div id="editor3"></div>
+                </section>
+
+                <!-- Section: Practice Examples -->
+                <section id="ornekler" class="mt-4">
+                    <h2>Uygulama Örnekleri</h2>
+
+                    <h3>Örnek 1: Çiçek Çizme Fonksiyonu</h3>
+                    <p>Parametreli özel şekil fonksiyonu:</p>
+                    <div id="editor4"></div>
+
+                    <h3>Örnek 2: Yüz Çizme Fonksiyonu</h3>
+                    <p>Karmaşık şekilleri fonksiyonla basitleştirme:</p>
+                    <div id="editor5"></div>
+
+                    <h3>Örnek 3: Yardımcı Fonksiyonlar</h3>
+                    <p>Hesaplama ve kontrol fonksiyonları:</p>
+                    <div id="editor6"></div>
+
+                    <h3>Örnek 4: Animasyon Fonksiyonu</h3>
+                    <p>Hareket eden nesneler için fonksiyon:</p>
+                    <div id="editor7"></div>
+                </section>
+
+                <!-- Key Concepts Summary -->
+                <section class="mt-4">
+                    <h2>Temel Kavramlar Özeti</h2>
+
+                    <div class="card" style="background: rgba(0, 217, 255, 0.05);">
+                        <h4>Bu Derste Öğrendikleriniz</h4>
+                        <ul>
+                            <li><strong>function:</strong> Fonksiyon tanımlama anahtar kelimesi</li>
+                            <li><strong>Parametreler:</strong> Fonksiyona gönderilen değerler</li>
+                            <li><strong>return:</strong> Fonksiyondan değer döndürme</li>
+                            <li><strong>Çağırma:</strong> Fonksiyonu çalıştırma: <code>fonksiyon()</code></li>
+                            <li><strong>Kapsam:</strong> Fonksiyon içindeki değişkenler dışarıdan erişilemez</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <section class="mt-4" style="display: flex; justify-content: space-between; padding: 2rem 0; border-top: 1px solid var(--border-color);">
+                    <a href="07-animasyon.html" class="btn btn-secondary">
+                        ← Önceki: Animasyon
+                    </a>
+                    <a href="09-diziler.html" class="btn btn-primary">
+                        Sonraki Ders: Diziler →
+                    </a>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>İnteraktif p5.js Eğitimi | Güvenç Usanmaz | <a href="https://github.com/gusanmaz/p5js-course" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="../js/editor.js"></script>
+    <script src="../js/theme.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Örnek 1: Temel Fonksiyon
+            new P5CodeEditor('editor1', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Fonksiyonları çağır
+  selamVer();
+  kareCiz();
+  daireCiz();
+}
+
+// En basit fonksiyon - parametresiz
+function selamVer() {
+  fill(255);
+  textSize(20);
+  textAlign(CENTER);
+  text("Merhaba p5.js!", width/2, 50);
+}
+
+// Kare çizen fonksiyon
+function kareCiz() {
+  fill(255, 100, 100);
+  noStroke();
+  rect(50, 100, 120, 120);
+}
+
+// Daire çizen fonksiyon
+function daireCiz() {
+  fill(100, 100, 255);
+  noStroke();
+  circle(300, 160, 120);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 2: Parametreli Fonksiyon
+            new P5CodeEditor('editor2', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Aynı fonksiyonu farklı parametrelerle çağır
+  renkliDaire(80, 100, 60, 255, 100, 100);   // Kırmızı
+  renkliDaire(200, 100, 80, 100, 255, 100);  // Yeşil
+  renkliDaire(320, 100, 50, 100, 100, 255);  // Mavi
+  
+  // Alt sıra - farklı boyutlar
+  renkliDaire(100, 250, 100, 255, 200, 50);
+  renkliDaire(250, 280, 70, 200, 50, 255);
+  
+  // Fareyi takip eden daire
+  renkliDaire(mouseX, mouseY, 40, 255, 255, 0);
+}
+
+// Parametreli daire çizme fonksiyonu
+function renkliDaire(x, y, boyut, r, g, b) {
+  noStroke();
+  fill(r, g, b);
+  circle(x, y, boyut);
+  
+  // Parlaklık efekti
+  fill(255, 255, 255, 100);
+  circle(x - boyut * 0.15, y - boyut * 0.15, boyut * 0.3);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 3: return
+            new P5CodeEditor('editor3', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+  textAlign(CENTER, CENTER);
+}
+
+function draw() {
+  background(30);
+  
+  // Mesafe hesapla (return kullanan fonksiyon)
+  let mesafe = mesafeHesapla(mouseX, mouseY, width/2, height/2);
+  
+  // Mesafeye göre renk (return kullanan fonksiyon)
+  let renk = mesafeyeGoreRenk(mesafe);
+  
+  // Daire çiz
+  fill(renk);
+  noStroke();
+  circle(width/2, height/2, 100);
+  
+  // Fareye çizgi
+  stroke(renk);
+  strokeWeight(2);
+  line(width/2, height/2, mouseX, mouseY);
+  
+  // Bilgi
+  fill(255);
+  noStroke();
+  textSize(16);
+  text("Mesafe: " + floor(mesafe), width/2, 50);
+  
+  // Diğer return örnekleri
+  textSize(14);
+  text("5 çift mi? " + ciftMi(5), width/2, 340);
+  text("8 çift mi? " + ciftMi(8), width/2, 360);
+  text("max(15, 28) = " + maksimum(15, 28), width/2, 380);
+}
+
+// Mesafe hesaplama fonksiyonu
+function mesafeHesapla(x1, y1, x2, y2) {
+  let dx = x2 - x1;
+  let dy = y2 - y1;
+  return sqrt(dx * dx + dy * dy);
+}
+
+// Mesafeye göre renk döndür
+function mesafeyeGoreRenk(mesafe) {
+  if (mesafe < 50) {
+    return color(255, 50, 50);
+  } else if (mesafe < 100) {
+    return color(255, 255, 50);
+  } else if (mesafe < 150) {
+    return color(50, 255, 50);
+  } else {
+    return color(50, 50, 255);
+  }
+}
+
+// Çift sayı kontrolü
+function ciftMi(sayi) {
+  return sayi % 2 == 0;
+}
+
+// Maksimum bulma
+function maksimum(a, b) {
+  if (a > b) {
+    return a;
+  } else {
+    return b;
+  }
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 4: Çiçek
+            new P5CodeEditor('editor4', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(135, 206, 235);
+  
+  // Zemin
+  noStroke();
+  fill(100, 180, 100);
+  rect(0, 300, width, 100);
+  
+  // Çiçekler çiz
+  cicekCiz(80, 280, 40, color(255, 100, 150));
+  cicekCiz(160, 300, 30, color(255, 200, 100));
+  cicekCiz(250, 270, 50, color(200, 100, 255));
+  cicekCiz(330, 290, 35, color(100, 200, 255));
+  
+  // Fareyle çiçek
+  cicekCiz(mouseX, mouseY, 45, color(255, 255, 100));
+}
+
+function cicekCiz(x, y, boyut, renk) {
+  // Sap
+  stroke(50, 150, 50);
+  strokeWeight(boyut / 10);
+  line(x, y, x, y + 80);
+  
+  // Yapraklar
+  noStroke();
+  fill(50, 180, 50);
+  ellipse(x - boyut/3, y + 40, boyut/2, boyut/4);
+  ellipse(x + boyut/3, y + 50, boyut/2, boyut/4);
+  
+  // Taç yaprakları (5 adet daire)
+  fill(renk);
+  for (let i = 0; i < 5; i++) {
+    let aci = i * TWO_PI / 5 - PI/2;
+    let px = x + cos(aci) * boyut * 0.4;
+    let py = y + sin(aci) * boyut * 0.4;
+    circle(px, py, boyut * 0.5);
+  }
+  
+  // Merkez
+  fill(255, 220, 50);
+  circle(x, y, boyut * 0.4);
+  
+  // Merkez detayı
+  fill(200, 150, 0);
+  circle(x, y, boyut * 0.2);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 5: Yüz
+            new P5CodeEditor('editor5', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(200, 230, 255);
+  
+  // Birden fazla yüz çiz - gözler fareyi takip eder
+  yuzCiz(100, 150, 80);
+  yuzCiz(300, 150, 80);
+  yuzCiz(200, 300, 120);
+  
+  // Bilgi
+  fill(50);
+  textSize(14);
+  textAlign(CENTER);
+  text("Fareyi hareket ettirin - gözler sizi takip eder!", width/2, 390);
+}
+
+function yuzCiz(x, y, boyut) {
+  // Yüz
+  fill(255, 220, 180);
+  stroke(0);
+  strokeWeight(2);
+  circle(x, y, boyut);
+  
+  // Gözler
+  let gozBoyut = boyut * 0.2;
+  let gozUzaklik = boyut * 0.2;
+  let gozY = y - boyut * 0.1;
+  
+  // Sol göz
+  fill(255);
+  circle(x - gozUzaklik, gozY, gozBoyut);
+  
+  // Sağ göz
+  circle(x + gozUzaklik, gozY, gozBoyut);
+  
+  // Göz bebekleri - fareyi takip eder
+  fill(0);
+  let bebekBoyut = gozBoyut * 0.5;
+  let maxHareket = gozBoyut * 0.2;
+  
+  // Sol göz bebeği
+  let solGozX = x - gozUzaklik;
+  let aciSol = atan2(mouseY - gozY, mouseX - solGozX);
+  let bebekSolX = solGozX + cos(aciSol) * maxHareket;
+  let bebekSolY = gozY + sin(aciSol) * maxHareket;
+  circle(bebekSolX, bebekSolY, bebekBoyut);
+  
+  // Sağ göz bebeği
+  let sagGozX = x + gozUzaklik;
+  let aciSag = atan2(mouseY - gozY, mouseX - sagGozX);
+  let bebekSagX = sagGozX + cos(aciSag) * maxHareket;
+  let bebekSagY = gozY + sin(aciSag) * maxHareket;
+  circle(bebekSagX, bebekSagY, bebekBoyut);
+  
+  // Gülümseme
+  noFill();
+  strokeWeight(3);
+  arc(x, y + boyut * 0.15, boyut * 0.4, boyut * 0.25, 0, PI);
+  
+  // Yanaklar
+  noStroke();
+  fill(255, 150, 150, 100);
+  circle(x - boyut * 0.3, y + boyut * 0.1, boyut * 0.15);
+  circle(x + boyut * 0.3, y + boyut * 0.1, boyut * 0.15);
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 6: Yardımcı Fonksiyonlar
+            new P5CodeEditor('editor6', {
+                initialCode: `function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(30);
+  
+  // Sabit daireler
+  let daire1X = 120, daire1Y = 200, daire1R = 50;
+  let daire2X = 280, daire2Y = 200, daire2R = 60;
+  
+  // Fare daire1 üzerinde mi?
+  let fare1Uzerinde = noktaDaireIcinde(mouseX, mouseY, daire1X, daire1Y, daire1R);
+  // Fare daire2 üzerinde mi?
+  let fare2Uzerinde = noktaDaireIcinde(mouseX, mouseY, daire2X, daire2Y, daire2R);
+  
+  // Daire 1
+  if (fare1Uzerinde) {
+    fill(255, 100, 100);
+  } else {
+    fill(100, 100, 255);
+  }
+  noStroke();
+  circle(daire1X, daire1Y, daire1R * 2);
+  
+  // Daire 2
+  if (fare2Uzerinde) {
+    fill(255, 100, 100);
+  } else {
+    fill(100, 255, 100);
+  }
+  circle(daire2X, daire2Y, daire2R * 2);
+  
+  // Mesafe bilgisi
+  fill(255);
+  textSize(14);
+  text("Fare-Merkez mesafesi: " + floor(mesafe(mouseX, mouseY, width/2, height/2)), 10, 30);
+  text("Daireler arası: " + floor(mesafe(daire1X, daire1Y, daire2X, daire2Y)), 10, 50);
+}
+
+// İki nokta arası mesafe hesapla
+function mesafe(x1, y1, x2, y2) {
+  let dx = x2 - x1;
+  let dy = y2 - y1;
+  return sqrt(dx * dx + dy * dy);
+}
+
+// Nokta daire içinde mi kontrol et
+function noktaDaireIcinde(px, py, cx, cy, r) {
+  return mesafe(px, py, cx, cy) < r;
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+
+            // Örnek 7: Animasyon
+            new P5CodeEditor('editor7', {
+                initialCode: `// Zıplayan top değişkenleri
+let topX, topY;
+let topHizY = 0;
+let yercekimi = 0.5;
+
+function setup() {
+  createCanvas(400, 400);
+  topX = width / 2;
+  topY = 100;
+}
+
+function draw() {
+  background(30);
+  
+  // Zemin çiz
+  zeminCiz();
+  
+  // Topu güncelle ve çiz
+  topuGuncelle();
+  topuCiz(topX, topY, 40);
+  
+  // Bilgi
+  fill(255);
+  textSize(14);
+  text("Tıklayın: Topu sıfırla", 10, 30);
+}
+
+// Zemin çizme fonksiyonu
+function zeminCiz() {
+  fill(100, 80, 60);
+  noStroke();
+  rect(0, 350, width, 50);
+}
+
+// Top fizik güncellemesi
+function topuGuncelle() {
+  // Yerçekimi uygula
+  topHizY += yercekimi;
+  topY += topHizY;
+  
+  // Zemine çarpma
+  if (topY > 330) {
+    topY = 330;
+    topHizY *= -0.8; // Enerji kaybı ile sekme
+  }
+}
+
+// Top çizme fonksiyonu
+function topuCiz(x, y, boyut) {
+  // Gölge
+  fill(0, 50);
+  ellipse(x, 355, boyut * 0.8, 10);
+  
+  // Top
+  fill(255, 100, 100);
+  noStroke();
+  circle(x, y, boyut);
+  
+  // Parlaklık
+  fill(255, 200);
+  circle(x - 8, y - 8, 10);
+}
+
+function mousePressed() {
+  // Tıklayınca topu sıfırla
+  topY = 100;
+  topHizY = 0;
+}`,
+                autoRun: true,
+                showConsole: false
+            });
+        });
+    </script>
+</body>
+</html>
